@@ -1,6 +1,6 @@
 # Socialites Excellent Driving System
 ### Student Information and Schedule Management System for Socialites Excellent Driving
-
+---
 **Front-End Language & Framework:**
 
 - HTML(HTML5), CSS
@@ -12,17 +12,30 @@
 - Node.js (JavaScript)
 - SQL (MySQL)
 - Express Framework
-
+---
 ***Developers:***
+- _Documentation_
+    - [Perrine](https://github.com/zhayrine)    
 
 - _Front-End:_
     - [Graciella](https://github.com/ellaaatrix)
-    - [Perrine](https://github.com/zhayrine)
 - _Back-End:_
     - [Christian](https://github.com/Paulymorphy)
     - [Janelle](https://github.com/JenGabat)
+---
+***Development Tools:***
 
-### Installation:
+Server-Side:
+- Node.js (v8.9.3)
+- npm (v4.6.1)
+- MySQL (v15.1)
+
+Client-Side:
+- Bootstrap
+- JQuery
+
+---
+### Installation: 
 
 1) Install Node.js and MySQL
 2) Clone this repository or download the latest release, and get other assets
