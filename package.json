@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/talatuga/Socialites-Excellent-Driving-System.git"
+    "url": "git+https://github.com/TLTG/Socialites-Excellent-Driving-System.git"
   },
   "author": "TLTG",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/talatuga/Socialites-Excellent-Driving-System/issues"
+    "url": "https://github.com/TLTG/Socialites-Excellent-Driving-System/issues"
   },
-  "homepage": "https://github.com/talatuga/Socialites-Excellent-Driving-System#readme",
+  "homepage": "https://github.com/TLTG/Socialites-Excellent-Driving-System#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
