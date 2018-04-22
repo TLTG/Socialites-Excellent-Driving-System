@@ -1,0 +1,30 @@
+{
+  "name": "socialites-excellent-driving-system",
+  "version": "1.0.0",
+  "description": "Student Information and Schedule Management System for Socialites Excellent Driving",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/talatuga/Socialites-Excellent-Driving-System.git"
+  },
+  "author": "TLTG",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/talatuga/Socialites-Excellent-Driving-System/issues"
+  },
+  "homepage": "https://github.com/talatuga/Socialites-Excellent-Driving-System#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "datejs": "^1.0.0-rc3",
+    "ejs": "^2.5.9",
+    "express": "^4.16.3",
+    "express-promise": "^0.4.0",
+    "express-session": "^1.15.6",
+    "mysql": "^2.15.0"
+  }
+}
