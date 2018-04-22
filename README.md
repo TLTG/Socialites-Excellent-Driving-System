@@ -14,13 +14,24 @@
 - Express Framework
 
 ***Developers:***
-
+- _Documentation:_
+    - [Perrine](https://github.com/zhayrine)
 - _Front-End:_
     - [Graciella](https://github.com/ellaaatrix)
-    - [Perrine](https://github.com/zhayrine)
 - _Back-End:_
     - [Christian](https://github.com/Paulymorphy)
     - [Janelle](https://github.com/JenGabat)
+
+***Development Tools:***
+
+Server-Side:
+-Node.js (v8.9.3)
+-npm (v4.6.1)
+-MySQL (v15.1)
+
+Client-Side:
+-Bootstrap
+-JQuery
 
 ### Installation:
 
