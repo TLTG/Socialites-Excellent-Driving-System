@@ -25,13 +25,13 @@
 ***Development Tools:***
 
 Server-Side:
--Node.js (v8.9.3)
--npm (v4.6.1)
--MySQL (v15.1)
+- Node.js (v8.9.3)
+- npm (v4.6.1)
+- MySQL (v15.1)
 
 Client-Side:
--Bootstrap
--JQuery
+- Bootstrap
+- JQuery
 
 ### Installation:
 
