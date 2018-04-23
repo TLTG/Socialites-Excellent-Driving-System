@@ -22,6 +22,7 @@
     - [Christian Paul R. Tupas](https://github.com/Paulymorphy)
     - [Janelle Joy R. Gabat](https://github.com/JenGabat)
 
+---
 ***Development Tools:***
 
 Server-Side:
