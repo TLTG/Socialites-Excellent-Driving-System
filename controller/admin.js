@@ -4,6 +4,6 @@ var router = require('express').Router();
 router.use(require('../middleware/authentication').auth);
 
 //Routes here.
-router.get('/', function(req, res, next){res.send('Hello, You\'re in the admin')});
+router.get('/', function(req, res, next){res.render('admin/index',{title: 'Hello world!'})});
 
 module.exports = router;

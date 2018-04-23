@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Socialites Excellent Driving</title>
+</head>
+<body> <%# //SD Study how templating works ella, EJS nalang gamitin nating kung di mo kaya mag React, You can still apply Bootstrap and JQuery here %>
+    <% include ./partials/navbar %> <!-- include yung navbar sa page nato, this is the easy way of combining ejs files -->
+    <% include ./partials/sidebar %>
+    <%# //Body here, %> <h1><%= title %></h1> <%# Check mo yung controller/admin line 7 makikita mo dun kung saan manggagaling yung title var %>
+    <% include ./partials/footer %>
+    <% include ../utils/adminImport %>
+</body>
+</html>
