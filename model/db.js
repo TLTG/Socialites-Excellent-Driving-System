@@ -1,3 +1,11 @@
+/* 
+  db.js, Main file for DB connectivity, 
+  Public functions and variables: MODE_PRODUCTION, MODE_TEST, connect(), and get()
+  dbstate: 
+    pool <- laman nito lahat nung connection sockets sa DB server. May 20 connection akong nilagay.
+    mode <- kung anong mode nung DB natin kung production ba or testing.
+*/
+
 var mysql = require('mysql');
 
 var dbstate = {

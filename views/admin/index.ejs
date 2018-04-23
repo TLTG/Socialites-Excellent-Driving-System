@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <% include ../utils/adminCSS %>    <!-- Import nung mga CSS files -->
     <title>Socialites Excellent Driving</title>
 </head>
 <body> <%# //SD Study how templating works ella, EJS nalang gamitin nating kung di mo kaya mag React, You can still apply Bootstrap and JQuery here %>
@@ -11,6 +12,6 @@
     <% include ./partials/sidebar %>
     <%# //Body here, %> <h1><%= title %></h1> <%# Check mo yung controller/admin line 7 makikita mo dun kung saan manggagaling yung title var %>
     <% include ./partials/footer %>
-    <% include ../utils/adminImport %>
+    <% include ../utils/adminJS %> <!-- Import nung mga JS files -->
 </body>
 </html>
