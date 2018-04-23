@@ -1,3 +1,7 @@
+/* 
+    authentication.js, This authenticate all request passing on admin and api routes for security purpose.
+*/
+
 var users = {};
 
 exports.auth = function(req, res, next){

@@ -1,4 +1,10 @@
-exports.error500 = function(err, req, res, next){
+/* 
+    errorHandler.js, from it name itself hahaha. 
+    Ginawa ko to para mahandle lahat ng error that might happen.
+    May default handler naman ng error ang express pero di sa specific ng system natin.
+*/
+
+exports.error500 = function(err, req, res){
     console.error("[SEVER] Error occur. Check error.log for information.");
     errorLog(err.stack);
     if(req.method == "POST"){
@@ -8,7 +14,7 @@ exports.error500 = function(err, req, res, next){
     }
 }
 
-exports.error404 = function(req, res, next) {
+exports.error404 = function(req, res) {
     if(req.method == "POST"){
         return res.status(404).send({error: 404, detail: '404 Page not found.'});
     }else{
@@ -16,10 +22,11 @@ exports.error404 = function(req, res, next) {
     }
 }
 
+// This writes on error.log file if ever may error na mag occur.
 var errorLog = function(err){
     var fs = require('fs');
     fs.appendFile('./error.log', "\n\n***\n" + err + "\n***", function(err){
     });
 }
 
-// I suggest doing a View for this errors, para di mukhang plain and halatang error. :D
+//SD:  I suggest doing a View for this errors, para di mukhang plain and halatang error. :D
