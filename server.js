@@ -16,8 +16,8 @@ app.use(parser.urlencoded({ extended: false }));
 app.use(cookie_parser());
 app.use(session({secret: "Secret Thing", resave: false, saveUninitialized: true}));
 app.use(require('express-promise')()); //this makes promises come true. Still can't use it properly soo disable muna. 
+app.use('/assets', express.static(__dirname + '/public')); //this make public folder static/public
 app.use('/', require('./controller/routes')); //this will route everything.
-app.use('/public', express.static(__dirname + '/public')); //this make public folder static/public
 
 //Establish DB connection then open Server port listener.
 db.connect(db.MODE_PRODUCTION, function (err) {
