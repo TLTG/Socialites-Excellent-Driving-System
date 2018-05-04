@@ -1,0 +1,129 @@
+<div class="view-instructor">
+    <!-- Bread crumb -->
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-primary">Instructors</h3> 
+        </div>
+    </div>
+    <!-- End Bread crumb -->
+
+    <div class="container-fluid">
+        <!-- Start of Card  -->
+        <div class="studentCard">
+            <div class="row studentCard">
+                <!-- Start of col-lg-5 -->
+                <div class="card col-lg-6">
+                    <div class="form-group">
+                        <div class="input-group input-group-flat">
+                            <span class="input-group-btn"><button class="btn btn-custom" type="submit"><i class="ti-search"></i></button></span>
+                            <input type="text" class="form-control" placeholder="Search..." style="font-size: 12px;">
+                            <span class="input-group-btn"><button class="btn btn-primary input-group-close-icon" type="submit"><i class="ti-close"></i></button></span>
+                        </div>
+                    </div><br>
+                    <h4 class="card-title">List of Instructors</h4><br>
+                    <div class="table-responsive">
+                        <table class="table tblInstructor table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Instructor Name</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Graciella Tatel</td>
+                                    <td><span class="badge badge-success">Available</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Christian Paul Tupas</td>
+                                    <td><span class="badge badge-danger">Day Off</span></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Janelle Joy Gabat</td>
+                                    <td><span class="badge badge-warning">In session</span></td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Perrine Laganzo</td>
+                                    <td><span class="badge badge-success">Available</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- End of col-lg-5 -->
+
+                <!-- Start of col-lg-6 -->
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="pull-right">
+                            <button type="button" id="btnNewInstructor" class="btn btn-success m-b-10 m-l-5" data-toggle="modal" data-target="#new-instructor">New Instructor</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Instructor Information</h3><hr>
+                        <div class="row">
+                            <div class="col-md-5 col-lg-5">
+                                <span><img src="assets/images/user-medium.png" alt="Student Picture" class="studPic"/></span><br><br>
+                                <center>
+                                    <h6 id="instNum">INST-00001-MN-0</h6>
+                                </center>
+                            </div>
+                            <div class="col-md-7 col-lg-7" style="padding-left: 30px;">
+                                <h4 id="instName">Harry James Potter</h4>
+                                <span class="fa fa-map-marker fa-red"></span> <span id="instAddress">Sapang Palay, CSJDM, Bulacan</span><br>
+                                <span class="fa fa-phone fa-red"></span> <span id="instPhone">0956 586 7353</span><br>
+                                <span class="fa fa-envelope fa-red"></span> <span id="instEmail">gtatel0517@gmail.com</span>
+                                <br><br><br><br>
+                                <button type="button" id="btnViewInstructor" class="btn btn-danger m-b-10 m-l-5">View Profile</button>
+                            </div>
+                        </div> <!-- End of row -->
+                    </div>
+                </div> <!-- End of col-lg-6 -->
+            </div> <!-- End of row -->
+        </div><!-- End of Card  -->
+    </div>
+</div>
+
+<!-- New Instructor Modal -->
+    <div class="modal fade" id="new-instructor" tabindex="-1" role="dialog" aria-labelledby="new-instructor">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="myModalLabel"><strong>ADD</strong> New Instructor</h3>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4">
+                            <!-- <label class="control-label">First Name <span class="asterisk">*</span></label>
+                            <input type="text" id="firstName" class="form-control"> -->
+                            <label class="control-label">First Name <span class="asterisk">*</span></label>
+                            <input type="text" class="form-control has-feedback-left" id="inputSuccess2" placeholder="First Name">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <label class="control-label">Middle Name</label>
+                            <input type="text" id="midName" class="form-control">
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <label class="control-label">Surname <span class="asterisk">*</span></label>
+                            <input type="text" id="surName" class="form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnConfAddInstr" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="btnCancAddInstr" class="btn btn-primary">Save changes</button>
+            </div>
+
+            </div>
+        </div>
+    </div>
+</div>
