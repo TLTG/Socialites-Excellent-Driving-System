@@ -9,8 +9,8 @@ $(document).ready(function(){
 				swal("Oops!", "Please fill out all required fields.", "error");
             }
         else {
-            $.post('/admin', {user: username, pass: password}, function(err, data){
-                if(err) 
+            $.post('/admin', {user: username, pass: password}, function(data){
+                if(data.success == false) 
                 {
                     //alert (password);
                     swal("Oops!", "Invalid username or password!", "error");
