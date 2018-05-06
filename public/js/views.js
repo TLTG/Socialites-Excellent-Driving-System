@@ -1,4 +1,4 @@
-$(function() {
+$(function() {    
     $(".view-instructor").hide();
     $(".view-schedule").hide();
     $(".view-student").hide();

@@ -1,9 +1,66 @@
-$(function() {
-    // $("#btnNewInstructor").on("click", function() {
-    //     $('#newInstructor').modal('show');
-    // });
+$(function() { 
+    var calendar = new tui.Calendar(document.getElementById('calendar'), {
+        defaultView: 'week',
+        taskView: true,
+        scheduleView: true,
+        template: {
+            milestone: function(schedule) {
+                return '<span style="color:red;"><i class="fa fa-flag"></i> ' + schedule.title + '</span>';
+            },
+            milestoneTitle: function() {
+                return 'Milestone';
+            },
+            task: function(schedule) {
+                return '&nbsp;&nbsp;#' + schedule.title;
+            },
+            taskTitle: function() {
+                return '<label><input type="checkbox" />Task</label>';
+            },
+            allday: function(schedule) {
+                return schedule.title + ' <i class="fa fa-refresh"></i>';
+            },
+            alldayTitle: function() {
+                return 'All Day';
+            },
+            time: function(schedule) {
+                return schedule.title + ' <i class="fa fa-refresh"></i>' + schedule.start;
+            }
+        },
+        month: {
+            daynames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            startDayOfWeek: 0,
+            narrowWeekend: true
+        },
+        week: {
+            daynames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            startDayOfWeek: 0,
+            narrowWeekend: true
+        }
+    });
 });
-$("#btnConfAddInstr").on("click", function() {
+function resetConfNewInstr () //resets fields on confirm add instructor
+{
+    $("#confPass").val("");
+}
+
+function resetNewInstr () //resets fields on add instructor modal
+{
+    $("#newInstFirstname").val("");
+    $("#newInstMidname").val("");
+    $("#newInstSurname").val("");
+    $("#newInstBday").val("");
+    $("#newInstAddress").val("");
+    $("#newInstPhone").val("");
+    $("#newInstEmail").val("");
+    document.getElementById("g1NI").checked = true;
+    document.getElementById("g2NI").checked = false;
+}
+
+$("#btnNewInstructor").on("click", function() { //opens add instructor modal
+    $('#newInstructor').modal('show');
+});
+
+$("#btnConfAddInstr").on("click", function() { //conditions upon clicking add instructor button
     var fn = $("#newInstFirstname").val();
     var ln = $("#newInstSurname").val();
     var bday = $("#newInstBday").val();
@@ -18,18 +75,41 @@ $("#btnConfAddInstr").on("click", function() {
         || email == "" || email.length == 0 || email == null) {
             swal("Oops!", "Please fill out all required fields.", "error");
         }
+        else {
+            $('#confirmAddInstructor').modal('toggle'); //will open confirmation modal when all conditions are met
+        }
 });
-$("#btnConfConfAI").on("click", function() {
+
+$("#btnConfConfAI").on("click", function() { //conditions on password input upin confirmation
     var pass = $("#confPass").val();
     if (pass == "" || pass.length == 0 || pass == null) {
             swal("Oops!", "Please fill out all required fields.", "error");
         }
     // else if {
+        // swal("Oops!", "Incorrect password.", "error");
     //     alert ('Conditions and validations here.'); //DB: Conditions and validations here.
     // }
     else{
         swal("Success!", "Instructor has been added to database!", "success");
+        $('#confirmAddInstructor').modal("hide");
         $('#newInstructor').modal("hide");
     }
 });
 
+$("#btnViewInstructor").on("click", function() { //opens view instructor page upon clicking view details
+    $('.view-instructor').hide();
+    $('.view-viewInstructor').show();
+});
+
+$(".backInst").on("click", function() { //when back button is clicked (right side of instructor information)
+    $('.view-viewInstructor').hide();
+    $('.view-instructor').show();
+});
+
+$(".btnDelInstAcc").on("click", function() { //opens confirmation modal upon clicking delete account. UNDONE.
+    $('#confirmDeleteInstructor').modal('show');
+});
+
+$(".btnUpdateInstAcc").on("click", function() { //opens confirmation modal upon clicking update account. UNDONE.
+    $('#confirmDeleteInstructor').modal('show');
+});
