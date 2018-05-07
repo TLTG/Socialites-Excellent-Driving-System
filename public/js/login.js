@@ -1,4 +1,7 @@
 $(document).ready(function(){
+    var x = (screen.height)-50;
+    $("#main-wrapper").height();
+
     $('#btnLogin').on('click', function(e){
         e.preventDefault();
         var username = $('#username').val();

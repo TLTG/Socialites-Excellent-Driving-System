@@ -15,6 +15,7 @@ $(function() {
         $(".view-dashboard").hide();
         $(".view-vehicle").hide();
         $(".view-branches").hide();
+        $(".view-viewInstructor").hide();
         $(".view-student").show();
         document.getElementById("li1").classList.remove('active');
         document.getElementById("li3").classList.remove('active');
@@ -31,6 +32,7 @@ $(function() {
         $(".view-student").hide();
         $(".view-vehicle").hide();
         $(".view-branches").hide();
+        $(".view-viewInstructor").hide();
         $(".view-instructor").show();
         document.getElementById("li1").classList.remove('active');
         document.getElementById("li2").classList.remove('active');
@@ -47,6 +49,7 @@ $(function() {
         $(".view-dashboard").hide();
         $(".view-student").hide();
         $(".view-branches").hide();
+        $(".view-viewInstructor").hide();
         $(".view-vehicle").show();
         document.getElementById("li1").classList.remove('active');
         document.getElementById("li2").classList.remove('active');
@@ -63,6 +66,7 @@ $(function() {
         $(".view-student").hide();
         $(".view-vehicle").hide();
         $(".view-branches").hide();
+        $(".view-viewInstructor").hide();
         $(".view-schedule").show();
         document.getElementById("li1").classList.remove('active');
         document.getElementById("li2").classList.remove('active');
@@ -79,6 +83,7 @@ $(function() {
         $(".view-dashboard").hide();
         $(".view-student").hide();
         $(".view-vehicle").hide();
+        $(".view-viewInstructor").hide();
         $(".view-branches").show();
         document.getElementById("li1").classList.remove('active');
         document.getElementById("li2").classList.remove('active');
@@ -97,6 +102,7 @@ var dashboard = function()
         $(".view-student").hide();
         $(".view-vehicle").hide();
         $(".view-branches").hide();
+        $(".view-viewInstructor").hide();
         $(".view-dashboard").show();
         document.getElementById("li2").classList.remove('active');
         document.getElementById("li3").classList.remove('active');
