@@ -1,4 +1,5 @@
 $(function() {    
+    // $MAIN-WRAPPER.css("min-height", $(window).height());
     $(".view-instructor").hide();
     $(".view-schedule").hide();
     $(".view-student").hide();
