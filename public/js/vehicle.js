@@ -3,7 +3,15 @@ $(function ()
     $("#editVehiPlate").hide();
     $("#editVehiCoding").hide();
     $("#editVehiInst").hide();
+    $("#editVehiPlateM").hide();
+    $("#editVehiCodingM").hide();
+    $("#editVehiInstM").hide();
     $("#btnDoneEditVehi").hide();
+    $("#btnCancEditVehi").hide();
+
+    $("#vehiPlateM").show();
+    $("#vehiInstM").show();
+    $("#vehiCodingM").show();
     $("#vehiPlate").show();
     $("#vehiInst").show();
     $("#vehiCoding").show();
@@ -34,21 +42,39 @@ function confDelVehicle ()
     });
 }
 
-function confEditVehicle ()
+function editVehicle (a)
 {
-    $("#vehiPlate").hide();
-    $("#vehiInst").hide();
-    $("#vehiCoding").hide();
-    $("#btnEditVehi").hide();
-    $("#btnAddDefVehi").show();
-    $("#editVehiPlate").show();
-    $("#editVehiCoding").show();
-    $("#editVehiInst").show();
-    $("#btnDoneEditVehi").show();
-    $("#btnCancEditVehi").show();
+    if (a=="a")
+    {
+        $("#vehiPlate").hide();
+        $("#vehiInst").hide();
+        $("#vehiCoding").hide();
+        $("#editVehiPlate").show();
+        $("#editVehiCoding").show();
+        $("#editVehiInst").show();
+
+        $("#btnEditVehi").hide();
+        $("#btnAddDefVehi").show();
+        $("#btnDoneEditVehi").show();
+        $("#btnCancEditVehi").show();
+    }
+    else if (a=="m")
+    {
+        $("#vehiPlateM").hide();
+        $("#vehiInstM").hide();
+        $("#vehiCodingM").hide();
+        $("#editVehiPlateM").show();
+        $("#editVehiCodingM").show();
+        $("#editVehiInstM").show();
+
+        $("#btnEditVehiM").hide();
+        $("#btnAddDefVehiM").show();
+        $("#btnDoneEditVehiM").show();
+        $("#btnCancEditVehiM").show();
+    }
 }
 
-function doneEditVehi ()
+function doneEditVehi (a)
 {
     swal({
         title: "Are you sure you want to save the changes?",
@@ -62,17 +88,35 @@ function doneEditVehi ()
     },
     function(isConfirm){
         if (isConfirm) {
+            if (a=="a")
+            {
+                $("#editVehiPlate").hide();
+                $("#editVehiCoding").hide();
+                $("#editVehiInst").hide();
+                $("#btnDoneEditVehi").hide();
+                $("#btnCancEditVehi").hide();
+                $("#btnAddDefVehi").hide();
+
+                $("#vehiPlate").show();
+                $("#vehiInst").show();
+                $("#vehiCoding").show();
+                $("#btnEditVehi").show();
+            }
+            else if (a=="m")
+            {
+                $("#editVehiPlateM").hide();
+                $("#editVehiCodingM").hide();
+                $("#editVehiInstM").hide();
+                $("#btnDoneEditVehiM").hide();
+                $("#btnCancEditVehiM").hide();
+                $("#btnAddDefVehiM").hide();
+
+                $("#vehiPlateM").show();
+                $("#vehiInstM").show();
+                $("#vehiCodingM").show();
+                $("#btnEditVehiM").show();
+            }
             swal("Updated!", "Vehicle details has been successfully updated!", "success");
-            $("#editVehiPlate").hide();
-            $("#editVehiCoding").hide();
-            $("#editVehiInst").hide();
-            $("#btnDoneEditVehi").hide();
-            $("#btnCancEditVehi").hide();
-            $("#btnAddDefVehi").hide();
-            $("#vehiPlate").show();
-            $("#vehiInst").show();
-            $("#vehiCoding").show();
-            $("#btnEditVehi").show();
             //DB: Updating of vehicle function here
         }
         else {
@@ -81,27 +125,59 @@ function doneEditVehi ()
     });
 }
 
-function cancEditVehi ()
+function cancEditVehi (a)
 {
-    $("#editVehiPlate").hide();
+    if (a=="a")
+    {
+        $("#editVehiPlate").hide();
         $("#editVehiCoding").hide();
         $("#editVehiInst").hide();
         $("#btnDoneEditVehi").hide();
         $("#btnCancEditVehi").hide();
         $("#btnAddDefVehi").hide();
+
         $("#vehiPlate").show();
         $("#vehiInst").show();
         $("#vehiCoding").show();
         $("#btnEditVehi").show();
-        //DB&SD: Cancel updating of vehicle function here
+    }
+    else if (a=="m")
+    {
+        $("#editVehiPlateM").hide();
+        $("#editVehiCodingM").hide();
+        $("#editVehiInstM").hide();
+        $("#btnDoneEditVehiM").hide();
+        $("#btnCancEditVehiM").hide();
+        $("#btnAddDefVehiM").hide();
+
+        $("#vehiPlateM").show();
+        $("#vehiInstM").show();
+        $("#vehiCodingM").show();
+        $("#btnEditVehiM").show();
+    }
+    //DB&SD: Cancel updating of vehicleA function here
 }
 
 function doneDefVehi ()
 {
-    //DB&SD: Done vehicle defect function here
+    //DB&SD: Done vehicleA defect function here
 }
+
 
 function cancDefVehi ()
 {
-    //DB&SD: Cancel vehicle defect function here
+    //DB&SD: Cancel vehicleA defect function here
+}
+
+function addDefVehi (a)
+{
+    if (a=="A")
+    {
+        
+    }
+    else{
+        
+    }
+    $('#addNewDefectModal').modal('show');
+    //DB: Add vehicle defect function here
 }
