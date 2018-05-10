@@ -192,8 +192,7 @@
       <div class="modal-body">
         <center>
               <h2>ADD CAR DEFECT</h2>
-              <h6>Fill out all required (<span class="asterisk">*</span>) fields.</h6>
-          <br><br>
+              <h6>Fill out all required (<span class="asterisk">*</span>) fields.</h6><br>
           <div class="row">
             <div class="col-md-4 col-lg-4 col-xs-4 col-sm-4 defMod1 activeDefMod">
                 <h4 class="defModTxt">Car Part/s</h4>
@@ -205,91 +204,141 @@
                 <h4 class="defModTxt">Significance</h4>
             </div>
           </div><br>
-          <h5>You may select more than one.</h5><hr width="20%">
         </center>
-        <form>
-            <p>Car Body and Main Part</p>
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p1" value="p1"> Doors</label>
-                </div>
-                <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p2" value="p2"> Windows</label>
-                </div>
-                <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
-                </div>
-            </div><br>
+        <div class="divMod1">
+            <center><h5>You may select more than one.</h5><hr width="20%"></center>
+            <form>
+                <span class="fa fa-caret-right faDefMod pull-left"></span>
+                <h5 class="defModB">Car Body and Main Part</h5>
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6 checkbox">
+                        <label><input type="checkbox" class="flat-cb" name="newDefPart" id="p1" value="Doors"> Doors</label>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6 checkbox">
+                        <label><input type="checkbox" class="flat-cb" name="newDefPart" id="p2" value="Windows"> Windows</label>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
+                        <label><input type="checkbox" class="flat-cb" name="newDefPart" id="p28" value="Tires"> Tires</label>
+                    </div>
+                </div><br>
 
-            <p>Electrical and Electronics</p>
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p3" value="p3"> Audio/Video Devices</label>
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p4" value="p4"> Cameras</label>
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p5" value="p5"> Electrical Supply System</label>
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p6" value="p6"> Gauges and Meters</label>
-                </div>
-                <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p7" value="p7"> Ignition Electronic System</label>
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p8" value="p8"> Lighting and Signaling System</label>
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p10" value="p10"> Sensors</label>
-                </div>
-                <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p11" value="p11"> Starting System</label>
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p12" value="p12"> Electrical Switches</label>
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p13" value="p13"> Wiring Harnesses</label>
-                </div>
-            </div><br>
-            
-            <p>Interior</p>
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p14" value="p14"> Floor Components and Parts</label>
-                </div>
-                <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p15" value="p15"> Car Seat</label>
-                </div>
-                <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
-                </div>
-            </div><br>
+                <span class="fa fa-caret-right faDefMod pull-left"></span>
+                <h5 class="defModB">Electrical and Electronics</h5>
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p3" value="Audio/Video Devices"> Audio/Video Devices</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p4" value="Cameras"> Cameras</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p5" value="Electrical Supply System"> Electrical Supply System</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p6" value="Gauges and Meters"> Gauges and Meters</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p7" value="Ignition Electronic System"> Ignition Electronic System</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p8" value="Lighting and Signaling System"> Lighting and Signaling System</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p10" value="Sensors"> Sensors</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p11" value="Starting System"> Starting System</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p12" value="Electrical Switches"> Electrical Switches</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p13" value="Wiring Harnesses"> Wiring Harnesses</label><br>
+                    </div>
+                </div><br>
+                
+                <span class="fa fa-caret-right faDefMod pull-left"></span>
+                <h5 class="defModB">Interior</h5>
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p14" value="Floor Components and Parts"> Floor Components and Parts</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p15" value="Car Seat"> Car Seat</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
+                    </div>
+                </div><br>
 
-            <p>	Power-Train and Chassis</p>
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p16" value="p16"> Braking System</label>
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p17" value="p17"> Engine Components and Parts</label>
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p18" value="p18"> Engine Cooling System</label>
-                </div>
-                <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p19" value="p19"> Engine Oil System</label>
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p20" value="p20"> Exhaust System</label>
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p21" value="p21"> Fuel Supply System</label>
-                </div>
-                <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p22" value="p22"> Suspension and Steering Systems</label>
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p23" value="p23"> Transmission System</label>
-                </div>
-            </div><br>
+                <span class="fa fa-caret-right faDefMod pull-left"></span>
+                <h5 class="defModB">Power-Train and Chassis</h5>
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p16" value="Braking System"> Braking System</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p17" value="Engine Components and Parts"> Engine Components and Parts</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p18" value="Engine Cooling System"> Engine Cooling System</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p19" value="Engine Oil System"> Engine Oil System</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p20" value="Exhaust System"> Exhaust System</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p21" value="Fuel Supply System"> Fuel Supply System</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p22" value="Suspension and Steering Systems"> Suspension and Steering Systems</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p23" value="Transmission System"> Transmission System</label><br>
+                    </div>
+                </div><br>
 
-            <p>Miscellaneous Auto Parts</p>
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p24" value="p24"> Air Conditioning System (A/C)</label>
-                </div>
-                <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p25" value="p25"> Bearings</label>
-                </div>
-                <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
-                    <label><input type="checkbox" class="flat" name="newDefPart" id="p26" value="p26"> Hose</label>
-                </div>
-            </div><br>
+                <span class="fa fa-caret-right faDefMod pull-left"></span>
+                <h5 class="defModB">Miscellaneous Auto Parts</h5>
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p24" value="Air Conditioning System (A/C)"> Air Conditioning System (A/C)</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p25" value="Bearings"> Bearings</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p26" value="Hose"> Hose</label><br>
+                    </div>
+                </div><br>
 
-            <p>Others</p>
-            <label>Please Specify: <input type="text" class="flat" name="newDefPart" id="p25"> </label>
-        </form>
+                <span class="fa fa-caret-right faDefMod pull-left"></span>
+                <h5 class="defModB">Others</h5>
+                <label>Please Specify: <input type="text" class="flat" name="newDefPart" id="p27"> </label>
+
+            </form>
+        </div>
+
+        <div class="divMod2">
+            <center><h5>Briefly explain the defect or problem of the specific car part/s.</h5><hr width="20%"></center><br>
+            <form class="formDefect">
+                <div class="row divDamage">
+                    <div class="col-md-6 col-lg-6 col-xs-4 col-sm-4">
+                        <h5 class="damagedPartTxt"></h5>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xs-8 col-sm-8">
+                        <input type="text" class="flat damageTxtInput">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="divMod3">
+            <center><h5>Rate the importance of the defect/s to be fixed.</h5>
+                    <h6>(1: Lowest; 5: Highest)</h6><hr width="20%"></center>
+            <form class="formSignif">
+                <div class="damageSignifDiv">
+                    <center><h5 class="damagedPartTxt1">Tires</h5>
+                    <input type="radio" class="defRateRD" id="defRate1" name="defRate" value="1" checked>
+                        <label class="defRateLbl" for="defRate1">1</label>
+                    <input type="radio" class="defRateRD" id="defRate2" name="defRate" value="2">
+                        <label class="defRateLbl" for="defRate2">2</label>
+                    <input type="radio" class="defRateRD" id="defRate3" name="defRate" value="3">
+                        <label class="defRateLbl" for="defRate3">3</label>
+                    <input type="radio" class="defRateRD" id="defRate4" name="defRate" value="4">
+                        <label class="defRateLbl" for="defRate4">4</label>
+                    <input type="radio" class="defRateRD" id="defRate5" name="defRate" value="5">
+                        <label class="defRateLbl" for="defRate5">5</label></center>
+                </div>       
+            </form>
+        </div>
       </div>
       <div class="modal-footer">
-        <button type="button" id="btnCancAddInstr" class="btn btn-light" data-dismiss="modal">Cancel</button>
-        <button type="button" id="btnConfAddInstr" class="btn btn-primary" onclick="resetConfNewInstr()">Next</button>
+        <button type="button" id="btnCancAddDef" class="btn btn-light" data-dismiss="modal">Cancel</button>
+        <button type="button" id="btnNextAddDef" onclick="nextDef1()" class="btn btn-primary">Next</button>
+
+        <button type="button" id="btnPrevAddDef" onclick="prevDef1()" class="btn btn-primary">Previous</button>
+        <button type="button" id="btnNextAddDef2" onclick="nextDef2()" class="btn btn-primary">Next</button>
+
+        <button type="button" id="btnPrevAddDef2" onclick="prevDef2()" class="btn btn-primary">Previous</button>
+        <button type="button" id="btnDoneAddDef" onclick="doneDef()" class="btn btn-primary">Done</button>
       </div>
     </div>
   </div>
