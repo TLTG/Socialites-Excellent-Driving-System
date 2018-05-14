@@ -1,0 +1,345 @@
+<div class="view-vehicleA">
+    <!-- Bread crumb -->
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-primary">Vehicles</h3> </div>
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                <li class="breadcrumb-item">Vehicle</li>
+                <li class="breadcrumb-item active">Automatic</li>
+            </ol>
+        </div>
+    </div>
+    <!-- End Bread crumb -->
+    <!-- Container fluid  -->
+    <div class="container-fluid">
+        <!-- Start of Card  -->
+        <div class="studentCard">
+            <div class="row studentCard">
+                <!-- Start of col-lg-5 -->
+                <div class="card col-lg-6 scrollXCard">
+                    <div class="form-group">
+                        <div class="input-group input-group-flat">
+                            <span class="input-group-btn"><button class="btn btn-custom" type="submit"><i class="ti-search"></i></button></span>
+                            <input type="text" class="form-control" placeholder="Search..." style="font-size: 12px;">
+                            <span class="input-group-btn"><button class="btn btn-primary input-group-close-icon" type="submit"><i class="ti-close"></i></button></span>
+                        </div>
+                    </div><br>
+                    <h4 class="card-title">List of Automatic Vehicles</h4><br>
+                    <div class="table-responsive">
+                        <table class="table tblVehicle table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Brand</th>
+                                    <th>Model</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Toyota</td>
+                                    <td>Vios (Sedan)</td>
+                                    <td><span class="badge badge-success">Available</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Toyota</td>
+                                    <td>Corolla Atlis (Sedan)</td>
+                                    <td><span class="badge badge-success">Available</span></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Toyota</td>
+                                    <td>Corolla Atlis (Sedan)</td>
+                                    <td><span class="badge badge-danger">Coding</span></td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Toyota</td>
+                                    <td>Corolla Atlis (Sedan)</td>
+                                    <td><span class="badge badge-warning">In Use</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- End of col-lg-5 -->
+
+                <!-- Start of col-lg-6 -->
+                <div class="col-lg-6 scrollXCard">
+                    <div class="card">
+                        <div class="pull-right">
+                            <button type="button" id="btnNewVehicle" onclick="resetNewVehicle()" class="btn btn-success m-b-10 m-l-5">New Vehicle</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Vehicle Information</h3><hr>
+                        <div style="padding-left: 30px;">
+                            <div class="row">
+                                <div class="col-md-8 col-lg-8 col-sm-7 col-xs-7">
+                                    <h4 id="vehiName">Toyota, Vios (Sedan)</h4>
+                                    <h6>ID: <span id="vehiID">V0001-A</span></h6>
+                                </div>
+                                <div class="col-md-1 col-lg-1 col-sm-1 col-xs-1">
+                                    <i class="ti-pencil tiV" id="btnEditVehi" onclick="editVehicle('a')" data-toggle="tooltip" data-placement="bottom" title="Update"></i>
+                                </div>
+                                <div class="col-md-1 col-lg-1 col-sm-1 col-xs-1">
+                                    <i class="ti-trash tiV" id="btnDelVehi" onclick="confDelVehicle()" data-toggle="tooltip" data-placement="bottom" title="Delete"></i>
+                                </div>
+                                <div class="col-md-1 col-lg-1 col-sm-1 col-xs-1">
+                                    <i class="ti-calendar tiV" id="btnSchedVehi" data-toggle="tooltip" data-placement="bottom" title="Schedule"></i>
+                                </div>
+                            </div><hr>
+                            <div class="row">
+                                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                    <span class="fa fa-automobile fa-red fa-rightB">&nbsp;&nbsp;</span>
+                                        <span id="vehiPlate"> AAA 1234</span>
+                                        <input type="text" class="customTxtInput2 input-flat" id="editVehiPlate" placeholder="AAA 123"><br>
+                                    <span class="fa fa-close fa-red fa-rightB">&nbsp;&nbsp;</span>
+                                        <span id="vehiCoding"> Monday</span>
+                                        <select class="customTxtInput2 input-flat" id="editVehiCoding">
+                                            <option>Monday</option>
+                                            <option>Tuesday</option>
+                                            <option>Wednesday</option>
+                                            <option>Thursday</option>
+                                            <option>Friday</option>
+                                            <option>Saturday</option>
+                                            <option>Sunday</option>
+                                        </select>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                    <span class="fa fa-user fa-red fa-rightB">&nbsp;&nbsp;</span>
+                                        <span id="vehiInst"> Harry James Potter</span>
+                                        <select class="customTxtInput2 input-flat" id="editVehiInst">
+                                            <option>Harry James Potter</option>
+                                            <option>Dobby</option>
+                                            <option>Bellatrix Lestrange</option>
+                                            <option>Merula Synide</option>
+                                            <option>Clarissa Fray</option>
+                                            <option>---</option>
+                                        </select><br>
+                                </div>
+                            </div><br><br><hr>
+                            <div class="row">
+                                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                    <h4 class="card-title">Defect(s):</h4>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                    <i class="ti-plus tiV" id="btnAddDefVehi" onclick="addDefVehi('a')" data-toggle="tooltip" data-placement="bottom" title="Add Defect(s)"></i>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table tblVehicleDef table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Part</th>
+                                            <th>Damage</th>
+                                            <th>Significance</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Tires</td>
+                                            <td>Deflated</td>
+                                            <td><span class="text-warning"></span>3</td>
+                                            <td><i class="ti-check tiDef" id="btnDoneDefVehi" onclick="doneDefVehi()" data-toggle="tooltip" data-placement="bottom" title="Fixed Defect"></i>
+                                                <i class="ti-close tiDef1" id="btnCancDefVehi" onclick="cancDefVehi()" data-toggle="tooltip" data-placement="bottom" title="Cancel/Remove"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Brake</td>
+                                            <td>Broke</td>
+                                            <td><span class="text-danger"></span>5</td>
+                                            <td><i class="ti-check tiDef" id="btnDoneDefVehi" onclick="doneDefVehi()" data-toggle="tooltip" data-placement="bottom" title="Fixed Defect"></i>
+                                                <i class="ti-close tiDef1" id="btnCancDefVehi" onclick="cancDefVehi()" data-toggle="tooltip" data-placement="bottom" title="Cancel/Remove"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Plate Number</td>
+                                            <td>Missing</td>
+                                            <td><span class="text-danger"></span>5</td>
+                                            <td><i class="ti-check tiDef" id="btnDoneDefVehi" onclick="doneDefVehi()" data-toggle="tooltip" data-placement="bottom" title="Fixed Defect"></i>
+                                                <i class="ti-close tiDef1" id="btnCancDefVehi" onclick="cancDefVehi()" data-toggle="tooltip" data-placement="bottom" title="Cancel/Remove"></i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div><br>
+                            <button type="button" id="btnDoneEditVehi" onclick="doneEditVehi('a')" class="btn btn-success m-b-10 m-l-5">Save Changes</button>
+                            <button type="button" id="btnCancEditVehi" onclick="cancEditVehi('a')" class="btn btn-danger m-b-10 m-l-5">Cancel</button>
+                            <!-- <i class="ti-check tiV" id="btnDoneEditVehi" onclick="doneEditVehi()" data-toggle="tooltip" data-placement="bottom" title="Done"></i>
+                            <i class="ti-close tiV" id="btnCancEditVehi" onclick="cancEditVehi()" data-toggle="tooltip" data-placement="bottom" title="Cancel"></i> -->
+                        </div>
+                    </div>
+                </div> <!-- End of col-lg-6 -->
+            </div> <!-- End of row -->
+        </div><!-- End of Card  -->
+    </div>
+    <!-- End Container fluid  -->
+</div>
+
+<!-- Add Defect Modal -->
+<div class="modal fade" id="addNewDefectModal" tabindex="-1" role="dialog" aria-labelledby="addNewDefectModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <!-- <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel"><strong>ADD</strong> Defect</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div> -->
+      <div class="modal-body">
+        <center>
+              <h2>ADD CAR DEFECT</h2>
+              <h6>Fill out all required (<span class="asterisk">*</span>) fields.</h6><br>
+          <div class="row">
+            <div class="col-md-4 col-lg-4 col-xs-4 col-sm-4 defMod1 activeDefMod">
+                <h4 class="defModTxt">Car Part/s</h4>
+            </div>
+            <div class="col-md-4 col-lg-4 col-xs-4 col-sm-4 defMod2">
+                <h4 class="defModTxt">Defect or Problem</h4>
+            </div>
+            <div class="col-md-4 col-lg-4 col-xs-4 col-sm-4 defMod3">
+                <h4 class="defModTxt">Significance</h4>
+            </div>
+          </div><br>
+        </center>
+        <div class="divMod1">
+            <center><h5>You may select more than one.</h5><hr width="20%"></center>
+            <form>
+                <span class="fa fa-caret-right faDefMod pull-left"></span>
+                <h5 class="defModB">Car Body and Main Part</h5>
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6 checkbox">
+                        <label><input type="checkbox" class="flat-cb" name="newDefPart" id="p1" value="Doors"> Doors</label>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6 checkbox">
+                        <label><input type="checkbox" class="flat-cb" name="newDefPart" id="p2" value="Windows"> Windows</label>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
+                        <label><input type="checkbox" class="flat-cb" name="newDefPart" id="p28" value="Tires"> Tires</label>
+                    </div>
+                </div><br>
+
+                <span class="fa fa-caret-right faDefMod pull-left"></span>
+                <h5 class="defModB">Electrical and Electronics</h5>
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p3" value="Audio/Video Devices"> Audio/Video Devices</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p4" value="Cameras"> Cameras</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p5" value="Electrical Supply System"> Electrical Supply System</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p6" value="Gauges and Meters"> Gauges and Meters</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p7" value="Ignition Electronic System"> Ignition Electronic System</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p8" value="Lighting and Signaling System"> Lighting and Signaling System</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p10" value="Sensors"> Sensors</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p11" value="Starting System"> Starting System</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p12" value="Electrical Switches"> Electrical Switches</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p13" value="Wiring Harnesses"> Wiring Harnesses</label><br>
+                    </div>
+                </div><br>
+                
+                <span class="fa fa-caret-right faDefMod pull-left"></span>
+                <h5 class="defModB">Interior</h5>
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p14" value="Floor Components and Parts"> Floor Components and Parts</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p15" value="Car Seat"> Car Seat</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
+                    </div>
+                </div><br>
+
+                <span class="fa fa-caret-right faDefMod pull-left"></span>
+                <h5 class="defModB">Power-Train and Chassis</h5>
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p16" value="Braking System"> Braking System</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p17" value="Engine Components and Parts"> Engine Components and Parts</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p18" value="Engine Cooling System"> Engine Cooling System</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p19" value="Engine Oil System"> Engine Oil System</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p20" value="Exhaust System"> Exhaust System</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p21" value="Fuel Supply System"> Fuel Supply System</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p22" value="Suspension and Steering Systems"> Suspension and Steering Systems</label><br>
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p23" value="Transmission System"> Transmission System</label><br>
+                    </div>
+                </div><br>
+
+                <span class="fa fa-caret-right faDefMod pull-left"></span>
+                <h5 class="defModB">Miscellaneous Auto Parts</h5>
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p24" value="Air Conditioning System (A/C)"> Air Conditioning System (A/C)</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p25" value="Bearings"> Bearings</label><br>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-2 col-xs-2">
+                        <label><input type="checkbox" class="flat" name="newDefPart" id="p26" value="Hose"> Hose</label><br>
+                    </div>
+                </div><br>
+
+                <span class="fa fa-caret-right faDefMod pull-left"></span>
+                <h5 class="defModB">Others</h5>
+                <label>Please Specify: <input type="text" class="flat" name="newDefPart" id="p27"> </label>
+
+            </form>
+        </div>
+
+        <div class="divMod2">
+            <center><h5>Briefly explain the defect or problem of the specific car part/s.</h5><hr width="20%"></center><br>
+            <form class="formDefect">
+                <div class="row divDamage">
+                    <div class="col-md-6 col-lg-6 col-xs-4 col-sm-4">
+                        <h5 class="damagedPartTxt"></h5>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xs-8 col-sm-8">
+                        <input type="text" class="flat damageTxtInput">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="divMod3">
+            <center><h5>Rate the importance of the defect/s to be fixed.</h5>
+                    <h6>(1: Lowest; 5: Highest)</h6><hr width="20%"></center>
+            <form class="formSignif">
+                <div class="damageSignifDiv">
+                    <center><h5 class="damagedPartTxt1">Tires</h5>
+                    <input type="radio" class="defRateRD" id="defRate1" name="defRate" value="1" checked>
+                        <label class="defRateLbl" for="defRate1">1</label>
+                    <input type="radio" class="defRateRD" id="defRate2" name="defRate" value="2">
+                        <label class="defRateLbl" for="defRate2">2</label>
+                    <input type="radio" class="defRateRD" id="defRate3" name="defRate" value="3">
+                        <label class="defRateLbl" for="defRate3">3</label>
+                    <input type="radio" class="defRateRD" id="defRate4" name="defRate" value="4">
+                        <label class="defRateLbl" for="defRate4">4</label>
+                    <input type="radio" class="defRateRD" id="defRate5" name="defRate" value="5">
+                        <label class="defRateLbl" for="defRate5">5</label></center>
+                </div>       
+            </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btnCancAddDef" class="btn btn-light" data-dismiss="modal">Cancel</button>
+        <button type="button" id="btnNextAddDef" onclick="nextDef1()" class="btn btn-primary">Next</button>
+
+        <button type="button" id="btnPrevAddDef" onclick="prevDef1()" class="btn btn-primary">Previous</button>
+        <button type="button" id="btnNextAddDef2" onclick="nextDef2()" class="btn btn-primary">Next</button>
+
+        <button type="button" id="btnPrevAddDef2" onclick="prevDef2()" class="btn btn-primary">Previous</button>
+        <button type="button" id="btnDoneAddDef" onclick="doneDef()" class="btn btn-primary">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
