@@ -1,7 +1,7 @@
-function resetConfNewInstr () //resets fields on confirm add instructor
-{
-    $("#confPass").val("");
-}
+$("#btnNewInstructor").on("click", function() { //opens add instructor modal
+    resetNewInstr();
+    $('#newInstructorModal').modal('show');
+});
 
 function resetNewInstr () //resets fields on add instructor modal
 {
@@ -14,47 +14,17 @@ function resetNewInstr () //resets fields on add instructor modal
     $("#newInstEmail").val("");
     document.getElementById("g1NI").checked = true;
     document.getElementById("g2NI").checked = false;
+
+    $(".defMod2Inst").removeClass("activeDefModInst");
+    $(".defMod1Inst").addClass("activeDefModInst");
+
+    $("#btnPrevAddInst").hide();
+    $("#btnDoneAddInst").hide();
+    $("#btnNextAddInst").show();
+
+    $(".divMod2Inst").hide();
+    $(".divMod1Inst").show();
 }
-
-$("#btnNewInstructor").on("click", function() { //opens add instructor modal
-    $('#newInstructor').modal('show');
-});
-
-$("#btnConfAddInstr").on("click", function() { //conditions upon clicking add instructor button
-    var fn = $("#newInstFirstname").val();
-    var ln = $("#newInstSurname").val();
-    var bday = $("#newInstBday").val();
-    var add = $("#newInstAddress").val();
-    var phone = $("#newInstPhone").val();
-    var email = $("#newInstEmail").val();
-    if (fn == "" || fn.length == 0 || fn == null
-        || ln == "" || ln.length == 0 || ln == null
-        || bday == "" || bday.length == 0 || bday == null
-        || add == "" || add.length == 0 || add == null
-        || phone == "" || phone.length == 0 || phone == null
-        || email == "" || email.length == 0 || email == null) {
-            swal("Oops!", "Please fill out all required fields.", "error");
-        }
-        else {
-            $('#confirmAddInstructor').modal('toggle'); //will open confirmation modal when all conditions are met
-        }
-});
-
-$("#btnConfConfAI").on("click", function() { //conditions on password input upin confirmation
-    var pass = $("#confPass").val();
-    if (pass == "" || pass.length == 0 || pass == null) {
-            swal("Oops!", "Please fill out all required fields.", "error");
-        }
-    // else if {
-        // swal("Oops!", "Incorrect password.", "error");
-    //     alert ('Conditions and validations here.'); //DB: Conditions and validations here.
-    // }
-    else{
-        swal("Success!", "Instructor has been added to database!", "success");
-        $('#confirmAddInstructor').modal("hide");
-        $('#newInstructor').modal("hide");
-    }
-});
 
 $("#btnViewInstructor").on("click", function() { //opens view instructor page upon clicking view details
     $('.view-instructor').hide();
@@ -73,3 +43,90 @@ $(".btnDelInstAcc").on("click", function() { //opens confirmation modal upon cli
 $(".btnUpdateInstAcc").on("click", function() { //opens confirmation modal upon clicking update account. UNDONE.
     $('#confirmDeleteInstructor').modal('show');
 });
+
+function nextInst ()
+{
+    var fn = $("#newInstFirstname").val();
+    var ln = $("#newInstSurname").val();
+    var bday = $("#newInstBday").val();
+    var add = $("#newInstAddress").val();
+    var phone = $("#newInstPhone").val();
+    var email = $("#newInstEmail").val();
+    if (fn == "" || fn.length == 0 || fn == null
+        || ln == "" || ln.length == 0 || ln == null
+        || bday == "" || bday.length == 0 || bday == null
+        || add == "" || add.length == 0 || add == null
+        || phone == "" || phone.length == 0 || phone == null
+        || email == "" || email.length == 0 || email == null) {
+            swal("Oops!", "Please fill out all required fields.", "error");
+        }
+        else {
+            var email = $("#newInstEmail").val();
+            $("#newInstUsername").val(email);
+            
+            $(".defMod1Inst").removeClass("activeDefModInst");
+            $(".defMod2Inst").addClass("activeDefModInst");
+
+            $("#btnNextAddInst").hide();
+            $("#btnPrevAddInst").show();
+            $("#btnDoneAddInst").show();
+
+            $(".divMod1Inst").hide();
+            $(".divMod2Inst").show();
+        }
+}
+
+function doneInst ()
+{
+    var un = $("#newInstUsername").val();
+    var pw = $("#newInstPassword").val();
+    var cpw = $("#newInstConfPassword").val();
+    if (un == "" || un.length == 0 || un == null
+        || pw == "" || pw.length == 0 || pw == null
+        || cpw == "" || cpw.length == 0 || cpw == null) {
+            swal("Oops!", "Please fill out all required fields.", "error");
+        }
+        else {
+            if (pw == cpw)
+            {
+                swal({
+                    title: "Warning!",
+                    text: "Are you sure you want to create this instructor account?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "Cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm){
+                    if (isConfirm) {
+                        swal("Success!", "Instructor account has been created!", "success");
+                        $("#newInstructorModal").modal('hide');
+                        //DB: Adding of new instructor here
+                    }
+                    else {
+                        swal("Cancelled", "", "error");
+                    }
+                });
+            }
+            else
+            {
+                swal("Oops!", "Passwords do not match.", "error");
+            }
+        }
+}
+
+function prevInst ()
+{
+    $(".defMod2Inst").removeClass("activeDefModInst");
+    $(".defMod1Inst").addClass("activeDefModInst");
+
+    $("#btnPrevAddInst").hide();
+    $("#btnDoneAddInst").hide();
+    $("#btnNextAddInst").show();
+
+    $(".divMod2Inst").hide();
+    $(".divMod1Inst").show();
+}
