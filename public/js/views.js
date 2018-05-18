@@ -8,6 +8,9 @@ $(function() {
     $(".view-branches").hide();
     $(".view-dashboard").show();
 
+    $(".view-viewInstructor").hide();
+    $(".view-viewStudent").hide();
+
     $("#dashboard").on("click", dashboard);
 
     $("#students").on("click", function() {
@@ -19,6 +22,7 @@ $(function() {
         $(".view-vehicleB").hide();
         $(".view-branches").hide();
         $(".view-viewInstructor").hide();
+        $(".view-viewStudent").hide();
         $(".view-student").show();
         document.getElementById("li1").classList.remove('active');
         document.getElementById("li3").classList.remove('active');
@@ -39,6 +43,7 @@ $(function() {
         $(".view-vehicleB").hide();
         $(".view-branches").hide();
         $(".view-viewInstructor").hide();
+        $(".view-viewStudent").hide();
         $(".view-instructor").show();
         document.getElementById("li1").classList.remove('active');
         document.getElementById("li2").classList.remove('active');
@@ -58,6 +63,7 @@ $(function() {
         $(".view-student").hide();
         $(".view-branches").hide();
         $(".view-viewInstructor").hide();
+        $(".view-viewStudent").hide();
         $(".view-vehicleB").hide();
         $(".view-vehicleA").show();
         document.getElementById("li1").classList.remove('active');
@@ -78,6 +84,7 @@ $(function() {
         $(".view-student").hide();
         $(".view-branches").hide();
         $(".view-viewInstructor").hide();
+        $(".view-viewStudent").hide();
         $(".view-vehicleA").hide();
         $(".view-vehicleB").show();
         document.getElementById("li1").classList.remove('active');
@@ -90,26 +97,6 @@ $(function() {
         document.getElementById("li4B").classList.add('active');
     });
 
-    // $("#schedule").on("click", function() {
-    //     $(".search-box").hide();
-    //     $(".view-dashboard").hide();
-    //     $(".view-instructor").hide();
-    //     $(".view-student").hide();
-    //     $(".view-vehicleA").hide();
-    //     $(".view-vehicleB").hide();
-    //     $(".view-branches").hide();
-    //     $(".view-viewInstructor").hide();
-    //     $(".view-schedule").show();
-    //     document.getElementById("li1").classList.remove('active');
-    //     document.getElementById("li2").classList.remove('active');
-    //     document.getElementById("li3").classList.remove('active');
-    //     document.getElementById("li4").classList.remove('active');
-    //     document.getElementById("li6").classList.remove('active');
-    //     document.getElementById("li5").classList.add('active');
-    //     document.getElementById("li4A").classList.remove('active');
-    //     document.getElementById("li4B").classList.remove('active');
-    // });
-
     $("#branches").on("click", function() {
         $(".search-box").hide();
         $(".view-instructor").hide();
@@ -119,6 +106,7 @@ $(function() {
         $(".view-vehicleA").hide();
         $(".view-vehicleB").hide();
         $(".view-viewInstructor").hide();
+        $(".view-viewStudent").hide();
         $(".view-branches").show();
         document.getElementById("li1").classList.remove('active');
         document.getElementById("li2").classList.remove('active');
@@ -141,6 +129,7 @@ var dashboard = function()
     $(".view-vehicleB").hide();
     $(".view-branches").hide();
     $(".view-viewInstructor").hide();
+    $(".view-viewStudent").hide();
     $(".view-dashboard").show();
     document.getElementById("li2").classList.remove('active');
     document.getElementById("li3").classList.remove('active');
@@ -162,6 +151,7 @@ var schedule = function()
     $(".view-vehicleB").hide();
     $(".view-branches").hide();
     $(".view-viewInstructor").hide();
+    $(".view-viewStudent").hide();
     $(".view-schedule").show();
     document.getElementById("li1").classList.remove('active');
     document.getElementById("li2").classList.remove('active');

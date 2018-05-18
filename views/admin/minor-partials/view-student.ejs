@@ -1,0 +1,242 @@
+<div class="view-viewStudent">
+    <!-- Bread crumb -->
+    <div class="row page-titles">
+        <div class="col-md-8 align-self-center">
+            <span class="fa fa-chevron-left float-left backStud"></span>
+            <h3 class="text-primary">Student Information</h3> 
+        </div>
+    </div>
+    <!-- End Bread crumb -->
+
+    <div class="container-fluid">
+        <!-- Start of Card  -->
+        <div class="instructorCard">
+            <div class="row instructorCard">
+                <!-- Start of col-lg-3 -->
+                <div class="col-lg-3">
+                    <div class="card">
+                        <center>
+                            <span><img src="assets/images/user-medium.png" alt="Student Picture" class="studPic"/></span><br><br>
+                            <h4 class="studName">Graciella Custodio Tatel</h4>
+                            <h6 class="studNum">2015-02355-MN-0</h6>
+                            <h6 class="studBranch">Main Office</h6><hr width="30%">
+                        </center>
+                            <span><span class="fa fa-map-marker fa-red"></span> <span class="studAddress">Sapang Palay, CSJDM, Bulacan</span></span>
+                            <span><span class="fa fa-phone fa-red"></span> <span class="studPhone">0956 586 7353</span></span>
+                            <span><span class="fa fa-envelope fa-red"></span> <span class="studEmail">gtatel0517@gmail.com</span></span>
+                    </div>
+                </div>
+                <!-- End of col-lg-3 -->
+
+                <!-- Start of col-lg-9 -->
+                <div class="col-lg-9">
+                    <div class="card">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs profile-tab" role="tablist">
+                            <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#scheduleS" role="tab">Schedule</a> </li>
+                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#paymentS" role="tab">Payment</a> </li>
+                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#gradeS" role="tab">Grades and Lessons</a> </li>
+                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#evaluationS" role="tab">Evaluation</a> </li>
+                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settingsS" role="tab">Settings</a> </li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <!--first tab-->
+                            <div class="tab-pane active" id="scheduleS" role="tabpanel">
+                                <div class="card-body"> 
+                                    <div id='calendar'>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--second tab-->
+                            <div class="tab-pane" id="evaluationS" role="tabpanel">
+                                <div class="card-body">
+                                    <div class="profiletimeline studTab">
+                                        <div class="sl-item">
+                                            <div class="sl-left"> <img src="assets/images/user4.png" alt="Student" id="studEvalPic" class="img-circle" /> </div>
+                                            <div class="sl-right">
+                                                <div><a href="#" class="link" id="instEvalName">Harry James Potter</a> <span class="sl-date">May 2, 2018</span>
+                                                    <br><br><p style="color: #455a64;">Evaluation Grade: <span class="instEvalGrade">Passed</span></p>
+                                                    <p class="m-t-10 instEvalMsg"> You did great! :> </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--third tab-->
+                            <div class="tab-pane" id="gradeS" role="tabpanel">
+                                <div class="card-body">
+                                    <div class="studTab">
+                                        <h3 class="pull-right">Course: <span class="studCourse">CRS-001-A</span></h3><br><br>
+                                        <div class="table-responsive">
+                                            <table class="table tblStudGrades1 table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>#</th>
+                                                        <th>Lesson</th>
+                                                        <th>Time</th>
+                                                        <th>Instructor</th>
+                                                        <th>Vehicle Used</th>
+                                                        <th>Grade</th>
+                                                        <th>Comment</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="studentTable">
+                                                    <tr>
+                                                        <td>05/11/18</td>
+                                                        <td>1</td>
+                                                        <td>Start &amp; Stop</td>
+                                                        <td>9:00 A.M.</td>
+                                                        <td>Harry James Potter</td>
+                                                        <td>Toyota, Vios</td>
+                                                        <td>90</td>
+                                                        <td>---</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>05/12/18</td>
+                                                        <td>2</td>
+                                                        <td>Backing &amp; Turning</td>
+                                                        <td>9:00 A.M.</td>
+                                                        <td>Harry James Potter</td>
+                                                        <td>Toyota, Vios</td>
+                                                        <td>92</td>
+                                                        <td>Hanep!</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>05/12/18</td>
+                                                        <td>3</td>
+                                                        <td>Road Crossing &amp; Light Traffic</td>
+                                                        <td>9:00 A.M.</td>
+                                                        <td>Harry James Potter</td>
+                                                        <td>Toyota, Vios</td>
+                                                        <td>95</td>
+                                                        <td>Active listener</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div><br><br>
+                                        <div class="pull-right">
+                                            <button type="button" id="btnAddPayment" class="btn btn-warning m-b-10 m-l-5">Add Grade</button>
+                                            <button type="button" id="btnEditPayment" class="btn btn-light m-b-10 m-l-5">Edit Grade</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--fourth tab-->
+                            <div class="tab-pane" id="paymentS" role="tabpanel">
+                                <div class="card-body">
+                                    <div class="studTab">
+                                        <h3 class="pull-right">Status: <span class="studPayStatus">Fully Paid</span></h3><br>
+                                        <div class="table-responsive">
+                                            <table class="table tblStudPayment1 table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Transaction #</th>
+                                                        <th>Date</th>
+                                                        <th>Assessment</th>
+                                                        <th>Payment</th>
+                                                        <th>Balance</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="studentTable">
+                                                    <tr>
+                                                        <td>1001</td>
+                                                        <td>05/11/18</td>
+                                                        <td>5,000.00</td>
+                                                        <td>5,000.00</td>
+                                                        <td>0.00</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div><br><br>
+                                        <div class="pull-right">
+                                            <button type="button" id="btnAddPayment" class="btn btn-warning m-b-10 m-l-5">Add Payment</button>
+                                            <button type="button" id="btnEditPayment" class="btn btn-light m-b-10 m-l-5">Edit Payment</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!--fifth tab-->
+                            <div class="tab-pane" id="settingsS" role="tabpanel">
+                                <div class="card-body">
+                                    <form class="form-horizontal form-material studTab">
+                                        <div class="form-group">
+                                            <label class="col-md-12 customLbl">First Name <span class="asterisk">*</span></label>
+                                            <div class="col-md-12">
+                                                <input type="text" id="editInstAccFN" placeholder="Juan" class="form-control form-control-line">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 customLbl">Middle Name </label>
+                                            <div class="col-md-12">
+                                                <input type="text" id="editInstAccMN" placeholder="Santos" class="form-control form-control-line">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 customLbl">Surname <span class="asterisk">*</span></label>
+                                            <div class="col-md-12">
+                                                <input type="text" id="editInstAccLN" placeholder="Dela Cruz" class="form-control form-control-line">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 customLbl">Sex <span class="asterisk">*</span></label>
+                                            <div class="col-md-12">
+                                                <select class="form-control form-control-line" id="editInstAccSex">
+                                                    <option>Male</option>
+                                                    <option>Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 customLbl">Date of Birth <span class="asterisk">*</span></label>
+                                            <div class="col-md-12">
+                                                <input type="date" id="editInstAccBday" class="form-control form-control-line" id="newInstBday" placeholder="dd/mm/yyyy">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 customLbl">Address <span class="asterisk">*</span></label>
+                                            <div class="col-md-12">
+                                                <input type="text" id="editInstAccAdd" placeholder="Blk 43 Lot 1, Novaliches, Quezon City" class="form-control form-control-line">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 customLbl">Phone Number <span class="asterisk">*</span></label>
+                                            <div class="col-md-12">
+                                                <input type="number" id="editInstAccPhone" placeholder="09123456789" class="form-control form-control-line" min="999999999999" max="999999999999">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label "customLbl" class="col-md-12">Email Address <span class="asterisk">*</span></label>
+                                            <div class="col-md-12">
+                                                <input type="email" id="editInstAccEmail" placeholder="juansdcruz@gmail.com" class="form-control form-control-line">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 customLbl">Password <span class="asterisk">*</span></label>
+                                            <div class="col-md-12">
+                                                <input type="password" id="editInstAccPW" value="password" class="form-control form-control-line">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <button class="btn btn-danger pull-left btnDelInstAcc">Delete Account</button>
+                                                <button class="btn btn-primary pull-right btnUpdateInstAcc">Update Account</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- End of col-lg-9 -->
+            </div> <!-- End of row -->
+        </div><!-- End of Card  -->
+    </div>
+</div>

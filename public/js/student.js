@@ -22,6 +22,26 @@ $(function() { // nag rurun to pag fully loaded nayung page,
     getStudent(1, studentTable.offset, studentTable.limit).then(renderStudentTable); // <--- tawagin yung getStudent() then after yung renderStudentTable().    
 });
 
+$("#btnViewStudent").on("click", function() { //opens view student page upon clicking view details
+    $('.view-student').hide();
+    $('.view-viewStudent').show();
+});
+
+$(".backStud").on("click", function() { //closes view instructor page then goes back to previous page
+    $('.view-viewStudent').hide();
+    $('.view-student').show();
+});
+
+function clrSearchStudentC ()
+{
+    $('#searchStudentC').val("");
+}
+
+
+
+
+
+
 var studentTable = { // <--- set nang property nung table, para alam natin yung current page, offset, limit and storage narin ng loaded pages.
     offset: 0,
     limit: 10,

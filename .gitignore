@@ -59,4 +59,7 @@ typings/
 
 public/vendor
 public/images
-public/css
+public/css/*
+
+!public/css/style.css
+!public/css/login.css
