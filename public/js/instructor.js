@@ -3,6 +3,7 @@ var currentInstPage = {
     offset: 0,
     limit: 10,
 }
+
 $("#btnNewInstructor").on("click", function() { //opens add instructor modal
     resetNewInstr();
     $('#newInstructorModal').modal('show');
