@@ -1,6 +1,7 @@
 $(document).ready(function(){
-    var x = (screen.height)-50;
-    $("#main-wrapper").height();
+    var x = $(window).height(); 
+    $(".unix-login").height(x);
+    $("#main-wrapper").height(x);
 
     $('#btnLogin').on('click', function(e){
         e.preventDefault();
