@@ -8,7 +8,9 @@ $(function () {
         if (!selected)
             $(this).addClass("highlightTr");
     });
-    car.getATableData();
+    car.getATableData(function(){
+        viewCarProfile(car.pages[0][0].id);
+    });
 });
 
 function confDelVehicle() {
@@ -445,9 +447,11 @@ function doneDef(){ //All steps done
     });
     queryer.start(car.addDefect, checkedValuesData, function(err, done){
         if(err) return console.error(err);
-        console.log("Done.");
-        swal("Success!", count + " defects have been added to vehicle details!", "success");
-        $('#addNewDefectModal').modal('hide');
+        else{
+            console.log("Done.");
+            swal("Success!", count + " defects have been added to vehicle details!", "success");
+            $('#addNewDefectModal').modal('hide');
+        }
     });
 }
 
@@ -482,7 +486,7 @@ function prevDef2() //going back to step2
     $(".divMod2").show();
 }
 
-function cancDefVehi() //deleting of defect data on defTable
+function cancDefVehi(id) //deleting of defect data on defTable
 {
     swal({
         title: "Warning!",
@@ -497,7 +501,10 @@ function cancDefVehi() //deleting of defect data on defTable
     },
         function (isConfirm) {
             if (isConfirm) {
-                swal("Success!", "Defect data has been removed.", "success");
+                car.delDefect(id, function(err, done){
+                    if(err) return swal("Failed!", err, "error");
+                    swal("Success!", "Defect data has been removed.", "success");
+                });
                 //DB: Deleting of vehicle defect from defTable function here
             }
             else {
@@ -529,12 +536,14 @@ function viewCarProfile(id){
         $('#vehiInst').html(profile.driverName);
         var defect = "";
         profile.defect.forEach(x=>{
-            defect += "<tr>";
-            defect += "<td>" + x.part + "</td>";
-            defect += "<td>" + x.description + "</td>";
-            defect += "<td><span class='text-danger'>" + 2 + "</span></td>";
-            defect += "<td><i class='ti-close tiDef1' id='btnCancDefVehi' onclick='cancDefVehi()' data-toggle='tooltip' data-placement='bottom' title='Cancel/Remove'></i></td>";
-            defect += "</tr>";
+            if(x.repaired != 0){
+                defect += "<tr>";
+                defect += "<td>" + x.part + "</td>";
+                defect += "<td>" + x.description + "</td>";
+                defect += "<td><span class='text-danger'>" + x.importance + "</span></td>";
+                defect += "<td><i class='ti-close tiDef1' id='btnCancDefVehi' onclick='cancDefVehi("+ x.id +")' data-toggle='tooltip' data-placement='bottom' title='Cancel/Remove'></i></td>";
+                defect += "</tr>";
+            }
         });
         $('#carDefect').html(defect);
     });

@@ -23,7 +23,7 @@ var car = {
         }
         $('#carTableA').html(html);
     },
-    getATableData: function(){
+    getATableData: function(cb){
         $.get('api/v1/car?offset=' + this.offset + '&limit=' + this.limit + '&tran=A', function(response){
             if(response.success){
                 var data = response.data;
@@ -38,6 +38,7 @@ var car = {
             this.pages.push(page);
             this.renderATable(page);
             this.offset = page[page.length-1].id;
+            cb();
         }
     },
     addCar: function(_data, cb){
@@ -128,25 +129,45 @@ var car = {
             cb(new Error("Error: can't perform request."));            
         });
     },
-    editDefect: function(){},
-    delDefect: function(){},
-    storeDefectData: function(){}
+    delDefect: function(id, cb){
+        var onSuccess = function(response){
+            if(response.success){
+                cb(null, true);
+            }else{
+                onFail(error);
+            }
+        };
+        var onFail = function(error){
+            cb(error);
+        }
+        $.ajax({
+            type: "DELETE",
+            data: {data: id},
+            url: 'api/v1/car/'+ this.selectedCar + '/defect',
+            success: onSuccess,
+            error: onFail
+        });
+    },
 }
 /* 
 *   paul-made module design to query request one at a time, to prevent server congestion.
 */
 var queryer = {
-    actionPerform: (data, callback)=>{},
     arrData: [],
-    done: (error, done)=>{},    
     nextData: 0,
+    err: null,
+    actionPerform: (data, callback)=>{},
+    done: (error, done)=>{},    
     next: function(){
-        var a = this;
-        if(this.nextData >= this.arrData.length) return this.done(null, true);
-        this.action(this.arrData[this.nextData], function(ok, not){
-            if(not) return a.abort(not);
-            a.nextData++;
-            a.next();
+        var self = this;
+        if(this.err) return this.finish();
+        if(this.nextData >= this.arrData.length) return this.finish();
+        else this.action(this.arrData[this.nextData], function(ok, not){
+            if(not) return self.abort(not);
+            else {
+                self.nextData++;
+                self.next();
+            }
         });
     },
     action: function(data, cb){
@@ -161,8 +182,11 @@ var queryer = {
         this.done = cb;
         this.next();
     },
+    finish: function(){
+        if(this.err) return this.done(this.err);
+        this.done(null, true);
+    },
     abort: function(reason){
-        this.nextData = (this.arrData.length+1);
-        this.done(reason);
+        this.err = reason;
     }
 }

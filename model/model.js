@@ -6,6 +6,7 @@ var Model = {
     db: null,
     table: '',
     create: function (data, cb) {
+        //var self = this;
         var db = this.db;
         var sql = "INSERT INTO "+ this.table;    
         this.getFields(this.table, function(err, fields){
@@ -110,6 +111,10 @@ var Model = {
                 if(count == 0) return cb(null, fields);
             });
         });
+    },
+    init: function(table, db){
+        this.table = table;
+        this.db = db;
     }
 }
 

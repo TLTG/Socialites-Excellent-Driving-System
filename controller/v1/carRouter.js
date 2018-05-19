@@ -14,9 +14,8 @@ router.route('/:id')
     .delete(auth.auth, middleware.delete);
 router.route('/:id/defect')
     .get(middleware.getDefect)
-    .post()
-    .put()
-    .delete();
+    .post(middleware.addDefect)
+    .delete(middleware.delDefect);
 router.route('/:id/:field')
     .get(middleware.get)
     .put(auth.auth, middleware.update);

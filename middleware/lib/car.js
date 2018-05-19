@@ -1,4 +1,4 @@
-var car = require('../../model/vehicleModel');
+var car = require('../../model/vehicleModel'); 
 
 exports.create = function(req, res, next){
     if(res.locals.authenticated == 0) return next();
@@ -80,4 +80,29 @@ exports.getDefect = function(req, res, next){
         if(err) return next(err);
         res.status(200).send({success:true, data:_data});
     });
+}
+
+exports.addDefect = function(req, res, next){
+    if(res.locals.authenticated == 0) return next();
+    var id = req.params.id; 
+    var dataInput = JSON.parse(req.body.data);
+    var data = [null];
+    data.push(id);
+    data.push(dataInput.part);
+    data.push(dataInput.defect);
+    data.push(dataInput.importance);
+    data.push(1); 
+    car.addDefect(data, function(err, result){
+        if(err) return next(err);
+        res.status(200).send({success: true, detail:"Successfully Added!"});
+    });
+}
+
+exports.delDefect = function(req, res, next){
+    if(res.locals.authenticated == 0) return next();
+    var id = req.body.data;
+    car.delDefect(id, "repaired", function(err, result){
+        if(err) return next(err);
+        res.status(200).send({success: true, detail: "Successfully deleted!"});
+    });    
 }
