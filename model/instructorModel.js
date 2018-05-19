@@ -34,11 +34,15 @@ Instructor.get = function (id, field, cb) {
     }
     var sql = "CALL getInst(?)";
     this.db.get().query(sql, [id], function (err, result) {
-        if (err) return cb(null, null);
+        if (err) return cb(err, null);
         if (field == null) {
             cb(null, result[0]);
         } else {
-            cb(null, result[0][0][field]);
+            if(result[0].length == 0){
+                cb(null, []);
+            }else{
+                cb(null, result[0][0][field]);
+            }
         }
     });
 }

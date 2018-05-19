@@ -10,7 +10,7 @@ exports.create = function(req, res, next){
     data.push(dataInput.transType);
     data.push(dataInput.plate);
     data.push(null);
-    data.push(dataInput.offday);
+    data.push(offdayViaPlate(dataInput.plate));
     data.push(1);
 
     car.create(data, function(err, result){
@@ -54,7 +54,8 @@ exports.update = function(req, res, next){
         data.push(dataInput.brand);
         data.push(dataInput.transType);
         data.push(dataInput.plate);
-        data.push(dataInput.offday);
+        data.push(null);
+        data.push(offdayViaPlate(dataInput.plate));
         data.push(1);
     }
 
@@ -105,4 +106,13 @@ exports.delDefect = function(req, res, next){
         if(err) return next(err);
         res.status(200).send({success: true, detail: "Successfully deleted!"});
     });    
+}
+
+var offdayViaPlate = function(plate){
+    var lastDigit = plate[plate.length-1];
+    return (lastDigit == 1 || lastDigit == 2) ? 1 :
+            (lastDigit == 3 || lastDigit == 4) ? 2 : 
+            (lastDigit == 5 || lastDigit == 6) ? 3 :
+            (lastDigit == 7 || lastDigit == 8) ? 4 :
+            (lastDigit == 9 || lastDigit == 0) ? 5 : 0;
 }

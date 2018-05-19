@@ -2,13 +2,13 @@ var checkedValues, count, checkedValuesData = [];
 
 $(function () {
     clrSearchVehiA();
-    $('.carTbl').click(function () {
-        var selected = $(this).hasClass("highlightTr");
-        $('.tblVehicle tr').removeClass("highlightTr");
-        if (!selected)
-            $(this).addClass("highlightTr");
-    });
     car.getATableData(function(){
+        $('.carTbl').click(function () {
+            var selected = $(this).hasClass("highlightTr");
+            $('.tblVehicle tr').removeClass("highlightTr");
+            if (!selected)
+                $(this).addClass("highlightTr");
+        });
         viewCarProfile(car.pages[0][0].id);
     });
 });
@@ -39,14 +39,8 @@ function confDelVehicle() {
     });
 }
 
-function editVehicle ()
-{
-    $('.modalH2AddVehi').html("Edit Vehicle Details");
-    $('#btnConfAddVehi').hide();
-    $('#btnConfEditVehi').show();
-    $('#addNewVehicleModal').modal('show');
-  
-  car.pages[car.currPage].forEach(x=>{
+function editVehicle (){
+    car.pages[car.currPage].forEach(x=>{
         if(x.id == selectedCar){
             $('select[name="addVehiType"]').val(x.transmission);
             $(".addVehiBrand").val(x.brand);
@@ -55,10 +49,11 @@ function editVehicle ()
             $('select[name="addVehiCoding"]').val(x.offday);
         
             $('.modalH2AddVehi').html("Edit Vehicle Details");
+            $('#btnConfAddVehi').hide();
+            $('#btnConfEditVehi').show();
             $('#addNewVehicleModal').modal('show');
         }
     });
-
 }
 
 function openNewVehicle() {
@@ -555,4 +550,37 @@ function viewCarProfile(id){
         });
         $('#carDefect').html(defect);
     });
+}
+
+function editVehi(){
+    var _type = $('select[name="addVehiType"]').val();
+    var _brand = $(".addVehiBrand").val();
+    var _model = $(".addVehiModel").val();
+    var _plate = $(".addVehiPlate").val();
+    var _coding = $('select[name="addVehiCoding"]').val();
+
+    if (_brand == "" || _brand == null
+        || _model == "" || _model == null
+        || _plate == "" || _plate == null
+        || _type == 0 || _coding == 0) {
+        swal("Oops!", "Please fill out all required fields.", "error");
+    }
+    else {
+        var _data = {
+            model: _model,
+            brand: _brand,
+            transType: _type,
+            plate: _plate,
+            offday: _coding
+        }
+        car.update(_data, function(err, done){
+            if(err){
+                console.error(err);
+                swal("Failed!", err.stack, "error");            
+            }else{
+                swal("Success!", "Vehicle has been modified!", "success");
+                $('#addNewVehicleModal').modal('hide');                
+            }
+        });
+    }
 }

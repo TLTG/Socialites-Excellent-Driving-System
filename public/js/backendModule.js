@@ -13,10 +13,11 @@ var car = {
         var dayName = ["","Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
         for(var x=0; x < data.length; x++){
             if(data[x].status != 0){
-                html += "<tr class='carTblA' onclick='viewCarProfile("+ data[x].id +")'>";
+                html += "<tr class='carTbl' onclick='viewCarProfile("+ data[x].id +")'>";
                 html += "<td>" + data[x].id + "</td>";
                 html += "<td>" + data[x].brand + "</td>";
                 html += "<td>" + data[x].model + "</td>";
+                html += "<td>" + (data[x].transmission == "M" ? "Manual" : "Automatic") + "</td>";
                 html += "<td>" + (dayName[data[x].offday] == dayToday ? "<span class='text-danger'>Coding</span>" : (data[x].status == 2 ? "<span class='text-warning'>In Use</span>" : "<span class='text-success'>Available</span>")) + "</td>";
                 html += "</html>";
             }
@@ -99,7 +100,26 @@ var car = {
             }
         });
     },
-    update: function(){},
+    update: function(data, cb){
+        var id = this.selectedCar;
+        var onSuccess = function(res){
+            if(res.success){
+                cb(null, true);
+            }else{
+                onFail(res.detail);
+            }
+        };
+        var onFail = function(err){
+            cb(new Error("Error: " + err));
+        };
+        $.ajax({
+            type: "PUT",
+            url: 'api/v1/car/'+ id,
+            data: {data: JSON.stringify(data)},
+            success: onSuccess,
+            error: onFail
+        });
+    },
     delete: function(id, cb){
         var onSuccess = function(response){
             if(response.success){
