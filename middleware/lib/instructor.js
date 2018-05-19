@@ -19,7 +19,8 @@ exports.get = function(req, res, next){
 
         }else{
             var field = param.field == undefined ? null : param.field;
-            instructor.get(param.id, field, function(err, result){
+            var id = parseInt(param.id) == undefined ? 0 : param.id;
+            instructor.get(id, field, function(err, result){
                 if(err) return next(err);
                 res.status(200).send({success: true, data: result});                
             });

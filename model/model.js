@@ -15,7 +15,6 @@ var Model = {
             var execute = function(){
                 db.get().query(sql, data, function(err, result){
                     if(err) {
-                        console.error(err);
                         return cb(err);
                     }
                     cb(null, true);
@@ -38,7 +37,7 @@ var Model = {
             sql = "SELECT " + field + " as field FROM "+ this.table +" WHERE id = ?";
         }
         this.db.get().query(sql, [id], function (err, result) {
-            if (err) return cb(null, null);
+            if (err) return cb(err);
             cb(null, field == null ? result[0] : result[0].field);
         });
     },
