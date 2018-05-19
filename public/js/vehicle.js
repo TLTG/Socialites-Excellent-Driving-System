@@ -29,18 +29,19 @@ function confDelVehicle ()
     });
 }
 
-function editVehicle (a)
+function editVehicle ()
 {
-    //DB: Put vehicle details here
-    // var plate = $('#vehiPlate').val();
-    // $('.addVehiPlate').val(plate);
     $('.modalH2AddVehi').html("Edit Vehicle Details");
+    $('#btnConfAddVehi').hide();
+    $('#btnConfEditVehi').show();
     $('#addNewVehicleModal').modal('show');
 }
 
 function openNewVehicle ()
 {
     resetNewVehi();
+    $('#btnConfEditVehi').hide();
+    $('#btnConfAddVehi').show();
     $('.modalH2AddVehi').html("Add New Vehicle");
     $('#addNewVehicleModal').modal('show');
 }
@@ -51,7 +52,6 @@ function resetNewVehi ()
     $(".addVehiBrand").val("");
     $(".addVehiModel").val("");
     $(".addVehiPlate").val("");
-    $('select[name="addVehiCoding"]').val(0);
 }
 
 function addVehi ()
@@ -60,12 +60,11 @@ function addVehi ()
     var brand = $(".addVehiBrand").val();
     var model = $(".addVehiModel").val();
     var plate = $(".addVehiPlate").val();
-    var coding = $('select[name="addVehiCoding"]').val();
 
     if (brand == "" || brand == null
         || model == "" || model == null
         || plate == "" || plate == null
-        || type == 0 || coding == 0)
+        || type == 0)
     {
         swal("Oops!", "Please fill out all required fields.", "error");
     }
