@@ -1,20 +1,18 @@
 var db = require('./db');
 var ModelModule = require('./model');
 var UserInfo = require('./userInfoModel');
+var Vehicle = require('./vehicleModel').table;
 var table = "instructor";
 
 //Constructor
-var Instructor = function(tableName, database){
-    ModelModule.apply(this, arguments);
-    this.tableName = tableName;
-}
-Instructor.prototype = ModelModule.prototype;
-Instructor.prototype.constructor = Instructor;
+var Instructor = Object.create(ModelModule);
+Instructor.table = table;
+Instructor.db = db;
 
 //Custom codes here: Instructor.prototype
 
 //Override getList() function from parent model class.
-Instructor.prototype.getList = function(offset, limit, cb){
+Instructor.getList = function(offset, limit, cb){
     var sql = "CALL getInstList(?,?)";
     db.get().query(sql, [offset, limit], function(err, result){
         if(err) return cb(err);
@@ -22,19 +20,27 @@ Instructor.prototype.getList = function(offset, limit, cb){
     });
 }
 
-Instructor.prototype.getInf = function(accID, cb){
+Instructor.getInfo = function(accID, cb){
     UserInfo.getInfo(accID, function(err, result){
         if(err) return cb(err);
         cb(null, result);
     });
 }
 
-Instructor.prototype.getVacant = function(id, cb){
-    var sql = "SELECT vacant FROM " + this.tableName + " WHERE id = ?";
-    db.get().query(sql, [id], function(err, result){
-        if(err) return cb(err);
-        cb(null, result);
+Instructor.get = function (id, field, cb) {
+    if (typeof field == "function") {
+        cb = field;
+        field = null;
+    }
+    var sql = "CALL getInst(?)";
+    this.db.get().query(sql, [id], function (err, result) {
+        if (err) return cb(null, null);
+        if (field == null) {
+            cb(null, result[0]);
+        } else {
+            cb(null, result[0][0][field]);
+        }
     });
 }
 
-module.exports = new Instructor(table, db); //Export model for middleware use.
+module.exports = Instructor; //Export model for middleware use.

@@ -2,13 +2,10 @@ var db = require('./db');
 var ModelModule = require('./model');
 var table = "lesson";
 
-var Lesson = function(tableName, database){
-    ModelModule.apply(this, arguments);
-    this.tableName = tableName;
-}
-Lesson.prototype = ModelModule.prototype;
-Lesson.prototype.constructor = Lesson;
+var Lesson = Object.create(ModelModule);
+Lesson.table = table;
+Lesson.db = db;
 
 //Business Logic Code:
 
-module.exports = new Lesson(table, db);
+module.exports = Lesson;

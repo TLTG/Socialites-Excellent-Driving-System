@@ -2,13 +2,18 @@ var db = require('./db');
 var ModelModule = require('./model');
 var table = "defect";
 
-var Defect = function(tableName, database){
-    ModelModule.apply(this, arguments);
-    this.tableName = tableName;
+var Defect = {};
+Defect = Object.create(ModelModule);
+Defect.init(table, db);
+/* Defect.table = table;
+Defect.db = db; */
+
+Defect.getListByID = function(id, cb){
+    var sql = "SELECT * FROM " + table + " WHERE vehicle = ?";
+    this.db.get().query(sql, [id], function(err, result){
+        if(err) return cb(err);
+        cb(null, result);
+    });
 }
-Defect.prototype = ModelModule.prototype;
-Defect.prototype.constructor = Defect;
 
-//
-
-module.exports = new Defect(table, db);
+module.exports = Defect;

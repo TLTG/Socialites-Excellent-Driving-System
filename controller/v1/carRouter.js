@@ -12,6 +12,10 @@ router.route('/:id')
     .put(auth.auth, middleware.update)
     .get(middleware.get)
     .delete(auth.auth, middleware.delete);
+router.route('/:id/defect')
+    .get(middleware.getDefect)
+    .post(middleware.addDefect)
+    .delete(middleware.delDefect);
 router.route('/:id/:field')
     .get(middleware.get)
     .put(auth.auth, middleware.update);

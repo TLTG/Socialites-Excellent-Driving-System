@@ -10,6 +10,21 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getInst` (IN `_id` VARCHAR(15))  READS SQL DATA
+SELECT i.id as instID, i.vacant, u.* FROM instructor i, userinfo u WHERE i.id = _id AND i.userInfo = u.id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getInstList` (IN `_offset` INT(7), IN `_limit` INT(5))  READS SQL DATA
+SELECT i.id as instID,i.vacant,i.status, u.*  FROM instructor i, userinfo u WHERE i.id > _offset AND u.id = i.userInfo ORDER BY i.id ASC limit _limit$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getStud` (IN `_id` VARCHAR(15))  READS SQL DATA
+SELECT s.id as studID, s.dateRegistered, u.* FROM student s, userinfo u WHERE s.id = _id AND s.userInfo = u.id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getStudList` (IN `_offset` INT(7), IN `_limit` INT(5))  NO SQL
+SELECT s.id as studID, i.* FROM student s, userinfo i WHERE s.id > _offset AND i.id = s.userInfo ORDER BY s.id ASC limit _limit$$
+
+DELIMITER ;
+
 CREATE TABLE `account` (
   `id` int(15) NOT NULL,
   `studID` varchar(15) NOT NULL,
@@ -50,6 +65,7 @@ CREATE TABLE `defect` (
   `vehicle` int(3) NOT NULL,
   `part` varchar(15) NOT NULL,
   `description` varchar(150) NOT NULL,
+  `importance` int(1) NOT NULL,
   `repaired` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -143,7 +159,9 @@ CREATE TABLE `vehicle` (
   `id` int(3) NOT NULL,
   `model` varchar(15) NOT NULL,
   `brand` varchar(15) NOT NULL,
-  `plate#` varchar(10) NOT NULL,
+  `transmission` varchar(1) NOT NULL,
+  `plate` varchar(10) NOT NULL,
+  `driver` varchar(15) DEFAULT NULL,
   `offday` int(1) NOT NULL,
   `status` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -213,47 +231,48 @@ ALTER TABLE `userinfo`
   ADD KEY `userAcc` (`userAcc`);
 
 ALTER TABLE `vehicle`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `driver` (`driver`);
 
 
 ALTER TABLE `account`
-  MODIFY `id` int(15) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 ALTER TABLE `accounttype`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 ALTER TABLE `activity`
-  MODIFY `id` int(15) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 ALTER TABLE `branch`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 ALTER TABLE `defect`
-  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 ALTER TABLE `evaluation`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 ALTER TABLE `guardian`
-  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 ALTER TABLE `lesson`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 ALTER TABLE `requirement`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 ALTER TABLE `schedule`
-  MODIFY `id` int(15) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 ALTER TABLE `useraccount`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 ALTER TABLE `userinfo`
-  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 ALTER TABLE `vehicle`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=569;
 
 
 ALTER TABLE `account`
@@ -295,6 +314,9 @@ ALTER TABLE `useraccount`
 
 ALTER TABLE `userinfo`
   ADD CONSTRAINT `userinfo_ibfk_1` FOREIGN KEY (`userAcc`) REFERENCES `useraccount` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+ALTER TABLE `vehicle`
+  ADD CONSTRAINT `vehicle_ibfk_1` FOREIGN KEY (`driver`) REFERENCES `instructor` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
 
