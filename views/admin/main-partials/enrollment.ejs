@@ -1,0 +1,152 @@
+<div class="view-enrollment">
+    <!-- Bread crumb -->
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-primary">Student Enrollment</h3> </div>
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Students</a></li>
+                <li class="breadcrumb-item active" id="activeStudent">Enrollment</li>
+            </ol>
+        </div>
+    </div>
+    <!-- End Bread crumb -->
+
+    <div class="container-fluid">
+        <!-- Start of Card  -->
+        <div class="studentCard">
+            <div class="row">
+                <!-- Start of col-lg-6 -->
+                <div class="card col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <h3>Student Information</h3>
+                    <h6>Fields with <span class="asterisk">*</span> are required.</h6>
+                    <form class="enrForm">
+                        <hr class="hrCustom"><br>
+                        <div>
+                            <h5 class="h5Enr">Name<span class="asterisk">*</span></h5>
+                            <input type="text" class="txtEnr" required name="enrFN" id="enrFN" placeholder="*First Name"><br>
+                            <input type="text" class="txtEnr" required name="enrMN" id="enrMN" placeholder="Middle Name"><br>
+                            <input type="text" class="txtEnr" required name="enrSN" id="enrSN" placeholder="*Surname"><br>
+                        </div><hr>
+                        <div>
+                            <h5 class="h5Enr">Birth Date<span class="asterisk">*</span></h5>
+                            <input type="date" class="txtEnr" required name="enrBday" id="enrBday" placeholder="mm/dd/yyyy"><br>
+                        </div><hr>
+                        <div>
+                            <h5 class="h5Enr">Birth Place<span class="asterisk">*</span></h5>
+                            <input type="text" class="txtEnr" required name="enrBplace" id="enrBplace" placeholder="*Birthplace"><br>
+                        </div><hr>
+                        <div>
+                            <h5 class="h5Enr">Sex<span class="asterisk">*</span></h5>
+                            <input type="radio" class="enrSexRD" id="enrSex1" name="enrSex" value="Male" checked>
+                                <label class="enrSexLbl" for="enrSex1">Male</label><br>
+                            <input type="radio" class="enrSexRD" id="enrSex2" name="enrSex" value="Female">
+                                <label class="defRateLbl" for="enrSex2">Female</label>
+                        </div><hr>
+                        <div>
+                            <h5 class="h5Enr">Address<span class="asterisk">*</span></h5>
+                            <textarea rows="3" class="enrTxtArea" id="enrAddress" placeholder="*Address"></textarea>
+                        </div><hr>
+                        <div>
+                            <h5 class="h5Enr">Civil Status<span class="asterisk">*</span></h5>
+                            <select class="enrCivStatus" name="enrCivStatus">
+                                <option value="civ0">---</option>
+                                <option value="civ1">Single</option>
+                                <option value="civ2">Married</option>
+                                <option value="civ3">Divorced</option>
+                                <option value="civ4">Separated</option>
+                                <option value="civ5">Widowed</option>
+                            </select>
+                        </div><hr>
+                        <div>
+                            <h5 class="h5Enr">Occupation</h5>
+                            <input type="text" class="txtEnr" required name="enrOcc" id="enrOcc" placeholder="*Occupation"><br>
+                        </div><hr>
+                        <div>
+                            <h5 class="h5Enr">Contact<span class="asterisk">*</span></h5>
+                            <input type="text" class="txtEnr" required name="enrCont" id="enrCont" placeholder="*Contact Number"><br>
+                            <input type="text" class="txtEnr" required name="enrEmail" id="enrEmail" placeholder="Email Address"><br>
+                        </div><hr>
+                        <div>
+                            <h5 class="h5Enr">Guardian Information<span class="asterisk">*</span></h5>
+                            <input type="text" class="txtEnr" required name="enrGuard" id="enrGuard" placeholder="*Parent/Guardian Name"><br>
+                            <input type="text" class="txtEnr" required name="enrGuardCont" id="enrGuardCont" placeholder="*Contact Number"><br>
+                        </div><hr>
+                    </form>
+                </div>
+                <!-- End of col-lg-6 -->
+
+                <!-- Start of col-lg-6 -->
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 studentCard">
+                    <div class="card studentCard">
+                        <h3>Student Driver's Permit/License</h3>
+                        <h6>Select one below.</h6>
+                        <form class="reqForm">
+                            <hr class="hrCustom"><br>
+                            <input type="radio" class="enrReqPerm" id="enrReqP1" name="enrReqP" value="reqP1">
+                                <label class="enrSexLbl" for="enrReqP1">To apply student driver's permit at LTO</label><br>
+                            <input type="radio" class="enrReqPerm" id="enrReqP2" name="enrReqP" value="reqP2">
+                                <label class="enrSexLbl" for="enrReqP2">To apply student driver's permit thru S-Excellent</label><br>
+                            <input type="radio" class="enrReqPerm" id="enrReqP3" name="enrReqP" value="reqP3">
+                                <label class="enrSexLbl" for="enrReqP3">With student driver's permit</label><br>
+                            <input type="radio" class="enrReqPerm" id="enrReqP4" name="enrReqP" value="reqP4">
+                                <label class="enrSexLbl" for="enrReqP4">With non-professional license</label><br>
+                            <input type="radio" class="enrReqPerm" id="enrReqP5" name="enrReqP" value="reqP5">
+                                <label class="enrSexLbl" for="enrReqP5">With professional license</label><br>
+                            <input type="radio" class="enrReqPerm" id="enrReqP6" name="enrReqP" value="reqP6">
+                                <label class="enrSexLbl" for="enrReqP6">To apply non-professional license thru S-Excellent</label><br>
+                            <input type="radio" class="enrReqPerm" id="enrReqP7" name="enrReqP" value="reqP7">
+                                <label class="enrSexLbl" for="enrReqP7">To apply professional license thru S-Excellent</label><br>
+                            <input type="radio" class="enrReqPerm" id="enrReqP8" name="enrReqP" value="reqP8">
+                                <label class="enrSexLbl" for="enrReqP8">Other:</label>
+                            <input type="text" class="txtEnr" required name="enrGuard" placeholder="Please specify"><br>
+                        </form>
+                    </div>
+                    <div class="card studentCard">
+                        <h3>Requirements</h3>
+                        <h6>Check all requirements that are met.</h6>
+                        <form class="reqForm">
+                            <hr class="hrCustom"><br><!-- Different Requirements -->
+                            <input type="radio" class="reqType" id="enrReqT1" name="enrReqT" value="reqT1" checked>
+                                <label class="enrSexLbl" for="enrReqT1">17-18 yrs. old</label><br>
+                            <input type="radio" class="reqType" id="enrReqT2" name="enrReqT" value="reqT2">
+                                <label class="enrSexLbl" for="enrReqT2">19 yrs. old &amp; above</label><br>
+                            <input type="radio" class="reqType" id="enrReqT3" name="enrReqT" value="reqT3">
+                                <label class="enrSexLbl" for="enrReqT3">Non-Filipino Students/ Tourists</label><br>
+
+                            <div class="reqA"><hr>
+                                <h5 class="h5Enr">For 17-18 yrs. old</h5>
+                                <label class="lblCB1"><input type="checkbox" name="enrReqA" id="rA1" value="Original Birth Certificate (NSO)">
+                                    &emsp;&nbsp;Original Birth Certificate (NSO)</label><br>
+                                <label class="lblCB1"><input type="checkbox" name="enrReqA" id="rA2" value="Photocopy of Birth Certificate (NSO)">
+                                    &emsp;&nbsp;Photocopy of Birth Certificate (NSO)</label><br>
+                                <label class="lblCB1"><input type="checkbox" name="enrReqA" id="rA3" value="Parental Consent">
+                                    &emsp;&nbsp;Parental Consent</label><br>
+                            <hr></div>
+
+                            <div class="reqB"><hr>
+                                <h5 class="h5Enr">For 19 yrs. old &amp; above</h5>
+                                <label class="lblCB1"><input type="checkbox" name="enrReqB" id="rB1" value="Photocopy of Birth Certificate (NSO)">
+                                    &emsp;&nbsp;Photocopy of Birth Certificate (NSO)</label><br>
+                                <label class="lblCB1"><input type="checkbox" name="enrReqB" id="rB2" value="Parental Consent">
+                                    &emsp;&nbsp;TIN - Tax Identification Number</label><br>
+                                <label class="lblCB1"><input type="checkbox" name="enrReqB" id="rB3" value="Parental Consent">
+                                    &emsp;&nbsp;Baranggay Clearance</label><br>
+                            <hr></div>
+
+                            <div class="reqC"><hr>
+                                <h5 class="h5Enr">For Non-Filipino Students/ Tourists</h5>
+                                <label class="lblCB1"><input type="checkbox" name="enrReqC" id="rC1" value="Original Birth Certificate (NSO)">
+                                    &emsp;&nbsp;Original Passport</label><br>
+                                <label class="lblCB1"><input type="checkbox" name="enrReqC" id="rC2" value="Original Birth Certificate (NSO)">
+                                    &emsp;&nbsp;Original ACR - Alien Certificate Registration</label><br>
+                                <label class="lblCB1"><input type="checkbox" name="enrReqC" id="rC3" value="Photocopy of Birth Certificate (NSO)">
+                                    &emsp;&nbsp;Photocopy of ACR - Alien Certificate Registration</label><br>
+                            <hr></div>
+                        </form>
+                    </div>
+                </div> <!-- End of col-lg-6 -->
+            </div> <!-- End of row -->
+        </div><!-- End of Card  -->
+    </div>
+</div>

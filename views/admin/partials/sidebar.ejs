@@ -17,33 +17,31 @@
                 </div>
                 <li class="nav-divider"></li>
                 <li class="nav-label">General</li>
-                <li class="active" id="li1"> <a class="sidebarMenu" id="dashboard">
+                <li class="active" id="li1"> <a class="sidebarMenu" id="dashboard" onclick="dashboard()">
                     <i class="ti-home tiSide"></i><span class="hide-menu sidebarMenu">Dashboard</span></a>
                 </li>
-                <li id="li2"> <a class="sidebarMenu" id="students">
+                <!-- <li id="li2"> <a class="sidebarMenu" id="students">
                     <i class="ti-heart tiSide"></i><span class="hide-menu sidebarMenu">Students</span></a>
-                </li>
-                <!-- <li id="li2"> <a class="has-arrow sidebarMenu" href="#" aria-expanded="false" id="students"></a>
-                    <i class="ti-heart tiSide"></i><span class="hide-menu sidebarMenu">Students</span></a>
-                    <ul aria-expanded="false" class="collapse">
-                        <li id="li2A"><a id="studentC"><span class="fa fa-circle-o"></span> Current</a></li>
-                        <li id="li2B"><a id="studentP"><span class="fa fa-circle-o"></span> Past</a></li>
-                    </ul>
                 </li> -->
-                <li id="li3"> <a class="sidebarMenu" id="instructor">
+                <li id="li2"> <a class="has-arrow sidebarMenu" href="#" aria-expanded="false" id="students" onclick="activeStud()">
+                    <i class="ti-car tiSide"></i><span class="hide-menu sidebarMenu">Students</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li id="li2A"><a id="studentA" onclick="activeStudA()"><span class="fa fa-circle-o"></span> List</a></li>
+                        <li id="li2B"><a id="studentB" onclick="activeStudB()"><span class="fa fa-circle-o"></span> Enrollment</a></li>
+                        <li id="li2C"><a id="studentC"><span class="fa fa-circle-o"></span> Payment</a></li>
+                        <li id="li2D"><a id="studentD"><span class="fa fa-circle-o"></span> Grades &amp; Evaluation</a></li>
+                    </ul>
+                </li>
+                <li id="li3"> <a class="sidebarMenu" id="instructor" onclick="instructor()">
                     <i class="ti-user tiSide"></i><span class="hide-menu sidebarMenu">Instructors</span></a>
                 </li>
-                <li id="li4"> <a class="has-arrow sidebarMenu" href="#" aria-expanded="false" id="vehicle" onclick="activeVehi()">
+                <li id="li4"> <a class="sidebarMenu" id="vehicle" onclick="vehicle()">
                     <i class="ti-car tiSide"></i><span class="hide-menu sidebarMenu">Vehicle</span></a>
-                    <ul aria-expanded="false" class="collapse">
-                        <li id="li4A"><a id="vehicle1"><span class="fa fa-circle-o"></span> Automatic</a></li>
-                        <li id="li4B"><a id="vehicle2"><span class="fa fa-circle-o"></span> Manual</a></li>
-                    </ul>
                 </li>
                 <li id="li5"> <a class="sidebarMenu" id="schedule" onclick="schedule()">
                     <i class="ti-calendar tiSide"></i><span class="hide-menu sidebarMenu">Schedule</span></a>
                 </li>
-                <li id="li6"> <a class="sidebarMenu" id="branches">
+                <li id="li6"> <a class="sidebarMenu" id="branches" onclick="branches()">
                     <i class="ti-location-pin tiSide"></i><span class="hide-menu sidebarMenu">Branches</span></a>
                 </li>
                 <li class="nav-divider"></li>
