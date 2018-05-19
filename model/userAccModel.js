@@ -2,16 +2,13 @@ var db = require('./db');
 var modelModule = require('./model');
 var table = "useraccount";
 
-var UserAccount = function(tableName, database){
-    modelModule.apply(this, arguments);
-    this.tableName = tableName;
-}
-UserAccount.prototype = modelModule.prototype;
-UserAccount.prototype.constructor = UserAccount;
+var UserAccount = Object.create(modelModule);
+UserAccount.table = table;
+UserAccount.db = db;
 
 //Business Logic Code:
 
-UserAccount.prototype.login = function (data, cb) {
+UserAccount.login = function (data, cb) {
     var user = data.username;
     var pass = data.password;
     var sql = "SELECT id, accType FROM "+ table +" WHERE username = ? AND password = SHA1(?)";
@@ -21,7 +18,7 @@ UserAccount.prototype.login = function (data, cb) {
     });
 }
 
-UserAccount.prototype.changePass = function(id, pass, cb){
+UserAccount.changePass = function(id, pass, cb){
     var sql = "UPDATE `"+ table +"` SET password = SHA1(?) WHERE `id` = ?";
     db.get().query(sql, [pass, id], function(err, result){
         if(err) return cb(err);
@@ -29,4 +26,4 @@ UserAccount.prototype.changePass = function(id, pass, cb){
     });
 }
 
-module.exports = new UserAccount(table, db);
+module.exports = UserAccount;

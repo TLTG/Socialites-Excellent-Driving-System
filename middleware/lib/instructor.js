@@ -1,10 +1,8 @@
 var instructor = require('../../model/instructorModel');
 
 exports.create = function(req, res, next){
-    var data = [];
-    data = req.body["data[]"];
+    var data = JSON.parse(req.body.data);
     //Validation
-    data.unshift(null);
     data.unshift(null);
     
     instructor.create(data, function(err, result){

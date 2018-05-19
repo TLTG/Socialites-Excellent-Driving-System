@@ -6,13 +6,13 @@ var db = require('./db');
 
 var UserInfo = require('./userInfoModel');
 
-var Admin = function(){}
+var Admin = {}; 
 
-Admin.prototype.getInfo = function(accID, cb){
+Admin.getInfo = function(accID, cb){
     UserInfo.getInfo(accID, function(err, result){
         if(err) return cb(err);
         cb(null, result);
-    });
+    }); 
 }
 
-module.exports = new Admin();
+module.exports = Admin;

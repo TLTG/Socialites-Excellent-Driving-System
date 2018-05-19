@@ -14,15 +14,15 @@ exports.get = function(req, res, next){
     var query = Object.keys(req.query).length ? req.query : {};
     var param = Object.keys(req.params).length ? req.params : null;
     if(param){
-        if(query){
+        /* if(query != {}){
             res.status(403).send({}); // delete this after implementation
-        }else{
+        }else{ */
             var field = param.field == undefined ? null : param.field;
             student.get(param.id, field, function(err, result){
                 if(err) return next(err);
                 res.status(200).send({success: true, data: result});                
             });
-        }
+        //}
     }else{
         var offset = query.offset == undefined ? 0 : parseInt(query.offset);
         var limit = query.limit == undefined ? 10 : parseInt(query.limit);

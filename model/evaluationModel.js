@@ -2,13 +2,10 @@ var db = require('./db');
 var ModelModule = require('./model');
 var table = "evaluation";
 
-var Evaluation = function(tableName, database){
-    ModelModule.apply(this, arguments);
-    this.tableName = tableName;
-}
-Evaluation.prototype = ModelModule.prototype;
-Evaluation.prototype.constructor = Evaluation;
+var Evaluation = Object.create(ModelModule);
+Evaluation.table = table;
+Evaluation.db = db;
 
 //Business Logic Below:
 
-module.exports = new Evaluation(table, db);
+module.exports = Evaluation;
