@@ -1,4 +1,4 @@
-$(function() { // nag rurun to pag fully loaded nayung page, 
+$(function() {
     document.getElementById("btnPast").classList.remove('btnDarkActive');
     document.getElementById("btnAll").classList.remove('btnDarkActive');
     document.getElementById("btnCurrent").classList.add('btnDarkActive');
@@ -36,8 +36,6 @@ function clrSearchStudentC ()
 {
     $('#searchStudentC').val("");
 }
-
-
 
 
 

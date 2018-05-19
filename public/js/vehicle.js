@@ -39,9 +39,14 @@ function confDelVehicle() {
     });
 }
 
-function editVehicle(id) {
-    //DB: Put vehicle details here
-    car.pages[car.currPage].forEach(x=>{
+function editVehicle ()
+{
+    $('.modalH2AddVehi').html("Edit Vehicle Details");
+    $('#btnConfAddVehi').hide();
+    $('#btnConfEditVehi').show();
+    $('#addNewVehicleModal').modal('show');
+  
+  car.pages[car.currPage].forEach(x=>{
         if(x.id == selectedCar){
             $('select[name="addVehiType"]').val(x.transmission);
             $(".addVehiBrand").val(x.brand);
@@ -53,10 +58,13 @@ function editVehicle(id) {
             $('#addNewVehicleModal').modal('show');
         }
     });
+
 }
 
 function openNewVehicle() {
     resetNewVehi();
+    $('#btnConfEditVehi').hide();
+    $('#btnConfAddVehi').show();
     $('.modalH2AddVehi').html("Add New Vehicle");
     $('#addNewVehicleModal').modal('show');
 }
@@ -66,7 +74,6 @@ function resetNewVehi() {
     $(".addVehiBrand").val("");
     $(".addVehiModel").val("");
     $(".addVehiPlate").val("");
-    $('select[name="addVehiCoding"]').val(0);
 }
 
 function addVehi() {
@@ -80,6 +87,7 @@ function addVehi() {
         || _model == "" || _model == null
         || _plate == "" || _plate == null
         || _type == 0 || _coding == 0) {
+
         swal("Oops!", "Please fill out all required fields.", "error");
     }
     else {

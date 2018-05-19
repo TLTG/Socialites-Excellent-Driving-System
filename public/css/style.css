@@ -6894,7 +6894,7 @@ tbody tr td:last-child {
   font-size: 14px;
 }
 
-.view-dashboard, .view-instructor, .view-student, .view-schedule, .view-vehicleA, .view-vehicleM, .view-branches,
+.view-dashboard, .view-instructor, .view-student, .view-schedule, .view-vehicleA, .view-branches,
 .view-viewInstructor, .view-viewStudent,
 .view-error500, .view-error404
 {
@@ -7635,7 +7635,18 @@ tbody tr td:last-child {
   line-height: 25px;
 }
 
-.defRateRD, .sexRD {
+.enrSexLbl {
+  margin-right: 15px;
+  line-height: 25px;
+  font-size: 14px;
+}
+
+.enrSexRD, .reqType, .enrReqPerm
+{
+  margin-left: 10px;
+}
+
+.defRateRD, .sexRD, .enrSexRD, .reqType, .enrReqPerm {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -7653,7 +7664,7 @@ tbody tr td:last-child {
   top: 4px;
 }
 
-.defRateRD:checked, .sexRD:checked {
+.defRateRD:checked, .sexRD:checked, .enrSexRD:checked, .reqType:checked, .enrReqPerm:checked {
   border: 6px solid black;
 }
 
@@ -7739,6 +7750,11 @@ tiCustom
 .lblCb
 {
   padding-left: 15px;
+}
+
+.lblCb1
+{
+  font-size: 11px;
 }
 
 /* Create a custom checkbox */
@@ -7843,4 +7859,62 @@ tiCustom
 }
 #newInstPhone{
   -moz-appearance:textfield;
+}
+
+.hideScroll
+{
+  overflow: auto;
+}
+
+.reqForm
+{
+  font-size: 14px;
+}
+
+.txtEnr
+{
+  font-size: 14px;
+  width: 90%;
+  margin: 1px;
+  margin-left: 10px;
+  padding: 3px;
+  background-color: #FCFCFC;
+  border: solid 1px #E2E2E2;
+}
+
+.txtEnr:focus
+{
+  border: solid 1px #FFCD40;
+  background-color: #fff;
+}
+
+.h5Enr
+{
+  font-weight: bold;
+}
+
+.enrTxtArea, .enrCivStatus
+{
+  font-size: 14px;
+  margin-left: 10px;
+  width: 90%;
+  padding: 3px;
+  background-color: #FCFCFC;
+  border: solid 1px #E2E2E2;
+}
+
+.enrTxtArea:focus, .enrCivStatus:focus
+{
+  border: solid 1px #FFCD40;
+  background-color: #fff;
+}
+
+.reqA, .reqB, .reqC
+{
+  padding-left: 10px;
+}
+
+.reqB, .reqC
+{
+  display: none;
 }
