@@ -24,6 +24,28 @@
                             <span><span class="fa fa-phone fa-red"></span> <span class="instPhone">0956 586 7353</span></span>
                             <span><span class="fa fa-envelope fa-red"></span> <span class="instEmail">gtatel0517@gmail.com</span></span>
                     </div>
+                    <div class="card">
+                        <center>
+                            <span class="ti-calendar tiBig"></span>
+                            <h6>Date Hired:</h6>
+                            <h5 class="instDateHired">May 17, 2018</h5><hr width="30%">
+                            <div class="divResigned">
+                                <h6>Date Resigned:</h6>
+                                <h5 class="instDateResigned">May 19, 2018</h5><hr width="30%">
+                            </div>
+                        </center>
+                    </div>
+                    <div class="card">
+                        <center>
+                            <span class="ti-user tiBig"></span>
+                            <h6>Total Students Handled:</h6>
+                            <h5 class="totStud">32</h5><hr width="30%">
+                            <div class="divCurStud">
+                                <h6>Current Students:</h6>
+                                <h5 class="totCurrStud">3</h5><hr width="30%">
+                            </div>
+                        </center>
+                    </div>
                 </div>
                 <!-- End of col-lg-3 -->
 
@@ -133,9 +155,29 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label "customLbl" class="col-md-12">Email Address <span class="asterisk">*</span></label>
+                                            <label class="col-md-12 customLbl">Email Address <span class="asterisk">*</span></label>
                                             <div class="col-md-12">
                                                 <input type="email" id="editInstAccEmail" placeholder="" class="form-control form-control-line">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 customLbl">Highest Educational Attainment <span class="asterisk">*</span></label>
+                                            <div class="col-md-12">
+                                                <select required class="form-control form-control-line" id="editInstAccEduc">
+                                                    <option value="0">---</option>
+                                                    <option value="1">Pre-Primary/Pre-School</option>
+                                                    <option value="2">Primary/Elementary</option>
+                                                    <option value="3">Secondary/High School</option>
+                                                    <option value="4">Post-Secondary Non-Tertiary/Technical-Vocational</option>
+                                                    <option value="5">Tertiary/Baccalaureate</option>
+                                                    <option value="6">Tertiary/Post-Graduate</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 customLbl">Username <span class="asterisk">*</span></label>
+                                            <div class="col-md-12">
+                                                <input type="email" id="editInstAccUN" placeholder="" class="form-control form-control-line">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -146,8 +188,12 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-sm-12">
-                                                <button class="btn btn-danger pull-left btnDelInstAcc" onclick="delInst()">Delete Account</button>
-                                                <button class="btn btn-primary pull-right btnUpdateInstAcc" onclick="updateInst()">Update Account</button>
+                                                <button type="button" class="btn btn-danger pull-left btnDelInstAcc" data-toggle="modal" data-target="#confResignModal">Resign</button>
+                                                <button type="button" class="btn btn-primary pull-right btnUpdateInstAcc" onclick="updateInst()">Update Account</button>
+                                                
+                                                <button type="button" class="btn btn-primary pull-right btnSaveUpdInst" onclick="saveUpdInst()">Save</button>
+                                                <button type="button" class="btn btn-light pull-right btnResetUpdInst" onclick="resetUpdInst()">Reset</button>
+                                                <button type="button" class="btn btn-danger pull-right btnCancUpdInst" onclick="cancUpdInst()">Cancel</button>
                                             </div>
                                         </div>
                                     </form>
