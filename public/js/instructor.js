@@ -18,7 +18,7 @@ function resetNewInstr () //resets fields on add instructor modal
     $("#newInstAddress").val("");
     $("#newInstPhone").val("");
     $("#newInstEmail").val("");
-    $('select[name="addVehiType"]').val(0);
+    $('select[name="newInstEduc"]').val(0);
     document.getElementById("g1NI").checked = true;
     document.getElementById("g2NI").checked = false;
 
