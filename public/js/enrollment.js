@@ -42,12 +42,11 @@ function resetEnrollment(){
     $('#enrEmail').val("");
     $('#enrGuard').val("");
     $('#enrGuardCont').val("");
-    $('select[name="enrCivStatus"]').val(civ0);
+    $('#enrReqP9').val("");
+    $('select[name="enrCivStatus"]').val('civ0');
     document.getElementById("enrSex1").checked = true;
     document.getElementById("enrSex2").checked = false;
-    document.getElementById("enrReqT2").checked = false;
-    document.getElementById("enrReqT3").checked = false;
-    document.getElementById("enrReqT1").checked = true;
+    $("#enrReqT1").prop("checked", true);
 }
 
 function resetReqA(){
@@ -68,4 +67,39 @@ function resetReqC(){
     document.getElementById("rC1").checked = false;
     document.getElementById("rC2").checked = false;
     document.getElementById("rC3").checked = false;
+}
+
+function enrollStud(){
+    var isCheck1 = checkEnr1();
+    var isCheck2 = checkEnr2();
+    var isCheck3 = checkEnr3();
+}
+
+function checkEnr1 (){
+    var fn = $('#enrFN').val();
+    var sn = $('#enrSN').val();
+    var bday = $('#enrBday').val();
+    var bplace = $('#enrBplace').val();
+    var add = $('#enrAddress').val();
+    var cont = $('#enrCont').val();
+    var email = $('#enrEmail').val();
+    var guard = $('#enrGuard').val();
+    var gCont = $('#enrGuardCont').val();
+    var civ = $('select[name="enrCivStatus"]').val();
+
+    fn = fn.replace(/\s+/g, '');
+    sn = sn.replace(/\s+/g, '');
+    bplace = bplace.replace(/\s+/g, '');
+    add = add.replace(/\s+/g, '');
+    cont = cont.replace(/\s+/g, '');
+    email = email.replace(/\s+/g, '');
+    guard = guard.replace(/\s+/g, '');
+    gCont = gCont.replace(/\s+/g, '');
+
+    if (fn=="" || sn==""
+        || bplace=="" || add=="" || cont==""
+        || email=="" || guard=="" || gCont==""){
+            return 1;
+        }
+    else return 0;
 }

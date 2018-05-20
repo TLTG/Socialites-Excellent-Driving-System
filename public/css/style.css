@@ -7121,6 +7121,12 @@ tbody tr td:last-child {
   padding-right: 20px;
   color: black;
 }
+.customLbl1
+{
+  padding-right: 20px;
+  color: black;
+  text-align: right;
+}
 .backInst, .backStud
 {
   padding-top: 8px; 
@@ -7917,4 +7923,29 @@ tiCustom
 .reqB, .reqC
 {
   display: none;
+}
+
+#btnEnrollStudent
+{
+  width: 100%;
+  bottom: 0;
+}
+
+.btnCancUpdInst, .btnResetUpdInst, .btnSaveUpdInst{
+  display: none;
+  margin-left: 10px;
+  width: 100px;
+}
+
+.divResigned{
+  display: none;
+}
+
+.tiBig{
+  font-size: 16px;
+}
+
+.instDateHired, .instDateResigned, .totStud, .totCurrStud{
+  font-weight: bold;
+  color: #5D0000;
 }
