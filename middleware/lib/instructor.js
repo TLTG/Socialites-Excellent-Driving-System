@@ -1,11 +1,43 @@
 var instructor = require('../../model/instructorModel');
 
 exports.create = function(req, res, next){
-    var data = JSON.parse(req.body.data);
+    var dataIn = JSON.parse(req.body.data);
     //Validation
-    data.unshift(null);
+    var data = {
+        credential: [],
+        info: [],
+        inst: []
+    };
+    var credential = [];
+    credential.push(dataIn.credential.username);
+    credential.push(dataIn.credential.password);
+    credential.push(dataIn.credential.usertype);
     
-    instructor.create(data, function(err, result){
+    var info = [];
+    info.push(dataIn.info.fullname);
+    info.push(dataIn.info.address);
+    info.push(dataIn.info.telno);
+    info.push(dataIn.info.bdate);
+    info.push("n/a");
+    info.push(dataIn.info.sex);
+    info.push("n/a");
+    info.push(dataIn.info.email);
+    info.push(2);
+ 
+    var inst = [];
+    inst.push(null);
+    inst.push(null);
+    inst.push(dataIn.info.education);
+    inst.push("");
+    inst.push(null);
+    inst.push(null);
+    inst.push(1);
+
+    data.credential = credential;
+    data.info = info;
+    data.inst = inst;
+    
+    instructor.register(data, function(err, result){
         if(err) return next(err);
         res.status(200).send({success: true, detail: "Successfully Created!"});
     });

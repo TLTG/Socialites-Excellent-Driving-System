@@ -55,12 +55,14 @@ function resetNewInstr() //resets fields on add instructor modal
 function nextInst ()
 {
     var fn = $("#newInstFirstname").val();
-    var ln = $("#newInstSurname").val();
+    var mn = $("#newInstMidname").val();
+    var sn = $("#newInstSurname").val();
     var bday = $("#newInstBday").val();
     var add = $("#newInstAddress").val();
     var phone = $("#newInstPhone").val();
     var email = $("#newInstEmail").val();
     var educ = $('select[name="newInstEduc"]').val();
+    var gender = $('input[name="newInstGender"]:checked').val();
 
     fn = fn.replace(/\s+/g, '');
     sn = sn.replace(/\s+/g, '');
@@ -77,6 +79,18 @@ function nextInst ()
             var email = $("#newInstEmail").val();
             $("#newInstUsername").val(email);
             
+            //SD: need more validation here please. i can't do it all.
+
+            inst.registrationDetail["info"] = {
+                fullname: fn + "_" + mn + "_" + sn,
+                address: add,
+                telno: phone,
+                email: email,
+                bdate: bday,
+                education: educ, 
+                sex: gender,
+            };
+
             $(".defMod1Inst").removeClass("activeDefModInst");
             $(".defMod2Inst").addClass("activeDefModInst");
 
@@ -113,8 +127,20 @@ function doneInst() {
             },
                 function (isConfirm) {
                     if (isConfirm) {
-                        swal("Success!", "Instructor account has been created!", "success");
-                        $("#newInstructorModal").modal('hide');
+                        inst.registrationDetail["credential"] = {
+                            username: un,
+                            password: pw,
+                            usertype: 2,
+                        },
+                        inst.register(function(err, done){
+                            if(err){
+                                console.error(err);
+                                swal("Failed!", err.message, "error");                                
+                                return 
+                            }
+                            swal("Success!", "Instructor account has been created!", "success");
+                            $("#newInstructorModal").modal('hide');
+                        });
                         //DB: Adding of new instructor here
                     }
                     else {
@@ -261,13 +287,41 @@ function resignInst(){
 
 var renderInstTablePage = function (data) {
     var html = "";
+    var counter = 1;
     data.forEach(element => {
         var status = (element.vacant == Date.parse("today").toString('dddd') ? "<span class='badge badge-danger'>Day Off</span>" : element.status == 1 ? "<span class='badge badge-success'>Available</span>" : element.status == 2 ? "<span class='badge badge-warning'>In session</span>" : "");
-        html += "<tr>";
-        html += "<td>" + element.id + "</td>";
-        html += "<td>" + element.fullname + "</td>";
+        html += "<tr onclick='viewInstProfile(\""+ element.instID +"\")'>";
+        html += "<td>" + counter + "</td>";
+        html += "<td>" + (element.fullname.replace(/_/g," ")) + "</td>";
         html += "<td>" + status + "</td>";
         html += "</tr>";
+        counter++;
     });
     $('#instructorTable').html(html); 
+}
+
+var viewInstProfile = function(id){
+    inst.selected = id;
+    inst.getLocalData(function(profile){
+        $('.instNum').html(profile.instID);
+        $('.instName').html(profile.fullname.replace(/_/g,' '));
+        $('.instAddress').html(profile.address);
+        $('.instPhone').html(profile.telno);
+        $('.instEmail').html(profile.email);
+        $('.instDateHired').html(Date.parse(profile.dateRegistered).toString("MMM d, yyyy"));
+    });
+}
+
+var renderInstEdit = function(){
+    inst.getLocalData(function(profile){
+        var name = profile.fullname.split("_");
+        $('#editInstAccFN').val(name[0]);        
+        $('#editInstAccMN').val(name[1]);        
+        $('#editInstAccLN').val(name[2]);        
+        $('#editInstAccSex').val(profile.sex);        
+        $('#editInstAccBday').val(Date.parse(profile.birthdate).toString("yyyy-MM-dd"));        
+        $('#editInstAccPhone').val(profile.telno);            
+        $('#editInstAccEmail').val(profile.email);            
+        $('#editInstAccAdd').val(profile.address);            
+    });
 }

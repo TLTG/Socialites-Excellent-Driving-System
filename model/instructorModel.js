@@ -1,15 +1,23 @@
 var db = require('./db');
 var ModelModule = require('./model');
 var UserInfo = require('./userInfoModel');
-var Vehicle = require('./vehicleModel').table;
+var UserAcc = require('./userAccModel');
 var table = "instructor";
 
 //Constructor
-var Instructor = Object.create(ModelModule);
+var Instructor = {};
+Instructor = Object.create(ModelModule);
 Instructor.table = table;
 Instructor.db = db;
 
-//Custom codes here: Instructor.prototype
+//Custom codes here: 
+var generateInstId = function(account, info){
+    account = "" + account;
+    info = "" + info;
+    var prefix = "INST";
+    var pad = "000";
+    return prefix + "-" + (pad.substring(0, pad.length - account.length) + account) + (pad.substring(0, pad.length - info.length) + info);
+}
 
 //Override getList() function from parent model class.
 Instructor.getList = function(offset, limit, cb){
@@ -44,6 +52,32 @@ Instructor.get = function (id, field, cb) {
                 cb(null, result[0][0][field]);
             }
         }
+    });
+}
+
+Instructor.register = function(data, cb){
+    var self = this;
+    
+    var credential = data.credential;
+
+    UserAcc.register(credential, function(err, accID){
+        if(err) return cb(err);
+
+        var info = data.info;
+        info.unshift(accID);
+
+        UserInfo.register(info, function(err, userID){
+            if(err) return cb(err);  
+
+            var inst = data.inst;
+            inst[0] = generateInstId(accID, userID);
+            inst[1] = userID;
+
+            self.create(inst, function(err, result){
+                if(err) return cb(err);
+                cb(null, true);
+            });
+        });
     });
 }
 

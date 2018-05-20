@@ -2,7 +2,8 @@ var db = require('./db');
 var modelModule = require('./model');
 var table = "useraccount";
 
-var UserAccount = Object.create(modelModule);
+var UserAccount = {};
+UserAccount = Object.create(modelModule);
 UserAccount.table = table;
 UserAccount.db = db;
 
@@ -23,6 +24,15 @@ UserAccount.changePass = function(id, pass, cb){
     db.get().query(sql, [pass, id], function(err, result){
         if(err) return cb(err);
         cb(null, result[0]);
+    });
+}
+
+UserAccount.register = function(data, cb){
+    var sql = "SELECT addUserAcc(?,?,?) as id";
+    this.db.get().query(sql, data, function(err, result){
+        if(err) return cb(err);
+        console.log(JSON.stringify(result));
+        cb(null, result[0].id);
     });
 }
 
