@@ -1,15 +1,33 @@
-var instData = [];
-var currentInstPage = {
-    offset: 0,
-    limit: 10,
-}
+$(function () {
+    $("#btnNewInstructor").on("click", function () { //opens add instructor modal
+        resetNewInstr();
+        $('#newInstructorModal').modal('show');
+    });
+    $("#btnViewInstructor").on("click", function () { //opens view instructor page upon clicking view details
+        $('.view-instructor').hide();
+        $('.view-viewInstructor').show();
+    });
+    $(".backInst").on("click", function () { //when back button is clicked (right side of instructor information)
+        $('.view-viewInstructor').hide();
+        $('.view-instructor').show();
+    });
 
-$("#btnNewInstructor").on("click", function() { //opens add instructor modal
-    resetNewInstr();
-    $('#newInstructorModal').modal('show');
+    $(".btnDelInstAcc").on("click", function () { //opens confirmation modal upon clicking delete account. UNDONE.
+        $('#confirmDeleteInstructor').modal('show');
+    });
+
+    $(".btnUpdateInstAcc").on("click", function () { //opens confirmation modal upon clicking update account. UNDONE.
+        $('#confirmDeleteInstructor').modal('show');
+    });
+
+    inst.getInstList(function (err, done) {
+        if (err) return console.log(err);
+        renderInstTablePage(inst.pages[inst.currPage]);
+    });
 });
 
-function resetNewInstr () //resets fields on add instructor modal
+
+function resetNewInstr() //resets fields on add instructor modal
 {
     $("#newInstFirstname").val("");
     $("#newInstMidname").val("");
@@ -32,26 +50,7 @@ function resetNewInstr () //resets fields on add instructor modal
     $(".divMod1Inst").show();
 }
 
-$("#btnViewInstructor").on("click", function() { //opens view instructor page upon clicking view details
-    $('.view-instructor').hide();
-    $('.view-viewInstructor').show();
-});
-
-$(".backInst").on("click", function() { //when back button is clicked (right side of instructor information)
-    $('.view-viewInstructor').hide();
-    $('.view-instructor').show();
-});
-
-$(".btnDelInstAcc").on("click", function() { //opens confirmation modal upon clicking delete account. UNDONE.
-    $('#confirmDeleteInstructor').modal('show');
-});
-
-$(".btnUpdateInstAcc").on("click", function() { //opens confirmation modal upon clicking update account. UNDONE.
-    $('#confirmDeleteInstructor').modal('show');
-});
-
-function nextInst ()
-{
+function nextInst() {
     var fn = $("#newInstFirstname").val();
     var ln = $("#newInstSurname").val();
     var bday = $("#newInstBday").val();
@@ -64,49 +63,47 @@ function nextInst ()
         || add == "" || add.length == 0 || add == null
         || phone == "" || phone.length == 0 || phone == null
         || email == "" || email.length == 0 || email == null) {
-            swal("Oops!", "Please fill out all required fields.", "error");
-        }
-        else {
-            var email = $("#newInstEmail").val();
-            $("#newInstUsername").val(email);
-            
-            $(".defMod1Inst").removeClass("activeDefModInst");
-            $(".defMod2Inst").addClass("activeDefModInst");
+        swal("Oops!", "Please fill out all required fields.", "error");
+    }
+    else {
+        var email = $("#newInstEmail").val();
+        $("#newInstUsername").val(email);
 
-            $("#btnNextAddInst").hide();
-            $("#btnPrevAddInst").show();
-            $("#btnDoneAddInst").show();
+        $(".defMod1Inst").removeClass("activeDefModInst");
+        $(".defMod2Inst").addClass("activeDefModInst");
 
-            $(".divMod1Inst").hide();
-            $(".divMod2Inst").show();
-        }
+        $("#btnNextAddInst").hide();
+        $("#btnPrevAddInst").show();
+        $("#btnDoneAddInst").show();
+
+        $(".divMod1Inst").hide();
+        $(".divMod2Inst").show();
+    }
 }
 
-function doneInst ()
-{
+function doneInst() {
     var un = $("#newInstUsername").val();
     var pw = $("#newInstPassword").val();
     var cpw = $("#newInstConfPassword").val();
     if (un == "" || un.length == 0 || un == null
         || pw == "" || pw.length == 0 || pw == null
         || cpw == "" || cpw.length == 0 || cpw == null) {
-            swal("Oops!", "Please fill out all required fields.", "error");
-        }
-        else {
-            if (pw == cpw)
-            {
-                swal({
-                    title: "Warning!",
-                    text: "Are you sure you want to create this instructor account?",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes",
-                    cancelButtonText: "Cancel",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                function(isConfirm){
+        swal("Oops!", "Please fill out all required fields.", "error");
+    }
+    else {
+        if (pw == cpw) {
+            swal({
+                title: "Warning!",
+                text: "Are you sure you want to create this instructor account?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+                function (isConfirm) {
                     if (isConfirm) {
                         swal("Success!", "Instructor account has been created!", "success");
                         $("#newInstructorModal").modal('hide');
@@ -116,16 +113,14 @@ function doneInst ()
                         swal("Cancelled", "", "error");
                     }
                 });
-            }
-            else
-            {
-                swal("Oops!", "Passwords do not match.", "error");
-            }
         }
+        else {
+            swal("Oops!", "Passwords do not match.", "error");
+        }
+    }
 }
 
-function prevInst ()
-{
+function prevInst() {
     $(".defMod2Inst").removeClass("activeDefModInst");
     $(".defMod1Inst").addClass("activeDefModInst");
 
@@ -135,4 +130,17 @@ function prevInst ()
 
     $(".divMod2Inst").hide();
     $(".divMod1Inst").show();
+}
+
+var renderInstTablePage = function (data) {
+    var html = "";
+    data.forEach(element => {
+        var status = (element.vacant == Date.parse("today").toString('dddd') ? "<span class='badge badge-danger'>Day Off</span>" : element.status == 1 ? "<span class='badge badge-success'>Available</span>" : element.status == 2 ? "<span class='badge badge-warning'>In session</span>" : "");
+        html += "<tr>";
+        html += "<td>" + element.id + "</td>";
+        html += "<td>" + element.fullname + "</td>";
+        html += "<td>" + status + "</td>";
+        html += "</tr>";
+    });
+    $('#instructorTable').html(html);
 }
