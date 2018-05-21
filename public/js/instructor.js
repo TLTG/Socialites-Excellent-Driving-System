@@ -197,6 +197,7 @@ function resetSettingsInst (){
     $("#editInstAccEmail").prop("disabled", true);
     $("#editInstAccUN").prop("disabled", true);
     $("#editInstAccPW").prop("disabled", true);
+    $("#editInstAccCPW").prop("disabled", true);
     $("#editInstAccEduc").prop("disabled", true);
     $("#editInstAccSex").prop("disabled", true);
     $('.btnDelInstAcc').show();
@@ -216,6 +217,7 @@ function enableFields (){
     $("#editInstAccEmail").removeAttr("disabled");
     $("#editInstAccUN").removeAttr("disabled");
     $("#editInstAccPW").removeAttr("disabled");
+    $("#editInstAccCPW").removeAttr("disabled");
     $("#editInstAccEduc").removeAttr("disabled");
     $("#editInstAccSex").removeAttr("disabled");
 }
@@ -269,6 +271,7 @@ function saveUpdInst(){
     var sex = $('#editInstAccSex').val();
     var un = $("#editInstAccUN").val();
     var pw = $("#editInstAccPW").val();
+    var cpw = $("#editInstAccCPW").val();
 
     fn = fn.replace(/\s+/g, '');
     sn = sn.replace(/\s+/g, '');
@@ -355,7 +358,7 @@ var renderInstTablePage = function (data) {
     var html = "";
     var counter = 1;
     data.forEach(element => {
-        var status = (element.vacant == Date.parse("today").toString('dddd') ? "<span class='badge badge-danger'>Day Off</span>" : element.status == 1 ? "<span class='badge badge-success'>Available</span>" : element.status == 2 ? "<span class='badge badge-warning'>In session</span>" : "<span class='badge badge-danger'>Resigned</span>");
+        var status = (element.vacant == Date.parse("today").toString('dddd') ? "<span class='text-danger'>Day Off</span>" : element.status == 1 ? "<span class='text-success'>Available</span>" : element.status == 2 ? "<span class='text-warning'>In session</span>" : "<span class='text-danger'>Resigned</span>");
         html += "<tr onclick='viewInstProfile(\""+ element.instID +"\")'>";
         html += "<td>" + counter + "</td>";
         html += "<td>" + (element.fullname.replace(/_/g," ")) + "</td>";
