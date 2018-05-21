@@ -35,6 +35,7 @@ function resetSettingsStud (){
     $("#editStudAccGuardCont").prop("disabled", true);
     $("#editStudAccUN").prop("disabled", true);
     $("#editStudAccPW").prop("disabled", true);
+    $("#editStudAccCPW").prop("disabled", true);
     $("#editStudAccCivStatus").prop("disabled", true);
     $("#editEnrSex1").prop("disabled", true);
     $("#editEnrSex2").prop("disabled", true);
@@ -59,6 +60,7 @@ function enableFieldsStud (){
     $("#editStudAccGuardCont").removeAttr("disabled");
     $("#editStudAccUN").removeAttr("disabled");
     $("#editStudAccPW").removeAttr("disabled");
+    $("#editStudAccCPW").removeAttr("disabled");
     $("#editStudAccCivStatus").removeAttr("disabled");
     $("#editEnrSex1").removeAttr("disabled");
     $("#editEnrSex2").removeAttr("disabled");
@@ -98,6 +100,7 @@ function cancUpdStud(){
 }
 
 function saveUpdStud(){
+    var a, b, c, d, e, f, g, h, i ,j;
     var fn = $("#editStudAccFN").val();
     var sn = $("#editStudAccSN").val();
     var bday = $("#editStudAccBday").val();
@@ -108,41 +111,95 @@ function saveUpdStud(){
     var guardCont = $("#editStudAccGuardCont").val();
     var un = $("#editStudAccUN").val();
     var pw = $("#editStudAccPW").val();
+    var cpw = $("#editStudAccCPW").val();
     var civ = $('select[name="editStudAccCivStatus"]').val();
 
-    fn = fn.replace(/\s+/g, '');
-    sn = sn.replace(/\s+/g, '');
-    bplace = bplace.replace(/\s+/g, '');
-    add = add.replace(/\s+/g, '');
-    cont = cont.replace(/\s+/g, '');
-    guard = guard.replace(/\s+/g, '');
-    guardCont = guardCont.replace(/\s+/g, '');
-    un = un.replace(/\s+/g, '');
-    pw = pw.replace(/\s+/g, '');
+    a = fn.replace(/\s+/g, '');
+    b = sn.replace(/\s+/g, '');
+    c = bplace.replace(/\s+/g, '');
+    d = add.replace(/\s+/g, '');
+    e = cont.replace(/\s+/g, '');
+    f = guard.replace(/\s+/g, '');
+    g = guardCont.replace(/\s+/g, '');
+    h = un.replace(/\s+/g, '');
+    i = pw.replace(/\s+/g, '');
+    j = cpw.replace(/\s+/g, '');
 
-    if (fn=="" || sn=="" || bplace=="" || add=="" 
-        || cont=="" || email=="" || guard=="" || guardCont==""
-        || un=="" || pw=="" || civ=="civ0"){
+    if (a=="" || sn=="" || c=="" || d=="" 
+        || e=="" || f=="" || g=="" || civ=="civ0"){
             swal("Oops!", "Please fill out all required fields.", "error");
         }
     else{
-        swal({
-            text: "Are you sure you want to save these changes?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes",
-            cancelButtonText: "Cancel",
-            closeOnConfirm: false,
-            closeOnCancel: true
-        },
-        function(isConfirm){
-            if (isConfirm) {
-                swal("Success!", "Student account is updated successfully!", "success");
-                resetSettingsStud();
-                //DB: Update student account function
+        if (h=="" && i=="" && j==""){
+            swal({
+                title: "Warning!",
+                text: "Are you sure you want to save these changes?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },
+            function(isConfirm){
+                if (isConfirm) {
+                    swal("Success!", "Student account is updated successfully!", "success");
+                    resetSettingsStud();
+                    //DB: Update student account function
+                }
+            });
+        }
+        else{
+            if (i!="" && j!=""){
+                if (pw==cpw){
+                    swal({
+                        title: "Warning!",
+                        text: "Are you sure you want to save these changes?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Yes",
+                        cancelButtonText: "Cancel",
+                        closeOnConfirm: false,
+                        closeOnCancel: true
+                    },
+                    function(isConfirm){
+                        if (isConfirm) {
+                            swal("Success!", "Student account is updated successfully!", "success");
+                            resetSettingsStud();
+                            //DB: Update student account function
+                        }
+                    });
+                }
+                else{
+                    swal("Oops!", "Passwords do not match!", "error");
+                }
             }
-        });
+            else if (i=="" && j==""){
+                swal({
+                    title: "Warning!",
+                    text: "Are you sure you want to save these changes?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "Cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                function(isConfirm){
+                    if (isConfirm) {
+                        swal("Success!", "Student account is updated successfully!", "success");
+                        resetSettingsStud();
+                        //DB: Update student account function
+                    }
+                });
+            }
+            else{
+                swal("Oops!", "Please fill out all required fields.", "error");
+            }
+        }
     }
 }
 

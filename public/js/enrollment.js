@@ -51,7 +51,7 @@ function resetEnrollment(){
     $('#enrGuardCont').val("");
     $('#enrReqP9').val("");
     $('select[name="enrCivStatus"]').val('civ0');
-    $('input:radio').prop('checked', false);
+    $('input[name="enrReqP"]').prop('checked', false);
     $("#enrReqT1").prop("checked", true);
 }
 

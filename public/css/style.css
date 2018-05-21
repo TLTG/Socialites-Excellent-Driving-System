@@ -6876,22 +6876,16 @@ tbody tr td:last-child {
   }
 }
 
-.tableDash,.tblStudPayment1, .tblStudGrades1
+.tblStudPayment1, .tblStudGrades1
 {
   font-size: 14px;
   color: black;
 }
-.tableDash th,
-{
-  font-size: 15px;
-  color: #5D0000;
-  text-transform: uppercase;
-}
-.tableDash td, .tblStudPayment1 td, .tblStudGrades1 td
+.tblStudPayment1 td, .tblStudGrades1 td
 {
   color: black;
 }
-.tableDash td span, .tblStudPayment1 td span, .tblStudGrades1 td span
+.tblStudPayment1 td span, .tblStudGrades1 td span
 {
   font-size: 14px;
 }
@@ -6997,41 +6991,12 @@ tbody tr td:last-child {
   width: 100%;
   font-size: 14px;
 }
-.tblInstructor
-{
-  font-size: 14px;
-  color: white;
-}
-
-.tblInstructor th
-{
-  font-size: 15px;
-  color: #1F0000;
-  /* background-color: #FFE659; */
-  text-transform: uppercase;
-  text-align: left;
-}
-.tblInstructor td
-{
-  color: black;
-  text-align: left;
-}
-.tblInstructor td span
-{
-  font-size: 14px;
-}
 #btnViewInstructor, #btnViewStudent
 {
   font-size: 15px;
-  width: 90%;
+  width: 95%;
   /* background-color: #5D0000; */
   color: black;
-}
-#btnViewInstructor:hover, btnViewStudent:hover
-{
-  width: 90%;
-  background-color: #1F0000;
-  color: white;
 }
 #btnAddPayment
 {
@@ -7182,7 +7147,7 @@ tbody tr td:last-child {
   text-transform: uppercase;
 }
 
-#instAddress, #instPhone, #instEmail
+.instAddress, .instPhone, .instEmail
 {
   font-size: 14px;
 }
@@ -7288,14 +7253,14 @@ tbody tr td:last-child {
   text-transform: uppercase;
   color: #f4f4f4;
 }
-.tblVehicle, .tblVehicleDef, .tblVehicleM, .tblStudent, .tblBranches
+.tblVehicle, .tblVehicleDef, .tblVehicleM, .tblStudent, .tblBranches, .tableDash, .tblInstructor
 {
   font-size: 14px;
   color: white;
   overflow-y: auto;
 }
 .tblVehicle tbody tr:hover, .tblVehicleDef tbody tr:hover, .tblVehicleM tbody tr:hover, .tblStudent tbody tr:hover,
-.tblBranches tbody tr:hover
+.tblBranches tbody tr:hover, .tableDash tbody tr:hover, .tblInstructor tbody tr:hover
 {
   background-color: #F9F1D9;
   -webkit-transition: 0.2s ease-in;
@@ -7304,12 +7269,12 @@ tbody tr td:last-child {
   cursor: pointer;
 }
 
-.tblVehicle td, .tblVehicleDef td, .tblVehicleM td, .tblStudent td, .tblBranches td
+.tblVehicle td, .tblVehicleDef td, .tblVehicleM td, .tblStudent td, .tblBranches td, .tableDash td, .tblInstructor td
 {
   color: black;
   text-align: left;
 }
-.tblVehicle td span, .tblVehicleDef td span, .tblVehicleM td span, .tblBranches td span
+.tblVehicle td span, .tblVehicleDef td span, .tblVehicleM td span, .tblBranches td span, .tableDash td span, .tblInstructor td span
 {
   font-size: 14px;
 }
@@ -7982,7 +7947,8 @@ tiCustom
   font-size: 16px;
 }
 
-.instDateHired, .instDateResigned, .totStud, .totCurrStud{
+.instDateHired, .instDateResigned, .totStud, .totCurrStud, .enrolledCrs, .paidStatus,
+.studGuard, .studGuardCont{
   font-weight: bold;
   color: #5D0000;
 }
@@ -8042,6 +8008,11 @@ tiCustom
 
 .branchCard{
   height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.studCard, .instCard{
+  height: 500px;
   overflow-y: auto;
   overflow-x: hidden;
 }

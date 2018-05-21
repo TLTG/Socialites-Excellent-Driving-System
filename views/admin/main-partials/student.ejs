@@ -17,61 +17,71 @@
         <!-- Start of Card  -->
         <div class="studentCard">
             <div class="row">
-                <!-- Start of col-lg-6 -->
-                <div class="card col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12"></div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <div class="form-group">
                         <div class="input-group input-group-flat">
                             <span class="input-group-btn"><button class="btn btn-custom" type="submit"><i class="ti-search"></i></button></span>
                             <input type="text" id="searchStudentC" class="form-control" placeholder="Search..." style="font-size: 12px;">
                             <span class="input-group-btn"><button class="btn btn-primary input-group-close-icon" type="button" onclick="clrSearchStudentC()"><i class="ti-close"></i></button></span>
                         </div>
-                    </div><br>
-                    <div class="row">
-                        <div class="col-md-6 pull-left">
-                            <h3>List of Students</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- Start of col-lg-6 -->
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <hr class="hrCustom">
+                    <div class="card studCard">
+                        <div class="row">
+                            <div class="col-md-6 pull-left">
+                                <h3>List of Students</h3>
+                            </div>
+                            <div class="col-md-6 pull-right">
+                                <label class="enrSexLbl pull-right" for="studCP2">Past</label>
+                                <input type="radio" class="enrStudCp pull-right" id="studCP2" name="studCP" value="Past">
+                                <label class="enrSexLbl pull-right" for="studCP1">Current</label>
+                                <input type="radio" class="enrStudCp pull-right" id="studCP1" name="studCP" value="Current">
+
+                            </div>
+                        </div><br>
+                        <div class="table-responsive">
+                            <table class="table tableDash table-hover"> 
+                                <!-- //DB: to change to tblStudent -->
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Student Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="studentTable">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Graciella Tatel</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Christian Paul Tupas</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Janelle Joy Gabat</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Perrine Laganzo</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="col-md-6 pull-right">
-                            <label class="enrSexLbl pull-right" for="studCP2">Past</label>
-                            <input type="radio" class="enrStudCp pull-right" id="studCP1" name="studCP" value="Current" checked>
-                            <label class="enrSexLbl pull-right" for="studCP1">Current</label>
-                            <input type="radio" class="enrStudCp pull-right" id="studCP2" name="studCP" value="Past">
-                        </div>
-                    </div><br>
-                    <div class="table-responsive">
-                        <table class="table tableDash table-hover"> 
-                            <!-- to change to tblStudent -->
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Student Name</th>
-                                </tr>
-                            </thead>
-                            <tbody id="studentTable">
-                                <tr>
-                                    <td>1</td>
-                                    <td>Graciella Tatel</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Christian Paul Tupas</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Janelle Joy Gabat</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Perrine Laganzo</td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
                 <!-- End of col-lg-6 -->
 
                 <!-- Start of col-lg-6 -->
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 studentCard">
-                    <div class="card studentCard">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <hr class="hrCustom">
+                    <div class="card studCard">
                         <h3>Student Details</h3><hr>
                         <div class="row">
                             <div class="col-md-5 col-lg-5 col-sm-5 col-xs-5">
@@ -86,7 +96,8 @@
                                 <span class="fa fa-map-marker fa-red"></span> <span class="studAddress">Sapang Palay, CSJDM, Bulacan</span><br>
                                 <span class="fa fa-phone fa-red"></span> <span class="studPhone">0956 586 7353</span><br>
                                 <span class="fa fa-envelope fa-red"></span> <span class="studEmail">gtatel0517@gmail.com</span>
-                                <br><br><br><br><br><br><br>
+                            </div>
+                            <div class="divBottom">
                                 <button type="button" id="btnViewStudent" class="btn btn-primary m-b-10 m-l-5">View Profile</button>
                             </div>
                         </div> <!-- End of row -->
