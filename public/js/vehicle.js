@@ -2,6 +2,10 @@ var checkedValues, count, checkedValuesData = [];
 
 $(function () {
     clrSearchVehiA();
+});
+
+var loadVehi = function(){
+    $(".preloader").fadeIn(); 
     car.getATableData(function(){
         $('.carTbl').click(function () {
             var selected = $(this).hasClass("highlightTr");
@@ -10,8 +14,9 @@ $(function () {
                 $(this).addClass("highlightTr");
         });
         viewCarProfile(car.pages[0][0].id);
+        $(".preloader").fadeOut(); 
     });
-});
+}
 
 function confDelVehicle() {
     swal({
