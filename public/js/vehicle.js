@@ -2,6 +2,7 @@ var checkedValues, count, checkedValuesData = [];
 
 $(function () {
     clrSearchVehiA();
+    // $('.tblVehicle tbody tr:first').addClass("highlightTr");
 });
 
 var loadVehi = function(){
