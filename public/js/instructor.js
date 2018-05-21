@@ -20,6 +20,14 @@ $(function () {
     $(".btnUpdateInstAcc").on("click", function () { //opens confirmation modal upon clicking update account. UNDONE.
         $('#confirmDeleteInstructor').modal('show');
     });
+
+    $('.btnDelInstAcc').click(function(){
+        inst.getLocalData(function(data){
+            $('#instResign').attr("min", Date.parse(data.dateRegistered).addDays(1).toString("yyyy-MM-dd"));
+            $('#instResign').attr("max", Date.parse("today").toString("yyyy-MM-dd"));
+        });
+        $('#instResign').val(Date.parse("today").toString("yyyy-MM-dd"));
+    });
 });
 
 var loadInst = function(){
@@ -83,7 +91,16 @@ function nextInst ()
             var email = $("#newInstEmail").val();
             $("#newInstUsername").val(email);
             
-            //SD: need more validation here please. i can't do it all.
+            //SD: need more validation here please.
+            fn = $("#newInstFirstname").val();
+            mn = $("#newInstMidname").val();
+            sn = $("#newInstSurname").val();
+            bday = $("#newInstBday").val();
+            add = $("#newInstAddress").val();
+            phone = $("#newInstPhone").val();
+            email = $("#newInstEmail").val();
+            educ = $('select[name="newInstEduc"]').val();
+            gender = $('input[name="newInstGender"]:checked').val();
 
             inst.registrationDetail["info"] = {
                 fullname: fn + "_" + mn + "_" + sn,
@@ -211,8 +228,10 @@ function updateInst (){
     $('.btnResetUpdInst').show();
     $('.btnSaveUpdInst').show();
 }
+
 function resetUpdInst(){
     //reset fields here
+    renderInstEdit();
 }
 
 function cancUpdInst(){
@@ -258,15 +277,25 @@ function saveUpdInst(){
     phone = phone.replace(/\s+/g, '');
     email = email.replace(/\s+/g, '');
     un = un.replace(/\s+/g, '');
-    pw = pw.replace(/\s+/g, '');
+    pw = pw.replace(/\s+/g, '') == "" ? null : $("#editInstAccPW").val();
 
     if (fn=="" || sn=="" || add=="" 
         || phone=="" || email=="" || bday==""
-        || un=="" || pw==""){
+        || un==""){
             swal("Oops!", "Please fill out all required fields.", "error");
         }
     else{
         //SD: VALIDATIONS!!!! please pafilter mabuti ng mga data,
+        fn = $("#editInstAccFN").val();
+        mn = $("#editInstAccMN").val();
+        sn = $("#editInstAccLN").val();
+        bday = $("#editInstAccBday").val();
+        add = $("#editInstAccAdd").val();
+        phone = $("#editInstAccPhone").val();
+        email = $("#editInstAccEmail").val();
+        educ = $('#editInstAccEduc').val();
+        sex = $('#editInstAccSex').val();
+        un = $("#editInstAccUN").val();
 
         var data = {
             fullname: fn + "_" + mn + "_" + sn,
@@ -290,32 +319,36 @@ function saveUpdInst(){
         //DB: Update instructor account function
     }
 }
-$('#btnDelInstAcc').click(function(){
-    $('#instResign').val("");
-});
 
 function resignInst(){
     //gagawin ko pang minimum date yung araw na na-hire sya, ex: May 17 sya na-hire, bawal sya ma-fire ng May 16. Kaya di pa tapos
-    var resDate = $('#instResign').val();
-    if (resDate=="" || resDate.length==0 ||resDate==null){
-        swal("Oops!", "Please enter the resignation date.", "error");
-    }else{
-        inst.delete(resDate,function(err, done){
-            if(err){
-                swal("Failed!", err.message, "error");                
+    var resDate = Date.parse($('#instResign').val());
+    inst.getLocalData(function(data){
+        var register = Date.parse(data.dateRegistered);
+        if(resDate.toString("yyyy-MM-dd") == register.toString("yyyy-MM-dd") || register.addDays(1).toString("yyyy-MM-dd") == resDate.toString("yyyy-MM-dd")){
+            swal("Oops!", "Not soo fast.", "error");            
+        }else{
+            if (resDate=="" || resDate.length==0 ||resDate==null){
+                swal("Oops!", "Please enter the resignation date.", "error");
             }else{
-                swal("Success!", "Instructor accout has been removed.", "success");
-                $('#confResignModal').modal('hide');
-                $('.divResigned').show();
-                $('.instDateResigned').html(resDate); //babaguhin ko pa format nito to MM-DD-YYYY (ex: May 19, 2018)                
+                inst.delete(resDate.toString("yyyy-MM-dd"),function(err, done){
+                    if(err){
+                        swal("Failed!", err.message, "error");                
+                    }else{
+                        swal("Success!", "Instructor accout has been removed.", "success");
+                        $('#confResignModal').modal('hide');
+                        $('.divResigned').show();
+                        $('.instDateResigned').html(Date.parse(resDate).toString("MMM d, yyyy")); //babaguhin ko pa format nito to MM-DD-YYYY (ex: May 19, 2018)                
+                    }
+                });
+                //DB: Delete/Resign function here then go back to instructor list
+                //DB: As of now, idagdag mo pa rin sya sa table pero dapat sa dulo sya malalagay tas yung status nya: Resigned
+                //DB: Iniisip ko pa kasi kung gagawan ko pa sya ng bagong table, sabi kasi ni sir wag na.
+                //DB: Tsaka yung sa view profile ng resigned, dapat iba na laman. Wala na dapat sched, pero may evaluation pa rin.
+                //Wala na rin dapat settings. Or activate account? Basta. Wag mo muna intindihin yun.
             }
-        });
-        //DB: Delete/Resign function here then go back to instructor list
-        //DB: As of now, idagdag mo pa rin sya sa table pero dapat sa dulo sya malalagay tas yung status nya: Resigned
-        //DB: Iniisip ko pa kasi kung gagawan ko pa sya ng bagong table, sabi kasi ni sir wag na.
-        //DB: Tsaka yung sa view profile ng resigned, dapat iba na laman. Wala na dapat sched, pero may evaluation pa rin.
-        //Wala na rin dapat settings. Or activate account? Basta. Wag mo muna intindihin yun.
-    }
+        }
+    });
 }
 
 var renderInstTablePage = function (data) {
@@ -343,6 +376,14 @@ var viewInstProfile = function(id){
         $('.instPhone').html(profile.telno);
         $('.instEmail').html(profile.email);
         $('.instDateHired').html(Date.parse(profile.dateRegistered).toString("MMM d, yyyy"));
+        if(profile.dateRetired != null){
+            $('.instDateResigned').html(Date.parse(profile.dateRetired).toString("MMM d, yyyy"));
+            $('.divResigned').show();
+            $('.btnDelInstAcc').attr("disabled", true);
+        }else{
+            $('.divResigned').hide();         
+            $('.btnDelInstAcc').attr("disabled", false);
+        }
     });
 }
 
@@ -357,6 +398,7 @@ var renderInstEdit = function(){
         $('#editInstAccPhone').val(profile.telno);            
         $('#editInstAccEmail').val(profile.email);            
         $('#editInstAccAdd').val(profile.address);            
-        $('#editInstAccEduc').val(profile.educAttain);            
+        $('#editInstAccEduc').val(profile.educAttain);   
+        $('#editInstAccUN').val(profile.username);            
     });
 }

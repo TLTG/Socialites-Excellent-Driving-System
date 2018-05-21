@@ -37,8 +37,16 @@ UserAccount.register = function(data, cb){
 }
 
 UserAccount.edit = function(id, user, pass, type, cb){
-    var sql = "UPDATE " + this.table + " SET username = ?, password = SHA1(?), acctype = ? WHERE id = ?";
-    this.db.get().query(sql, [user, pass, type, id], function(err, result){
+    var sql = "";
+    var data = [];
+    if(pass == "" || pass == null || pass == undefined){
+        sql = "UPDATE " + this.table + " SET username = ?, acctype = ? WHERE id = ?";
+        data = [user, type, id];
+    }else{
+        sql = "UPDATE " + this.table + " SET username = ?, password = SHA1(?), acctype = ? WHERE id = ?";
+        data = [user, pass, type, id];
+    }
+    this.db.get().query(sql, data, function(err, result){
         if(err) return cb(err);
         cb(null, result);
     });
