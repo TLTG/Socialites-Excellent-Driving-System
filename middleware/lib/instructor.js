@@ -71,7 +71,6 @@ exports.update = function(req, res, next){
     var id = req.params.id;
     var field = req.params.field == undefined ? null : req.params.field.replace(';','');
     var dataIn = JSON.parse(req.body.data);
-    console.log(req.body.data);
     //VALIDATIONS
     var breakDownID = id.split("-");
     var account = parseInt(breakDownID[1].slice(0,3));
@@ -97,8 +96,6 @@ exports.update = function(req, res, next){
     data.credential["username"] = dataIn.username;
     data.credential["password"] = dataIn.password;
     data.credential["type"] = 2;
-
-    console.log(JSON.stringify(data));
     
     instructor.update(id, data, function(err, result){
         if(err) return next(err);
