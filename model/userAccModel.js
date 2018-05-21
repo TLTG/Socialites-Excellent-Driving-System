@@ -36,4 +36,12 @@ UserAccount.register = function(data, cb){
     });
 }
 
+UserAccount.edit = function(id, user, pass, type, cb){
+    var sql = "UPDATE " + this.table + " SET username = ?, password = SHA1(?), acctype = ? WHERE id = ?";
+    this.db.get().query(sql, [user, pass, type, id], function(err, result){
+        if(err) return cb(err);
+        cb(null, result);
+    });
+}
+
 module.exports = UserAccount;

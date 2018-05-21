@@ -81,4 +81,29 @@ Instructor.register = function(data, cb){
     });
 }
 
+Instructor.delete = function(id, date, cb){
+    var self = this;
+    var idBreakDown = id.split("-");
+    var account = parseInt(idBreakDown[1].slice(0, 2));
+    var formattedDate = Date.parse(date).toString("yyyy-MM-dd");
+    UserAcc.delete(account, "status", function(err, done){
+        if(err) return cb(err);        
+        var sql = "UPDATE " + self.table + " SET status = 3, dateRetired = ? WHERE id = ?";
+        self.db.get().query(sql, [formattedDate, id], function(err, result){
+            if(err) return cb(err);
+            cb(null, true);
+        });
+    });
+}
+
+Instructor.update = function(id, data, cb){
+    UserAcc.edit(data.credential.id, data.credential.username, data.credential.password, data.credential.type, function(err, done){
+        if(err) return cb(err);
+        UserInfo.update(data.infoID, data.info, null, function(err, done1){
+            if(err) return cb(err);
+            cb(null, true);
+        });
+    });
+}
+
 module.exports = Instructor; //Export model for middleware use.

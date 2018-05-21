@@ -20,13 +20,17 @@ $(function () {
     $(".btnUpdateInstAcc").on("click", function () { //opens confirmation modal upon clicking update account. UNDONE.
         $('#confirmDeleteInstructor').modal('show');
     });
+});
 
+var loadInst = function(){
+    $(".preloader").fadeIn();  
     inst.getInstList(function (err, done) {
         if (err) return console.log(err);
         renderInstTablePage(inst.pages[inst.currPage]);
-    });
-});
-
+        viewInstProfile(inst.pages[inst.currPage][0].instID);
+        $(".preloader").fadeOut();          
+    });    
+}
 
 function resetNewInstr() //resets fields on add instructor modal
 {
@@ -236,15 +240,16 @@ function cancUpdInst(){
 
 function saveUpdInst(){
     var fn = $("#editInstAccFN").val();
-    var ln = $("#editInstAccLN").val();
+    var mn = $("#editInstAccMN").val();
+    var sn = $("#editInstAccLN").val();
     var bday = $("#editInstAccBday").val();
     var add = $("#editInstAccAdd").val();
     var phone = $("#editInstAccPhone").val();
     var email = $("#editInstAccEmail").val();
+    var educ = $('#editInstAccEduc').val();
+    var sex = $('#editInstAccSex').val();
     var un = $("#editInstAccUN").val();
     var pw = $("#editInstAccPW").val();
-    var educ = $('select[name="editInstAccEduc"]').val();
-    var sex = $('select[name="editInstAccSex"]').val();
 
     fn = fn.replace(/\s+/g, '');
     sn = sn.replace(/\s+/g, '');
@@ -261,8 +266,27 @@ function saveUpdInst(){
             swal("Oops!", "Please fill out all required fields.", "error");
         }
     else{
-        swal("Success!", "Instructor account is updated successfully!", "success");
-        resetSettingsInst();
+        //SD: VALIDATIONS!!!! please pafilter mabuti ng mga data,
+
+        var data = {
+            fullname: fn + "_" + mn + "_" + sn,
+            address: add,
+            telno: phone,
+            bdate: bday,
+            sex: sex,
+            email: email,
+            education: educ,
+            username: un,
+            password: pw, 
+        };
+        inst.update(data, function(err, done){
+            if(err){
+                swal("Failed!", err.message, "error");                
+            }else{
+                swal("Success!", "Instructor account is updated successfully!", "success");
+                resetSettingsInst();
+            }
+        });
         //DB: Update instructor account function
     }
 }
@@ -273,10 +297,16 @@ function resignInst(){
     if (resDate=="" || resDate.length==0 ||resDate==null){
         swal("Oops!", "Please enter the resignation date.", "error");
     }else{
-        swal("Success!", "Instructor accout has been removed.", "success");
-        $('#confResignModal').modal('hide');
-        $('.divResigned').show();
-        $('.instDateResigned').html(resDate); //babaguhin ko pa format nito to MM-DD-YYYY (ex: May 19, 2018)
+        inst.delete(resDate,function(err, done){
+            if(err){
+                swal("Failed!", err.message, "error");                
+            }else{
+                swal("Success!", "Instructor accout has been removed.", "success");
+                $('#confResignModal').modal('hide');
+                $('.divResigned').show();
+                $('.instDateResigned').html(resDate); //babaguhin ko pa format nito to MM-DD-YYYY (ex: May 19, 2018)                
+            }
+        });
         //DB: Delete/Resign function here then go back to instructor list
         //DB: As of now, idagdag mo pa rin sya sa table pero dapat sa dulo sya malalagay tas yung status nya: Resigned
         //DB: Iniisip ko pa kasi kung gagawan ko pa sya ng bagong table, sabi kasi ni sir wag na.
@@ -289,7 +319,7 @@ var renderInstTablePage = function (data) {
     var html = "";
     var counter = 1;
     data.forEach(element => {
-        var status = (element.vacant == Date.parse("today").toString('dddd') ? "<span class='badge badge-danger'>Day Off</span>" : element.status == 1 ? "<span class='badge badge-success'>Available</span>" : element.status == 2 ? "<span class='badge badge-warning'>In session</span>" : "");
+        var status = (element.vacant == Date.parse("today").toString('dddd') ? "<span class='badge badge-danger'>Day Off</span>" : element.status == 1 ? "<span class='badge badge-success'>Available</span>" : element.status == 2 ? "<span class='badge badge-warning'>In session</span>" : "<span class='badge badge-danger'>Resigned</span>");
         html += "<tr onclick='viewInstProfile(\""+ element.instID +"\")'>";
         html += "<td>" + counter + "</td>";
         html += "<td>" + (element.fullname.replace(/_/g," ")) + "</td>";
@@ -302,6 +332,7 @@ var renderInstTablePage = function (data) {
 
 var viewInstProfile = function(id){
     inst.selected = id;
+    renderInstEdit();
     inst.getLocalData(function(profile){
         $('.instNum').html(profile.instID);
         $('.instName').html(profile.fullname.replace(/_/g,' '));
@@ -323,5 +354,6 @@ var renderInstEdit = function(){
         $('#editInstAccPhone').val(profile.telno);            
         $('#editInstAccEmail').val(profile.email);            
         $('#editInstAccAdd').val(profile.address);            
+        $('#editInstAccEduc').val(profile.educAttain);            
     });
 }

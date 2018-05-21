@@ -68,14 +68,50 @@ exports.get = function(req, res, next){
 }
 
 exports.update = function(req, res, next){
-    var id = parseInt(req.params.id);
+    var id = req.params.id;
     var field = req.params.field == undefined ? null : req.params.field.replace(';','');
-    var data = req.body.data;
+    var dataIn = JSON.parse(req.body.data);
+    console.log(req.body.data);
     //VALIDATIONS
-    instructor.update(id, data, field, function(err, result){
+    var breakDownID = id.split("-");
+    var account = parseInt(breakDownID[1].slice(0,3));
+    var info = parseInt(breakDownID[1].slice(3,6));
+    
+    var data = {
+        infoID: info,
+        info: [],
+        credential: {},
+    };
+    data.info.push(account);
+    data.info.push(dataIn.fullname);
+    data.info.push(dataIn.address);
+    data.info.push(dataIn.telno);
+    data.info.push(dataIn.bdate);
+    data.info.push("n/a");
+    data.info.push(dataIn.sex);
+    data.info.push("n/a");
+    data.info.push(dataIn.email);
+    data.info.push(2);
+
+    data.credential["id"] = account;
+    data.credential["username"] = dataIn.username;
+    data.credential["password"] = dataIn.password;
+    data.credential["type"] = 2;
+
+    console.log(JSON.stringify(data));
+    
+    instructor.update(id, data, function(err, result){
         if(err) return next(err);
         res.status(200).send({success: true, detail: "Successfully Modify!"});
     });
 }
 
-exports.delete = function(req, res, next){}
+exports.delete = function(req, res, next){
+    var id = req.params.id;
+    var date = JSON.parse(req.body.data);
+
+    instructor.delete(id, date, function(err, done){
+        if(err) return next(err);
+        res.status(200).send({success: true, detail: "Successfully Deleted!"});
+    });
+}

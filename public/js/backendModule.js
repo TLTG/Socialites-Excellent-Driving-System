@@ -232,7 +232,50 @@ var inst = {
                 return cb(x);
             }
         });
-    }
+    },
+    delete: function(date, cb){
+        var onFail = function(detail){
+            var error = new Error(detail);
+            cb(error);
+        };
+        $.ajax({
+            type: "DELETE",
+            url: "api/v1/instructor/" + this.selected,
+            data: {data: JSON.stringify(date)},
+            success: function(res){
+                if(res.success){
+                    cb(null, res.detail);
+                }else{
+                    onFail(res.detail);
+                }
+            },
+            error: onFail,
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    update: function(data, cb){
+        var json = JSON.stringify(data);
+        console.log(data);
+        var onFail = function(detail){
+            var error =  new Error(detail);
+            cb(error);
+        };
+        $.ajax({
+            type: "PUT",
+            url: 'api/v1/instructor/' + this.selected,
+            data: {data: json},
+            success: function(res){
+                if(res.success){
+                    cb(null, res.detail);
+                }else{
+                    onFail(res.detail);
+                }
+            }
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
 }
 /* 
 *   paul-made module design to query request one at a time, to prevent server congestion.
@@ -311,4 +354,8 @@ var refresher = {
             cb(null);
         });
     }
+}
+
+var uploadPic = {
+
 }
