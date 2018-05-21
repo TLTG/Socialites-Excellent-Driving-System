@@ -217,7 +217,7 @@ function resetUpdInst(){
 
 function cancUpdInst(){
     swal({
-        title: "Discard changes?",
+        title: "Cancel and discard changes?",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
