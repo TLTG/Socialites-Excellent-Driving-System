@@ -222,26 +222,26 @@
                                             <h5 class="h5Enr">Name<span class="asterisk">*</span></h5>
                                             <div class="row">
                                                 <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
-                                                    <h6 class="h6Enr">First Name*</h6>
-                                                    <input type="text" class="txtEnr1" required name="enrFN" id="editStudAccFN" placeholder="*First Name"><br>
+                                                    <input type="text" class="txtEnr1" required id="editStudAccFN"><br>
+                                                    <small class="cstSmall">First Name*</small>
                                                 </div>
                                                 <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
-                                                    <h6 class="h6Enr">Middle Name</h6>
-                                                    <input type="text" class="txtEnr1" required name="enrFN" id="editStudAccMN" placeholder="Middle Name"><br> 
+                                                    <input type="text" class="txtEnr1" required id="editStudAccMN"><br> 
+                                                    <small class="cstSmall">Middle Name</small> 
                                                 </div>
                                                 <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
-                                                    <h6 class="h6Enr">Surname*</h6>
-                                                    <input type="text" class="txtEnr1" required name="enrFN" id="editStudAccSN" placeholder="*Surname"><br>
+                                                    <input type="text" class="txtEnr1" required id="editStudAccSN"><br>
+                                                    <small class="cstSmall">Surname*</small>
                                                 </div>
                                             </div>
                                         </div><hr>
                                         <div>
                                             <h5 class="h5Enr">Birth Date<span class="asterisk">*</span></h5>
-                                            <input type="date" class="txtEnr1" required name="enrBday" id="editStudAccBday" placeholder="mm/dd/yyyy"><br>
+                                            <input type="date" class="txtEnr1" required id="editStudAccBday" placeholder="mm/dd/yyyy"><br>
                                         </div><hr>
                                         <div>
                                             <h5 class="h5Enr">Birth Place<span class="asterisk">*</span></h5>
-                                            <input type="text" class="txtEnr1" required name="enrBplace" id="editStudAccBplace" placeholder="*Birthplace"><br>
+                                            <input type="text" class="txtEnr1" required id="editStudAccBplace"><br>
                                         </div><hr>
                                         <div>
                                             <h5 class="h5Enr">Sex<span class="asterisk">*</span></h5>
@@ -252,11 +252,11 @@
                                         </div><hr>
                                         <div>
                                             <h5 class="h5Enr">Address<span class="asterisk">*</span></h5>
-                                            <textarea rows="3" class="enrTxtArea1" id="editStudAccAdd" placeholder="*Address"></textarea>
+                                            <textarea rows="3" class="enrTxtArea1" id="editStudAccAdd"></textarea>
                                         </div><hr>
                                         <div>
                                             <h5 class="h5Enr">Civil Status<span class="asterisk">*</span></h5>
-                                            <select class="enrCivStatus1" name="editStudAccCivStatus">
+                                            <select class="enrCivStatus1" name="editStudAccCivStatus" id="editStudAccCivStatus">
                                                 <option value="civ0">---</option>
                                                 <option value="civ1">Single</option>
                                                 <option value="civ2">Married</option>
@@ -267,18 +267,18 @@
                                         </div><hr>
                                         <div>
                                             <h5 class="h5Enr">Occupation</h5>
-                                            <input type="text" class="txtEnr1" required name="enrOcc" id="editStudAccOcc" placeholder="Occupation"><br>
+                                            <input type="text" class="txtEnr1" required id="editStudAccOcc"><br>
                                         </div><hr>
                                         <div>
                                             <h5 class="h5Enr">Contact<span class="asterisk">*</span></h5>
                                             <div class="row">
                                                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-                                                    <h6 class="h6Enr">Contact Number*</h6>
-                                                    <input type="number" class="txtEnr1" required name="enrCont" id="editStudAccCont" placeholder="*Contact Number"><br>
+                                                    <input type="number" class="txtEnr1" required id="editStudAccCont"><br>
+                                                    <small class="cstSmall">Contact Number*</small>
                                                 </div>
                                                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-                                                    <h6 class="h6Enr">Email Address</h6>
-                                                    <input type="email" class="txtEnr1" required name="enrEmail" id="editStudAccEmail" placeholder="Email Address"><br>
+                                                    <input type="email" class="txtEnr1" required id="editStudAccEmail"><br>
+                                                    <small class="cstSmall">Email Address</small>
                                                 </div>
                                             </div>
                                         </div><hr>
@@ -286,12 +286,12 @@
                                             <h5 class="h5Enr">Guardian Information<span class="asterisk">*</span></h5>
                                             <div class="row">
                                                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-                                                    <h6 class="h6Enr">Parent/Guardian Name*</h6>
-                                                    <input type="text" class="txtEnr1" required name="enrGuard" id="editStudAccGuard" placeholder="*Parent/Guardian Name"><br>
+                                                    <input type="text" class="txtEnr1" required id="editStudAccGuard"><br>
+                                                    <small class="cstSmall">Parent/Guardian Name*</small>
                                                 </div>
                                                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-                                                    <h6 class="h6Enr">Contact Number*</h6>
-                                                    <input type="number" class="txtEnr1" required name="enrGuardCont" id="editStudAccGuardCont" placeholder="*Contact Number"><br>
+                                                    <input type="number" class="txtEnr1" required id="editStudAccGuardCont"><br>
+                                                    <small class="cstSmall">Contact Number*</small>
                                                 </div>
                                             </div>
                                         </div><hr>
@@ -299,16 +299,16 @@
                                             <h5 class="h5Enr">Account<span class="asterisk">*</span></h5>
                                             <div class="row">
                                                 <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
-                                                    <h6 class="h6Enr">Username*</h6>
-                                                    <input type="text" class="txtEnr1" required name="enrUN" id="editStudAccUN" placeholder="Username"><br>
+                                                    <input type="text" class="txtEnr1" required id="editStudAccUN"><br>
+                                                    <small class="cstSmall">Username*</small>
                                                 </div>
                                                 <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
-                                                    <h6 class="h6Enr">Password*</h6>
-                                                    <input type="password" class="txtEnr1" required name="enrPW" id="editStudAccPW" placeholder="Password"><br>
+                                                    <input type="password" class="txtEnr1" required id="editStudAccPW"><br>
+                                                    <small class="cstSmall">Password*</small>
                                                 </div>
                                                 <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
-                                                    <h6 class="h6Enr">Confirm Password*</h6>
-                                                    <input type="password" class="txtEnr1" required name="enrCPW" id="editStudAccCPW" placeholder="Confirm Password"><br>
+                                                    <input type="password" class="txtEnr1" required id="editStudAccCPW"><br>
+                                                    <small class="cstSmall">Confirm Password*</small>
                                                 </div>
                                             </div>
                                         </div><hr>

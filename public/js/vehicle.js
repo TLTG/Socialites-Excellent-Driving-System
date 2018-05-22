@@ -2,11 +2,11 @@ var checkedValues, count, checkedValuesData = [];
 
 $(function () {
     clrSearchVehiA();
-    // $('.tblVehicle tbody tr:first').addClass("highlightTr");
 });
 
 var loadVehi = function(){
     $(".preloader").fadeIn(); 
+    // $('#carTableA tr:first').addClass("highlightTr");
     car.getATableData(function(){
         $('.carTbl').click(function () {
             var selected = $(this).hasClass("highlightTr");

@@ -8024,3 +8024,10 @@ tiCustom
   bottom: 10px;
   width: 100%;
 }
+.cstSmall{
+  padding-left: 12px; 
+  color: rgb(43, 42, 42);
+}
+.btnCstom{
+  width: 150px;
+}
