@@ -115,97 +115,88 @@
                             <div class="tab-pane" id="settingsI" role="tabpanel">
                                 <div class="card-body">
                                     <form class="form-horizontal form-material instTab">
-                                        <div class="form-group">
-                                            <label class="col-md-12 customLbl">First Name <span class="asterisk">*</span></label>
-                                            <div class="col-md-12">
-                                                <input type="text" id="editInstAccFN" placeholder="" class="form-control form-control-line">
+                                        <div>
+                                            <h5 class="h5Enr">Name<span class="asterisk">*</span></h5>
+                                            <div class="row">
+                                                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                                                    <input type="text" class="txtEnr1" required id="editInstAccFN"><br>
+                                                    <small class="cstSmall">First Name*</small>
+                                                </div>
+                                                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                                                    <input type="text" class="txtEnr1" required id="editInstAccMN"><br> 
+                                                    <small class="cstSmall">Middle Name</small>
+                                                </div>
+                                                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                                                    <input type="text" class="txtEnr1" required id="editInstAccLN"><br>
+                                                    <small class="cstSmall">Surname*</small>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12 customLbl">Middle Name </label>
-                                            <div class="col-md-12">
-                                                <input type="text" id="editInstAccMN" placeholder="" class="form-control form-control-line">
+                                        </div><hr>
+                                        <div>
+                                            <h5 class="h5Enr">Sex<span class="asterisk">*</span></h5>
+                                            <input type="radio" class="enrSexRD" id="editInstSex1" name="editInstAccSex" value="M">
+                                                <label class="enrSexLbl" for="editInstSex2">Male</label>
+                                            <input type="radio" class="enrSexRD" id="editInstSex2" name="editInstAccSex" value="F">
+                                                <label class="defRateLbl" for="editInstSex2">Female</label>
+                                        </div><hr>
+                                        <div>
+                                            <h5 class="h5Enr">Birth Date<span class="asterisk">*</span></h5>
+                                            <input type="date" class="txtEnr1" required id="editInstAccBday" placeholder="mm/dd/yyyy"><br>
+                                        </div><hr>
+                                        <div>
+                                            <h5 class="h5Enr">Address<span class="asterisk">*</span></h5>
+                                            <textarea rows="3" class="enrTxtArea1" id="editInstAccAdd"></textarea>
+                                        </div><hr>
+                                        <div>
+                                            <h5 class="h5Enr">Contact<span class="asterisk">*</span></h5>
+                                            <div class="row">
+                                                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                                    <input type="number" class="txtEnr1" required  id="editInstAccPhone"><br>
+                                                    <small class="cstSmall">Contact Number*</small>
+                                                </div>
+                                                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                                    <input type="email" class="txtEnr1" required id="editInstAccEmail"><br>
+                                                    <small class="cstSmall">Email Address</small>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12 customLbl">Surname <span class="asterisk">*</span></label>
-                                            <div class="col-md-12">
-                                                <input type="text" id="editInstAccLN" placeholder="" class="form-control form-control-line">
+                                        </div><hr>
+                                        <div>
+                                            <h5 class="h5Enr">Highest Educational Attainment<span class="asterisk">*</span></h5>
+                                            <select required class="enrCivStatus1" id="editInstAccEduc">
+                                                <option value="0">---</option>
+                                                <option value="1">Pre-Primary/Pre-School</option>
+                                                <option value="2">Primary/Elementary</option>
+                                                <option value="3">Secondary/High School</option>
+                                                <option value="4">Post-Secondary Non-Tertiary/Technical-Vocational</option>
+                                                <option value="5">Tertiary/Baccalaureate</option>
+                                                <option value="6">Tertiary/Post-Graduate</option>
+                                            </select>
+                                        </div><hr>
+                                        <div>
+                                            <h5 class="h5Enr">Account<span class="asterisk">*</span></h5>
+                                            <div class="row">
+                                                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                                                    <input type="text" class="txtEnr1" required id="editInstAccUN"><br>
+                                                    <small class="cstSmall">Username*</small>
+                                                </div>
+                                                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                                                    <input type="password" class="txtEnr1" required id="editInstAccPW"><br>
+                                                    <small class="cstSmall">Password*</small>
+                                                </div>
+                                                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                                                    <input type="password" class="txtEnr1" required id="editInstAccCPW"><br>
+                                                    <small class="cstSmall">Confirm Password*</small>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12 customLbl">Sex <span class="asterisk">*</span></label>
-                                            <div class="col-md-12">
-                                                <select class="form-control form-control-line" id="editInstAccSex">
-                                                    <option value="M">Male</option>
-                                                    <option value="F">Female</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12 customLbl">Date of Birth <span class="asterisk">*</span></label>
-                                            <div class="col-md-12">
-                                                <input type="date" id="editInstAccBday" class="form-control form-control-line" id="newInstBday" placeholder="dd/mm/yyyy">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12 customLbl">Address <span class="asterisk">*</span></label>
-                                            <div class="col-md-12">
-                                                <input type="text" id="editInstAccAdd" placeholder="" class="form-control form-control-line">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12 customLbl">Phone Number <span class="asterisk">*</span></label>
-                                            <div class="col-md-12">
-                                                <input type="number" id="editInstAccPhone" placeholder="" class="form-control form-control-line" min="1" max="999999999999">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12 customLbl">Email Address <span class="asterisk">*</span></label>
-                                            <div class="col-md-12">
-                                                <input type="email" id="editInstAccEmail" placeholder="" class="form-control form-control-line">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12 customLbl">Highest Educational Attainment <span class="asterisk">*</span></label>
-                                            <div class="col-md-12">
-                                                <select required class="form-control form-control-line" id="editInstAccEduc">
-                                                    <option value="0">---</option>
-                                                    <option value="1">Pre-Primary/Pre-School</option>
-                                                    <option value="2">Primary/Elementary</option>
-                                                    <option value="3">Secondary/High School</option>
-                                                    <option value="4">Post-Secondary Non-Tertiary/Technical-Vocational</option>
-                                                    <option value="5">Tertiary/Baccalaureate</option>
-                                                    <option value="6">Tertiary/Post-Graduate</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12 customLbl">Username <span class="asterisk">*</span></label>
-                                            <div class="col-md-12">
-                                                <input type="email" id="editInstAccUN" placeholder="" class="form-control form-control-line">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12 customLbl">Password <span class="asterisk">*</span></label>
-                                            <div class="col-md-12">
-                                                <input type="password" id="editInstAccPW" value="" class="form-control form-control-line">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12 customLbl">Confirm Password <span class="asterisk">*</span></label>
-                                            <div class="col-md-12">
-                                                <input type="password" id="editInstAccCPW" value="" class="form-control form-control-line">
-                                            </div>
-                                        </div>
+                                        </div><hr>
                                         <div class="form-group">
                                             <div class="col-sm-12">
-                                                <button type="button" class="btn btn-danger pull-left btnDelInstAcc" data-toggle="modal" data-target="#confResignModal">Resign</button>
-                                                <button type="button" class="btn btn-primary pull-right btnUpdateInstAcc" onclick="updateInst()">Update Account</button>
+                                                <button type="button" class="btn btnCstom btn-danger pull-left btnDelInstAcc" data-toggle="modal" data-target="#confResignModal">Resign</button>
+                                                <button type="button" class="btn btnCstom btn-primary pull-right btnUpdateInstAcc" onclick="updateInst()">Update Account</button>
                                                 
-                                                <button type="button" class="btn btn-primary pull-right btnSaveUpdInst" onclick="saveUpdInst()">Save</button>
-                                                <button type="button" class="btn btn-light pull-right btnResetUpdInst" onclick="resetUpdInst()">Reset</button>
-                                                <button type="button" class="btn btn-danger pull-right btnCancUpdInst" onclick="cancUpdInst()">Cancel</button>
+                                                <button type="button" class="btn btnCstom btn-primary pull-right btnSaveUpdInst" onclick="saveUpdInst()">Save</button>
+                                                <button type="button" class="btn btnCstom btn-light pull-right btnResetUpdInst" onclick="resetUpdInst()">Reset</button>
+                                                <button type="button" class="btn btnCstom btn-danger pull-right btnCancUpdInst" onclick="cancUpdInst()">Cancel</button>
                                             </div>
                                         </div>
                                     </form>

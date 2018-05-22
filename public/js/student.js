@@ -100,7 +100,7 @@ function cancUpdStud(){
 }
 
 function saveUpdStud(){
-    var a, b, c, d, e, f, g, h, i ,j;
+    var a, b, c, d, e, f, g, h, i ,j;  //for checking lang to
     var fn = $("#editStudAccFN").val();
     var sn = $("#editStudAccSN").val();
     var bday = $("#editStudAccBday").val();

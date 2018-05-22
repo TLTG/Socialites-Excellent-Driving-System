@@ -1,4 +1,13 @@
 $(function () {
+    //DB: Pakilagay naman yung highlightTr
+    // $('.instructorTable  tr:first').addClass("highlightTr");
+    // $('.instructorTable tr').click(function () {
+    //     var selected = $(this).hasClass("highlightTr");
+    //     $('.instructorTable tr').removeClass("highlightTr");
+    //     if (!selected)
+    //         $(this).addClass("highlightTr");
+    // });
+
     $("#btnNewInstructor").on("click", function () { //opens add instructor modal
         resetNewInstr();
         $('#newInstructorModal').modal('show');
@@ -9,6 +18,7 @@ $(function () {
         resetSettingsInst();        
     });
     $(".backInst").on("click", function () { //when back button is clicked (right side of instructor information)
+        //SD: Dapat may modal pa dito kung ididiscard ba yung changes
         $('.view-viewInstructor').hide();
         $('.view-instructor').show();
     });
@@ -260,6 +270,7 @@ function cancUpdInst(){
 }
 
 function saveUpdInst(){
+    var a, b, c, d, e, f, g; //for checking lang to
     var fn = $("#editInstAccFN").val();
     var mn = $("#editInstAccMN").val();
     var sn = $("#editInstAccLN").val();
@@ -268,63 +279,190 @@ function saveUpdInst(){
     var phone = $("#editInstAccPhone").val();
     var email = $("#editInstAccEmail").val();
     var educ = $('#editInstAccEduc').val();
-    var sex = $('#editInstAccSex').val();
+    var sex = $('input[name="editInstAccSex"]:checked').val();
     var un = $("#editInstAccUN").val();
     var pw = $("#editInstAccPW").val();
     var cpw = $("#editInstAccCPW").val();
 
-    fn = fn.replace(/\s+/g, '');
-    sn = sn.replace(/\s+/g, '');
-    bday = bday.replace(/\s+/g, '');
-    add = add.replace(/\s+/g, '');
-    phone = phone.replace(/\s+/g, '');
-    email = email.replace(/\s+/g, '');
-    un = un.replace(/\s+/g, '');
-    pw = pw.replace(/\s+/g, '') == "" ? null : $("#editInstAccPW").val();
+    a = fn.replace(/\s+/g, '');
+    b = sn.replace(/\s+/g, '');
+    c = add.replace(/\s+/g, '');
+    d = phone.replace(/\s+/g, '');
+    e = un.replace(/\s+/g, '');
+    f = pw.replace(/\s+/g, '');
+    g = cpw.replace(/\s+/g, '');
 
-    if (fn=="" || sn=="" || add=="" 
-        || phone=="" || email=="" || bday==""
-        || un==""){
+    if (a=="" || b=="" || c=="" 
+        || d=="" || bday==""){
             swal("Oops!", "Please fill out all required fields.", "error");
+            alert ("1");
         }
-    else{
-        //SD: VALIDATIONS!!!! please pafilter mabuti ng mga data,
-        fn = $("#editInstAccFN").val();
-        mn = $("#editInstAccMN").val();
-        sn = $("#editInstAccLN").val();
-        bday = $("#editInstAccBday").val();
-        add = $("#editInstAccAdd").val();
-        phone = $("#editInstAccPhone").val();
-        email = $("#editInstAccEmail").val();
-        educ = $('#editInstAccEduc').val();
-        sex = $('#editInstAccSex').val();
-        un = $("#editInstAccUN").val();
-
-        var data = {
-            fullname: fn + "_" + mn + "_" + sn,
-            address: add,
-            telno: phone,
-            bdate: bday,
-            sex: sex,
-            email: email,
-            education: educ,
-            username: un,
-            password: pw, 
-        };
-        inst.update(data, function(err, done){
-            if(err){
-                swal("Failed!", err.message, "error");                
-            }else{
-                swal("Success!", "Instructor account is updated successfully!", "success");
-                resetSettingsInst();
+        else{
+            if (e=="" && f=="" && g==""){
+                alert ("3");
+                swal({
+                    title: "Warning!",
+                    text: "Are you sure you want to save these changes?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "Cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                function(isConfirm){
+                    if (isConfirm) {
+                        swal("Success!", "Instructor account is updated successfully!", "success");
+                        var data = {
+                            fullname: fn + "_" + mn + "_" + sn,
+                            address: add,
+                            telno: phone,
+                            bdate: bday,
+                            sex: sex,
+                            email: email,
+                            education: educ,
+                            username: un,
+                            password: pw, 
+                        };
+                        inst.update(data, function(err, done){
+                            if(err){
+                                swal("Failed!", err.message, "error");                
+                            }else{
+                                swal("Success!", "Instructor account is updated successfully!", "success");
+                                resetSettingsInst();
+                            }
+                        });
+                        //DB: Update instructor account function
+                    }
+                });
             }
-        });
-        //DB: Update instructor account function
-    }
+            else{
+                if (f!="" && g!=""){
+                    if (pw==cpw){
+                        swal({
+                            title: "Warning!",
+                            text: "Are you sure you want to save these changes?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Yes",
+                            cancelButtonText: "Cancel",
+                            closeOnConfirm: false,
+                            closeOnCancel: true
+                        },
+                        function(isConfirm){
+                            if (isConfirm) {
+                                swal("Success!", "Instructor account is updated successfully!", "success");
+                                var data = {
+                                    fullname: fn + "_" + mn + "_" + sn,
+                                    address: add,
+                                    telno: phone,
+                                    bdate: bday,
+                                    sex: sex,
+                                    email: email,
+                                    education: educ,
+                                    username: un,
+                                    password: pw, 
+                                };
+                                inst.update(data, function(err, done){
+                                    if(err){
+                                        swal("Failed!", err.message, "error");                
+                                    }else{
+                                        swal("Success!", "Instructor account is updated successfully!", "success");
+                                        resetSettingsInst();
+                                    }
+                                });
+                                //DB: Update instructor account function
+                            }
+                        });
+                    }
+                    else{
+                        swal("Oops!", "Passwords do not match!", "error");
+                    }
+                }
+                else if (f=="" && g==""){
+                    swal({
+                        title: "Warning!",
+                        text: "Are you sure you want to save these changes?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Yes",
+                        cancelButtonText: "Cancel",
+                        closeOnConfirm: false,
+                        closeOnCancel: true
+                    },
+                    function(isConfirm){
+                        if (isConfirm) {
+                            swal("Success!", "Instructor account is updated successfully!", "success");
+                            var data = {
+                                fullname: fn + "_" + mn + "_" + sn,
+                                address: add,
+                                telno: phone,
+                                bdate: bday,
+                                sex: sex,
+                                email: email,
+                                education: educ,
+                                username: un,
+                                password: pw, 
+                            };
+                            inst.update(data, function(err, done){
+                                if(err){
+                                    swal("Failed!", err.message, "error");                
+                                }else{
+                                    swal("Success!", "Instructor account is updated successfully!", "success");
+                                    resetSettingsInst();
+                                }
+                            });
+                            //DB: Update instructor account function
+                        }
+                    });
+                }
+                else{
+                    alert (e +" "+ f +" "+g);
+                    swal("Oops!", "Please fill out all required fields.", "error");
+                }
+            }
+        }
+
+    // else{
+    //     //SD: VALIDATIONS!!!! please pafilter mabuti ng mga data,
+    //     fn = $("#editInstAccFN").val();
+    //     mn = $("#editInstAccMN").val();
+    //     sn = $("#editInstAccLN").val();
+    //     bday = $("#editInstAccBday").val();
+    //     add = $("#editInstAccAdd").val();
+    //     phone = $("#editInstAccPhone").val();
+    //     email = $("#editInstAccEmail").val();
+    //     educ = $('#editInstAccEduc').val();
+    //     sex = $('#editInstAccSex').val();
+    //     un = $("#editInstAccUN").val();
+
+    //     var data = {
+    //         fullname: fn + "_" + mn + "_" + sn,
+    //         address: add,
+    //         telno: phone,
+    //         bdate: bday,
+    //         sex: sex,
+    //         email: email,
+    //         education: educ,
+    //         username: un,
+    //         password: pw, 
+    //     };
+    //     inst.update(data, function(err, done){
+    //         if(err){
+    //             swal("Failed!", err.message, "error");                
+    //         }else{
+    //             swal("Success!", "Instructor account is updated successfully!", "success");
+    //             resetSettingsInst();
+    //         }
+    //     });
+    //     //DB: Update instructor account function
+    // }
 }
 
 function resignInst(){
-    //gagawin ko pang minimum date yung araw na na-hire sya, ex: May 17 sya na-hire, bawal sya ma-fire ng May 16. Kaya di pa tapos
     var resDate = Date.parse($('#instResign').val());
     inst.getLocalData(function(data){
         var register = Date.parse(data.dateRegistered);
@@ -354,6 +492,7 @@ function resignInst(){
     });
 }
 
+// --------------------
 var renderInstTablePage = function (data) {
     var html = "";
     var counter = 1;
