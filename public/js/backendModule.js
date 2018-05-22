@@ -278,6 +278,126 @@ var inst = {
     },
 }
 /* 
+*   branch module, simplified tong isang ito for better readability. 
+*   Pure communication lang to sa server, walang rendering.
+*/
+var office = {
+    selected: 0,
+    offset: 0,
+    limit: 10,
+    currPage: 0,
+    pages: [],
+    getList: function(cb){
+        var self = this;
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.get('api/v1/branch?offset='+this.offset+'&limit='+this.limit, function(res){
+            if(res.success){
+                self.pages.push(res.data);
+                self.offset = res.data[res.data.length-1].id;
+                cb(null);
+            }else{
+                cb("Error: " + res.detail);
+            }
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    add: function(data, cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.post('api/v1/branch', {data: JSON.stringify(data)}, function(res){
+            if(res.success){
+                cb(null);
+            }else{
+                onFail(res.detail);
+            }
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    update: function(data, cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.ajax({
+            type: "PUT",
+            url: "api/v1/branch/" + this.selected,
+            data: {data: JSON.stringify(data)},
+            success: function(res){
+                if(res.success){
+                    cb(null);
+                }else{
+                    onFail(res.detail);
+                }
+            },
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    delete: function(cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.ajax({
+            type: "DELETE",
+            url: "api/v1/branch/" + this.selected,
+            success: function(res){
+                if(res.success){
+                    cb(null);
+                }else{
+                    onFail(res.detail);
+                }
+            },
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    getLocalData: function(cb){
+        this.pages[this.currPage].forEach(x=>{
+            if(x.id == this.selected){
+                if(x.admin){
+                    return cb(x);
+                }else{
+                    this.getAdminName(function(err, data){
+                        if(err){
+                            console.error(err);
+                            return cb(x);
+                        }
+                        if(Object.keys(data).length != 0){
+                            x["admin"] = data;
+                        }else{
+                            x["admin"] = {id: 0, name: ""}   
+                        }
+                        cb(x);
+                    });
+                }
+            } 
+        });
+    },
+    getAdminName: function(cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        };
+        return $.get('api/v1/branch/' + this.selected + '/admin', function(res){
+            if(res.success){
+                cb(null, res.data);
+            }else{
+                onFail(res.detail);      
+            }
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+}
+/* 
 *   paul-made module design to query request one at a time, to prevent server congestion.
 */
 var queryer = {

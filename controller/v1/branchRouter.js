@@ -1,6 +1,6 @@
 //Branch Router
 var router = require('express').Router();
-/* //Branch Middelware
+//Branch Middelware
 var middleware = require('../../middleware/lib/branch');
 
 var auth = require('../../middleware/authentication');
@@ -12,8 +12,9 @@ router.route('/:id')
     .put(auth.auth, middleware.update)
     .get(middleware.get)
     .delete(auth.auth,middleware.delete);
+router.route('/:id/admin').get(middleware.getAdmin);
 router.route('/:id/:field')
     .get(middleware.get)
     .put(auth.auth,middleware.update);
- */
+
 module.exports = router;

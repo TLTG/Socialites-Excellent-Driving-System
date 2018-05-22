@@ -194,6 +194,7 @@ var schedule = function()
 
 var branches = function ()
 {
+    loadBranch();
     $(".search-box").hide();
     $(".view-instructor").hide();
     $(".view-schedule").hide();
