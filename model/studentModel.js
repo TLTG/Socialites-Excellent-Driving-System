@@ -1,14 +1,19 @@
 var db = require('./db');
 var ModelModule = require('./model');
-var table = "studentinformation";
+var table = "student";
 
 var Student = Object.create(ModelModule);
 Student.table = table;
 Student.db = db;
 
 //Business Logic Code Below:
-Student.getList = function(offset, limit, cb){
-    var sql = "CALL getStudList(?,?)";
+Student.getList = function(offset, limit, type, cb){
+    var sql = "";
+    if(type == 0){
+        sql = "CALL getStudList(?,?)";
+    }else{
+        sql = "CALL getPastStud(?,?)";
+    }
     db.get().query(sql, [offset, limit], function(err, result){
         if(err) return cb(err);
         cb(null, result[0]);
@@ -26,7 +31,7 @@ Student.get = function (id, field, cb) {
         if (field == null) {
             cb(null, result[0]);
         } else {
-            cb(null, result[0][0][field]);
+            cb(null, result[0][field]);
         }
     });
 }

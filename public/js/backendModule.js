@@ -36,7 +36,7 @@ var car = {
             console.log(request.status + ": " + request.statusText);
         });
         var addPage = (page)=>{
-            this.pages.push(page);
+            this.pages[this.currPage] = page;
             this.renderATable(page);
             this.offset = page[page.length-1].id;
             cb();
@@ -171,13 +171,7 @@ var car = {
     refresh: function(){
         this.offset = 0;
         this.currPage = 0;
-        $.get('api/v1/car?offset='+ this.offset + '&limit=' + this.limit, function(res){
-            if(res.success){
-
-            }else{
-                
-            }
-        });
+        this.getATableData(()=>{});
     }
 }
 /* 
@@ -194,7 +188,7 @@ var inst = {
         var self = this;
         var addPage = function(err, data){
             if(err) return cb(new Error("Error: getting data."));
-            self.pages.push(data);
+            self.pages[self.currPage] = data;
             self.offset = data[data.length-1].id;
             cb(null, true);
         };
@@ -276,6 +270,13 @@ var inst = {
             onFail("Error: " + xhr.status + "\n" + xhr.statusText);
         });
     },
+    refresh: function(){
+        this.offset = 0;
+        this.currPage = 0;
+        this.getInstList(()=>{
+            renderInstTablePage(this.pages[this.currPage]);
+        });
+    },
 }
 /* 
 *   branch module, simplified tong isang ito for better readability. 
@@ -295,7 +296,7 @@ var office = {
         }
         return $.get('api/v1/branch?offset='+this.offset+'&limit='+this.limit, function(res){
             if(res.success){
-                self.pages.push(res.data);
+                self.pages[self.currPage] = res.data;
                 self.offset = res.data[res.data.length-1].id;
                 cb(null);
             }else{
@@ -396,6 +397,221 @@ var office = {
             onFail("Error: " + xhr.status + "\n" + xhr.statusText);
         });
     },
+    refresh: function(){
+        this.offset = 0;
+        this.currPage = 0;
+        this.getList(()=>{
+            renderBranchTable(this.pages[this.currPage]);
+        });
+    },
+}
+/* 
+*   student module,
+*/
+var stud = {
+    selected: 0,
+    selectedID: 0,
+    offset: [0,0],
+    limit: 10,
+    currPage: [0,0],
+    tableType: 0,
+    pages: {
+        current: [],
+        past: [],
+    },
+    getList: function(cb){
+        var self = this;
+        var url = 'api/v1/stud?offset='+this.offset[this.tableType]+'&limit='+this.limit + '&filter=' + this.tableType;
+        var processPage = function(data){ 
+            if(data.length == 0) return cb(null);
+            self.pages[(self.tableType == 0 ? "current" : "past")][self.currPage[self.tableType]] = data;
+            self.offset[self.tableType] = data[data.length-1].id;                                    
+            cb(null);
+        };
+        var onfail = function(detail){
+            cb(new Error(detail));
+        };
+        return $.get(url, function(res){
+            if(res.success){
+                processPage(res.data);
+            }else{
+                onfail(res.detail);
+            }
+        }).fail(function(xhr){
+            onfail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    add: function(data, cb){
+        var onfail = function(detail){
+            cb(new Error(detail));
+        };
+        return $.post('api/v1/stud', {data: JSON.stringify(data)}, function(res){
+            if(res.success){
+                cb(null);
+            }else{
+                onfail(res.detail);
+            }
+        }).fail(function(xhr){
+            onfail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    edit: function(data, cb){
+        var onfail = function(detail){
+            cb(new Error(detail));
+        };
+        return $.ajax({
+            type: "PUT",
+            url: "api/v1/stud/" + this.selected,
+            data: {data: JSON.stringify(data)},
+            success: function(res){
+                if(res.success){
+                    cb(null);
+                }else{
+                    onfail(res.detail);
+                }
+            },
+        }).fail(function(xhr){
+            onfail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    delete: function(cb){
+        var onfail = function(detail){
+            cb(new Error(detail));
+        };
+        return $.ajax({
+            type: "DELETE",
+            url: "api/v1/stud/" + this.selectedID,
+            success: function(res){
+                if(res.success){
+                    cb(null);
+                }else{
+                    onfail(res.detail);
+                }
+            },
+        }).fail(function(xhr){
+            onfail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    getLocalData: function(cb){
+        this.pages[(this.tableType == 0 ? "current" : "past")][this.currPage[this.tableType]].forEach(x=>{
+            if(this.selected == x.id){
+                return cb(x);
+            }
+        });
+    },
+    refresh: function(){
+        this.offset[this.tableType] = 0;
+        this.currPage[this.tableType] = 0;
+        this.getList(()=>{
+            renderStudentTable(stud.pages[(stud.tableType == 0 ? "current" : "past")][stud.currPage[stud.tableType]], ()=>{});
+        });
+    }
+}
+/* 
+*   lesson module,
+*/
+var topic = {
+    selected: 0,
+    offset: 0,
+    limit: 10,
+    currPage: 0,
+    pages: [],
+    allData: [],
+    getList: function(cb){
+        var self = this;
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.get('api/v1/util/lesson?offset='+this.offset+'&limit='+this.limit, function(res){
+            if(res.success){
+                self.pages[self.currPage] = res.data;
+                self.offset = res.data[res.data.length-1].id;
+                self.getAllLocalData();
+                cb(null);
+            }else{
+                cb("Error: " + res.detail);
+            }
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    add: function(data, cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.post('api/v1/util/lesson', {data: JSON.stringify(data)}, function(res){
+            if(res.success){
+                cb(null);
+            }else{
+                onFail(res.detail);
+            }
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    update: function(data, cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.ajax({
+            type: "PUT",
+            url: "api/v1/util/lesson/" + this.selected,
+            data: {data: JSON.stringify(data)},
+            success: function(res){
+                if(res.success){
+                    cb(null);
+                }else{
+                    onFail(res.detail);
+                }
+            },
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    delete: function(cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.ajax({
+            type: "DELETE",
+            url: "api/v1/util/lesson/" + this.selected,
+            success: function(res){
+                if(res.success){
+                    cb(null);
+                }else{
+                    onFail(res.detail);
+                }
+            },
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    getLocalData: function(cb){
+        this.pages[this.currPage].forEach(x=>{
+            if(x.id == this.selected){
+                return cb(x);
+            } 
+        });
+    },
+    getAllLocalData: function(){
+        var data = [];
+        for(var x=0; x<this.pages.length; x++){
+            for(var y=0; y<this.pages[x].length; y++){
+                this.allData.push(this.pages[x][y]);
+            }
+        }
+    },
+    refresh: function(){
+        this.offset = 0;
+        this.currPage = 0;
+        this.getList(()=>{
+            renderLessonTable(this.pages[this.currPage]);
+        });
+    }
 }
 /* 
 *   paul-made module design to query request one at a time, to prevent server congestion.
@@ -478,4 +694,41 @@ var refresher = {
 
 var uploadPic = {
 
+}
+/* 
+*   ajaxHandler module, this handles outgoing and ingoing ajax request,
+*/
+var ajaxHandler = {
+    complete: function(xhr, setting){
+        if(setting.type == "POST" || setting.type == "DELETE" || setting.type == "PUT"){
+            var url  = setting.url.split('/');
+            switch(url[2]){
+                case "car" : {
+                    car.refresh();
+                    break;
+                }
+                case "branch" : {
+                    office.refresh();
+                    break;
+                }
+                case "instructor" : {
+                    inst.refresh();
+                    break;
+                }
+                case "stud" : {
+                    stud.refresh();
+                    break;
+                }
+                case "util" : {
+                    if(url[3] == "lesson"){
+                        topic.refresh();
+                    }   
+                    break;
+                }
+            }
+        }
+    },
+    send: function(xhr, setting){
+
+    },
 }

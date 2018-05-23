@@ -17,7 +17,7 @@ exports.get = function(req, res, next){
         /* if(query != {}){
             res.status(403).send({}); // delete this after implementation
         }else{ */
-            var field = param.field == undefined ? null : param.field;
+            var field = (param.field == undefined ? null : param.field);
             student.get(param.id, field, function(err, result){
                 if(err) return next(err);
                 res.status(200).send({success: true, data: result});                
@@ -26,7 +26,8 @@ exports.get = function(req, res, next){
     }else{
         var offset = query.offset == undefined ? 0 : parseInt(query.offset);
         var limit = query.limit == undefined ? 10 : parseInt(query.limit);
-        student.getList(offset, limit, function(err, result){
+        var type = query.filter == undefined ? 0 : parseInt(query.filter);
+        student.getList(offset, limit, type, function(err, result){
             if(err) return next(err);
             res.status(200).send({success: true, data: result});
         });
@@ -62,6 +63,12 @@ exports.updateAll = function(req, res, next){
     });
 }
 
-exports.del = function(req, res, next){}
+exports.del = function(req, res, next){
+    var id = req.params.id;
+    student.delete(id, "status", function(err){
+        if(err) return next(err);
+        res.status(200).send({success: true, detail:"Successfully Deactivate!"});
+    });
+}
 
 exports.delAll = function(req, res, next){}
