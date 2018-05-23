@@ -171,7 +171,9 @@ var car = {
     refresh: function(){
         this.offset = 0;
         this.currPage = 0;
-        this.getATableData(()=>{});
+        this.getATableData(()=>{
+            viewCarProfile(this.selectedCar);
+        });
     }
 }
 /* 

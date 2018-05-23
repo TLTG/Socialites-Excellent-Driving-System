@@ -3,8 +3,7 @@ $(document).ready(function(){
     $(".unix-login").height(x);
     $("#main-wrapper").height(x);
 
-    $('#btnLogin').on('click', function(e){
-        e.preventDefault();
+    var login = function(){
         var username = $('#username').val();
         var password = $('#password').val();
 
@@ -27,6 +26,16 @@ $(document).ready(function(){
                 }
             });
         }
+    }
+
+    $('#btnLogin').on('click', function(e){
+        e.preventDefault();
+        login();
+    });
+
+    $('#login').on('submit', function(e){
+        e.preventDefault();
+        login();        
     });
 });
 
