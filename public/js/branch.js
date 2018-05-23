@@ -162,13 +162,12 @@ function confCancAddBranch(){
         confirmButtonColor: "#DD6B55",
         confirmButtonText: "Yes",
         cancelButtonText: "No",
-        closeOnConfirm: false,
+        closeOnConfirm: true,
         closeOnCancel: true
     },
     function(isConfirm){
         if (isConfirm) {
             $('#addBranchModal').modal('hide');
-            swal("Cancelled!", "", "error");
             //DB: Cancel changes here
         }
     });
