@@ -35,7 +35,7 @@ exports.login = function(req, res, next){
                         next();
                     }else{
                         res.locals.authenticated = 0;
-                        res.status(200).send({detail: "Username/Password Incorrect!"});
+                        res.status(200).send({success: false, detail: "Username/Password Incorrect!"});
                     }
                 });
             }else{
