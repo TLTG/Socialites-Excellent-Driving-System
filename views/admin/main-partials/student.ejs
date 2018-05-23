@@ -37,16 +37,16 @@
                             <div class="col-md-6 pull-left">
                                 <h3>List of Students</h3>
                             </div>
-                            <div class="col-md-6 pull-right">
+                            <div class="col-md-6 pull-right" onclick='changeStudTable()'>
                                 <label class="enrSexLbl pull-right" for="studCP2">Past</label>
-                                <input type="radio" class="enrStudCp pull-right" id="studCP2" name="studCP" value="Past">
+                                <input type="radio" class="enrStudCp pull-right" id="studCP2" name="studCP" value="1">
                                 <label class="enrSexLbl pull-right" for="studCP1">Current</label>
-                                <input type="radio" class="enrStudCp pull-right" id="studCP1" name="studCP" value="Current">
+                                <input type="radio" class="enrStudCp pull-right" id="studCP1" name="studCP" value="0">
 
                             </div>
                         </div><br>
                         <div class="table-responsive">
-                            <table class="table tableDash table-hover"> 
+                            <table class="table tableStud table-hover"> 
                                 <!-- //DB: to change to tblStudent -->
                                 <thead>
                                     <tr>
@@ -92,7 +92,7 @@
                                 </center>
                             </div>
                             <div class="col-md-7 col-lg-7 col-sm-7 col-xs-7">
-                                <h3 id="studName">Graciella Custodio Tatel</h3>
+                                <h3 class="studName">Graciella Custodio Tatel</h3>
                                 <span class="fa fa-map-marker fa-red"></span> <span class="studAddress">Sapang Palay, CSJDM, Bulacan</span><br>
                                 <span class="fa fa-phone fa-red"></span> <span class="studPhone">0956 586 7353</span><br>
                                 <span class="fa fa-envelope fa-red"></span> <span class="studEmail">gtatel0517@gmail.com</span>

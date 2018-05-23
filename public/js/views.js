@@ -15,6 +15,11 @@ $(function() {
 
     $(".view-viewInstructor").hide();
     $(".view-viewStudent").hide();
+    $( document ).ajaxComplete(function(e, xhr, settings) {
+        ajaxHandler.complete(xhr, settings);
+    }).ajaxSend(function(e, xhr, settings){
+        ajaxHandler.send(xhr, settings);
+    });
 });
 
 var dashboard = function() 
@@ -65,6 +70,7 @@ var activeStud = function ()
 
 var activeStudA = function ()
 {
+    loadStud();                
     $(".search-box").hide();
     $(".view-instructor").hide();
     $(".view-schedule").hide();
@@ -328,6 +334,7 @@ var requirements = function ()
 
 var lessons = function ()
 {
+    loadLesson();
     $(".search-box").hide();
     $(".view-instructor").hide();
     $(".view-schedule").hide();

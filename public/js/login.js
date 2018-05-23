@@ -21,8 +21,9 @@ $(document).ready(function(){
                 }
                 else
                 {
+                    successLogin();
                     // swal("Success!", "You are now logged in as an administrator!", "success");
-                    setTimeout (successLogin, 3000);
+                    //setTimeout (successLogin, 3000);
                 }
             });
         }

@@ -1,13 +1,26 @@
 $(function () {
     clrSearchLesson();
-    $('.tblLessons tbody tr:first').addClass("highlightTr");
-    $('.tblLessons tbody tr').click(function () {
-        var selected = $(this).hasClass("highlightTr");
-        $('.tblLessons tbody tr').removeClass("highlightTr");
-        if (!selected)
-            $(this).addClass("highlightTr");
-    });
 });
+
+var lessonLoaded = 0;
+var loadLesson = function(){
+    if(lessonLoaded == 0){
+        $(".preloader").fadeIn();          
+        topic.getList(function(){
+            renderLessonTable(topic.pages[topic.currPage]);
+            $('.tblLessons tbody tr:first').addClass("highlightTr");
+            $('.tblLessons tbody tr').click(function () {
+                var selected = $(this).hasClass("highlightTr");
+                $('.tblLessons tbody tr').removeClass("highlightTr");
+                if (!selected)
+                    $(this).addClass("highlightTr");
+            });
+            viewLessonDetail(topic.pages[topic.currPage][0].id);
+            $(".preloader").fadeOut();                      
+            lessonLoaded = 1;
+        });
+    }
+}
 
 function clrSearchLesson(){
     $('#searchLesson').val("");
@@ -31,17 +44,30 @@ function editLesson(){
     $('#btnConfResetLesson').show();
     $('#btnConfEditLesson').show();
     $('#addLessonModal').modal('show');
+    renderEdit();
 }
 
 function resetAddLesson(){
     $('#newLesName').val("");
     $('#newLesDesc').val("");
     $('select[name="newLesPrereq"]').val("0");
+    var count = topic.allData.length;
+    var html = "<option value='0'>none</option>";
+    topic.allData.forEach(x=>{
+        html += "<option value='"+ x.id +"'>"+ x.title +"</option>";
+        count--;
+        if(count == 0){
+            $('#newLesPrereq').html(html);
+        }
+    });
 }
 
 function confAddLesson()
 {
-    var isCheckLes = checkFieldsLesson();
+    var data;
+    var isCheckLes = checkFieldsLesson(function(out){
+        data = out;
+    });
     if (isCheckLes==0)
         swal("Oops!", "Please fill out all required fields.", "error");
     else {
@@ -58,16 +84,25 @@ function confAddLesson()
         },
         function(isConfirm){
             if (isConfirm) {
-                swal("Success!", "New lesson has been added!", "success");
-                $('#addLessonModal').modal('hide');
-                //DB: Adding of lesson function here
+                topic.add(data, function(err){
+                    if(err){
+                        swal("Failed!", err.message, "error");                        
+                    }else{
+                        swal("Success!", "New lesson has been added!", "success");
+                        $('#addLessonModal').modal('hide');
+                        //DB: Adding of lesson function here
+                    }
+                });
             }
         });
     }
 }
 
 function confEditLesson(){
-    var isCheckLes = checkFieldsLesson();
+    var data;
+    var isCheckLes = checkFieldsLesson(function(out){
+        data = out;
+    });
     if (isCheckLes==0)
         swal("Oops!", "Please fill out all required fields.", "error");
     else {
@@ -84,15 +119,21 @@ function confEditLesson(){
         },
         function(isConfirm){
             if (isConfirm) {
-                swal("Success!", "Lesson has been successully updated!", "success");
-                $('#addLessonModal').modal('hide');
-                //DB: Updating of lesson function here
+                topic.update(data, function(err){
+                    if(err){
+                        swal("Failed!", err.message, "error");
+                    }else{
+                        swal("Success!", "Lesson has been successully updated!", "success");
+                        $('#addLessonModal').modal('hide');
+                        //DB: Updating of lesson function here
+                    }
+                });
             }
         });
     }
 }
 
-function checkFieldsLesson(){
+function checkFieldsLesson(cb){
     var a, b, c;
     var name = $('#newLesName').val();
     var desc = $('#newLesDesc').val();
@@ -103,11 +144,21 @@ function checkFieldsLesson(){
     b = desc.replace(/\s+/g, '');
 
     if (a=="" || prereq=="0") return "0";
-    else return "1";
+    else{
+        if(cb != undefined){
+            var data = {
+                title: name,
+                description: desc,
+                prerequisite: (prereq == 0 ? null : prereq),
+            };
+            cb(data);
+        }
+        return "1";
+    } 
 }
 
 function confResetLesson(){
-    resetAddLesson();
+    renderEdit();
 }
 
 function confCancAddLesson(){
@@ -144,9 +195,48 @@ function remLesson(){
     },
     function(isConfirm){
         if (isConfirm) {
-            $('#addLessonModal').modal('hide');
-            swal("Success!", "Lesson is now unavailable.", "success");
-            //DB: Remove lesson function here
+            topic.delete(function(err){
+                if(err){
+                    swal("Failed!", err.message, "error");
+                }else{
+                    $('#addLessonModal').modal('hide');
+                    swal("Success!", "Lesson is now unavailable.", "success");
+                    //DB: Remove lesson function here
+                }
+            });
         }
+    });
+}
+
+var renderLessonTable = function(data){
+    var html = "";
+    data.forEach(x=>{
+        if(x.purgeFlag != 0){
+            html += "<tr onclick='viewLessonDetail("+ x.id +")'>";
+            html += "<td>"+ x.lessonID +"</td>";
+            html += "<td>"+ x.title +"</td>";
+            html += "</tr>";
+        }
+    });
+    $('#lessonTable').html(html);
+}
+
+var viewLessonDetail = function(id){
+    topic.selected = id;
+    topic.getLocalData(function(profile){
+        $('.lesName').html(profile.title);
+        $('.lesID').html(profile.lessonID);
+        $('.lesDesc').html(profile.description);
+        var pad = "000";
+        var preID = "SED-L" + (pad.substring(0,pad.length - (profile.prerequisite + "").length) + profile.prerequisite);
+        $('.lesPrereq').html((profile.prerequisite == null ? "none" : preID));
+    });
+}
+
+var renderEdit = function(){
+    topic.getLocalData(function(profile){
+        var name = $('#newLesName').val(profile.title);
+        var desc = $('#newLesDesc').val(profile.description);
+        var prereq = $('#newLesPrereq').val(profile.prerequisite);
     });
 }
