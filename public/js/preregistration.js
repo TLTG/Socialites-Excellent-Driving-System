@@ -28,6 +28,11 @@ $(function(){
     selected = 1;
     resetEnrollment();
 
+    $('#enrBday').change(function() {
+        var date = $("enrBday").val();
+        console.log(date, 'change')
+    });
+
     Number.prototype.formatMoney = function(c, d, t){
         var n = this, 
         c = isNaN(c = Math.abs(c)) ? 2 : c, 

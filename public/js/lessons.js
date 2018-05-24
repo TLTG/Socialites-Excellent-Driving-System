@@ -143,7 +143,7 @@ function checkFieldsLesson(cb){
     a = name.replace(/\s+/g, '');
     b = desc.replace(/\s+/g, '');
 
-    if (a=="" || prereq=="0") return "0";
+    if (a=="") return "0";
     else{
         if(cb != undefined){
             var data = {

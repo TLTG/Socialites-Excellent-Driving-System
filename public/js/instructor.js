@@ -418,7 +418,6 @@ function saveUpdInst(){
                     });
                 }
                 else{
-                    alert (e +" "+ f +" "+g);
                     swal("Oops!", "Please fill out all required fields.", "error");
                 }
             }

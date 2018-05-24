@@ -443,6 +443,7 @@ var activeCrsLes = function ()
 
 var lessons = function ()
 {
+    loadLesson();
     $(".search-box").hide();
     $(".view-instructor").hide();
     $(".view-schedule").hide();
@@ -477,7 +478,6 @@ var lessons = function ()
 
 var courses = function ()
 {
-    loadLesson();
     $(".search-box").hide();
     $(".view-instructor").hide();
     $(".view-schedule").hide();
