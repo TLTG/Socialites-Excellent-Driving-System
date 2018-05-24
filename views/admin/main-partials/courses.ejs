@@ -1,0 +1,144 @@
+<div class="view-courses">
+    <!-- Bread crumb -->
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-primary">Courses</h3> 
+        </div>
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a onclick="dashboard()">Home</a></li>
+                <li class="breadcrumb-item active"><a>Courses</a></li>
+            </ol>
+        </div>
+    </div>
+    <!-- End Bread crumb -->
+    <!-- Container fluid  -->
+    <div class="container-fluid">
+        <!-- Start of Card  -->
+        <div class="studentCard">
+            <div>
+                <div class="row">
+                    <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="input-group input-group-flat">
+                                <span class="input-group-btn"><button class="btn btn-custom" type="submit"><i class="ti-search"></i></button></span>
+                                <input type="text" id="searchCourses" class="form-control" placeholder="Search..." style="font-size: 12px;">
+                                <span class="input-group-btn"><button class="btn btn-primary input-group-close-icon" onclick="clrSearchCourses()" type="button"><i class="ti-close"></i></button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                        <div class="pull-right">
+                            <button type="button" id="btnNewCourse" onclick="addCourse()" class="btn btn-success m-b-10 m-l-5">New Course</button>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div>
+                    <hr class="hrCustom">
+                    <div class="card branchCard">
+                        <h3>List of Courses</h3>
+                        <div class="table-responsive">
+                            <table class="table tblCourses tblCustom table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Days/Duration</th>
+                                        <th>Price</th>
+                                        <th>Vehicle Type</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>CRS-M001</td>
+                                        <td>5 Days</td>
+                                        <td>2,500.00</td>
+                                        <td>Manual</td>
+                                        <td>
+                                            <i class="ti-pencil tiDef2 btnRemCourse" onclick="editCourse()" data-toggle="tooltip" data-placement="bottom" title="Edit"></i>
+                                            <i class="ti-close tiDef2 btnEditCourse" onclick="remCourse()" data-toggle="tooltip" data-placement="bottom" title="Remove"></i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>CRS-M002</td>
+                                        <td>7 Days</td>
+                                        <td>3,500.00</td>
+                                        <td>Manual</td>
+                                        <td>
+                                            <i class="ti-pencil tiDef2 btnRemCourse" onclick="editCourse()" data-toggle="tooltip" data-placement="bottom" title="Edit"></i>
+                                            <i class="ti-close tiDef2 btnEditCourse" onclick="remCourse()" data-toggle="tooltip" data-placement="bottom" title="Remove"></i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>CRS-A001</td>
+                                        <td>10 Days</td>
+                                        <td>5,000.00</td>
+                                        <td>Automatic</td>
+                                        <td>
+                                            <i class="ti-pencil tiDef2 btnRemCourse" onclick="editCourse()" data-toggle="tooltip" data-placement="bottom" title="Edit"></i>
+                                            <i class="ti-close tiDef2 btnEditCourse" onclick="remCourse()" data-toggle="tooltip" data-placement="bottom" title="Remove"></i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>CRS-A002</td>
+                                        <td>10 Days</td>
+                                        <td>5,000.00</td>
+                                        <td>Automatic</td>
+                                        <td>
+                                            <i class="ti-pencil tiDef2 btnRemCourse" onclick="editCourse()" data-toggle="tooltip" data-placement="bottom" title="Edit"></i>
+                                            <i class="ti-close tiDef2 btnEditCourse" onclick="remCourse()" data-toggle="tooltip" data-placement="bottom" title="Remove"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <hr class="hrCustom">
+                </div>
+            </div>
+        </div><!-- End of Card  -->
+    </div>
+    <!-- End Container fluid  -->
+</div>
+
+<!-- Add Course Modal -->
+<div class="modal fade" id="addCourseModal" tabindex="-1" role="dialog" aria-labelledby="addCourseModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <center>
+            <h2 class="h6AddCourse"></h2>
+            <h6>Fill out all required (<span class="asterisk">*</span>) fields.</h6>
+        </center>
+        <hr class="hrCustom"><br>
+        <div>
+            <form class="formAddBranch">
+                <div>
+                    <h5 class="h5Enr">Days/Duration<span class="asterisk">*</span></h5>
+                    <input type="number" class="txtEnr3" required name="newCrsDays" id="newCrsDays"><br>
+                </div><hr>
+                <div>
+                    <h5 class="h5Enr">Price</h5>
+                    <input type="number" class="txtEnr3" required name="newCrsPrice" id="newCrsPrice"><br>               
+                </div><hr>
+                <div>
+                    <h5 class="h5Enr">Vehicle Type<span class="asterisk">*</span></h5>
+                    <select required class="enrCivStatus3" name="newCrsVehiType" id="newCrsVehiType">
+                        <option value="0">---</option>
+                        <option value="1">Automatic</option>
+                        <option value="2">Manual</option>
+                    </select>
+                </div><hr>
+            </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btnCancAddCourse" onclick="confCancAddCourse()" class="btn btn-danger">Cancel</button>
+        <button type="button" id="btnConfAddCourse" onclick="confAddCourse()" class="btn btn-success">Add</button>
+        <button type="button" id="btnConfResetCourse" onclick="confResetCourse()" class="btn btn-light">Reset</button>
+        <button type="button" id="btnConfEditCourse" onclick="confEditCourse()" class="btn btn-success">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
