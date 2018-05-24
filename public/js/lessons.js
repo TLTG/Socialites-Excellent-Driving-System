@@ -1,5 +1,13 @@
 $(function () {
     clrSearchLesson();
+    $('#searchLesson').on('click', function(e){
+        search.init(topic.pages[topic.currPage],["lessonID","title"], function(data){
+            renderLessonTable(data);
+        });
+    });
+    $('#searchLesson').on('keyup',function(e){
+        search.keypress($('#searchLesson').val());
+    });
 });
 
 var lessonLoaded = 0;
@@ -15,6 +23,7 @@ var loadLesson = function(){
                 if (!selected)
                     $(this).addClass("highlightTr");
             });
+            topic.getAllLocalData();            
             viewLessonDetail(topic.pages[topic.currPage][0].id);
             $(".preloader").fadeOut();                      
             lessonLoaded = 1;

@@ -2,6 +2,14 @@ var checkedValues, count, checkedValuesData = [];
 
 $(function () {
     clrSearchVehiA();
+    $('#searchVehiA').on('click', function(e){
+        search.init(car.pages[car.currPage], ["brand","model","plate","id"], function(data){
+            car.renderATable(data);
+        });
+    });
+    $('#searchVehiA').on('keyup', function(e){
+        search.keypress($('#searchVehiA').val());
+    });
 });
 
 var loadVehi = function(){

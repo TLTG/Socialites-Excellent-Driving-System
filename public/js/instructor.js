@@ -38,6 +38,16 @@ $(function () {
         });
         $('#instResign').val(Date.parse("today").toString("yyyy-MM-dd"));
     });
+    
+    $('#searchInst').on('click', function(e){
+        search.init(inst.pages[inst.currPage], ["fullname","instID"], function(data){
+            renderInstTablePage(data);
+        });
+    });
+
+    $('#searchInst').on('keyup', function(e){
+        search.keypress($('#searchInst').val());
+    });
 });
 
 var loadInst = function(){

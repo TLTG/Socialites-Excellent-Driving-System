@@ -1,5 +1,13 @@
 $(function () {
     clrSearchBranch();
+    $('#searchBranch').on('click', function(e){
+        search.init(office.pages[office.currPage], ["branchID","name"], function(data){
+            renderBranchTable(data);
+        });
+    });
+    $('#searchBranch').on('keyup', function(e){
+        search.keypress($('#searchBranch').val());
+    });
 });
 
 var branchLoaded = 0;
