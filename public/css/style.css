@@ -8026,12 +8026,19 @@ tiCustom
   white-space: nowrap;
   table-layout: fixed;
 }
+.tblLessons td > div{
+  width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  table-layout: fixed;
+}
 
 .brnchReg, .brnchPhone, .brnchAdd{
   font-size: 14px;
 }
 
-.branchCard{
+.branchCard, .accountCard{
   height: 400px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -8063,6 +8070,9 @@ tiCustom
 }
 .btnCstom{
   width: 150px;
+}
+.btnCstom1{
+  width: 100px;
 }
 .lesID{
   color: #5D0000;
@@ -8154,4 +8164,12 @@ tiCustom
   height: 97%;
   border-left: solid 2px black;
   border-right: solid 2px black;
+}
+
+.span17{
+  padding-left: 10px;
+}
+
+.not17span{
+  color: red;
 }
