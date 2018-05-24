@@ -171,23 +171,7 @@ function confResetLesson(){
 }
 
 function confCancAddLesson(){
-    swal({
-        title: "Warning!",
-        text: "Are you sure you want to discard the changes?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes",
-        cancelButtonText: "No",
-        closeOnConfirm: true,
-        closeOnCancel: true
-    },
-    function(isConfirm){
-        if (isConfirm) {
-            $('#addLessonModal').modal('hide');
-            //DB: Cancel changes here
-        }
-    });
+    $('#addLessonModal').modal('hide');
 }
 
 function remLesson(){

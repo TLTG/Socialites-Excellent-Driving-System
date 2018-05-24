@@ -1,100 +1,47 @@
-var checkedReqP, checkedValReq, countT=0, countP=0, textReq;
-var checkedReqT = 1, canCancel = 1;
-var isCheck1, isCheck2, isCheck3;
-
 $(function(){
-    resetEnrollment();
-
-    $('input:radio[name="enrReqT"]').change(
-    function(){
-        if ($(this).is(':checked') && $(this).val() == 'reqT1') {
-            checkedReqT = 1;
-            resetReqB();
-            resetReqC();
-            $('.reqB').hide();
-            $('.reqC').hide();
-            $('.reqA').show();
-        }
-        else if ($(this).is(':checked') && $(this).val() == 'reqT2') {
-            checkedReqT = 2;
-            resetReqA();
-            resetReqC();
-            $('.reqA').hide();
-            $('.reqC').hide();
-            $('.reqB').show();
-        }
-        else if ($(this).is(':checked') && $(this).val() == 'reqT3') {
-            checkedReqT = 3;
-            resetReqA();
-            resetReqB();
-            $('.reqA').hide();
-            $('.reqB').hide();
-            $('.reqC').show();
-        }
+    $('.tblReg tbody tr:first').addClass("highlightTr");
+    $('.tblReg tbody tr').click(function () {
+        var selected = $(this).hasClass("highlightTr");
+        $('.tblReg tbody tr').removeClass("highlightTr");
+        if (!selected)
+            $(this).addClass("highlightTr");
     });
 });
 
-function resetEnrollment(){
-    resetReqA();
-    resetReqB();
-    resetReqC();
-    $('#enrFN').val("");
-    $('#enrMN').val("");
-    $('#enrSN').val("");
-    $('#enrBday').val("");
-    $('#enrBplace').val("");
-    $('#enrAddress').val("");
-    $('#enrOcc').val("");
-    $('#enrCont').val("");
-    $('#enrEmail').val("");
-    $('#enrGuard').val("");
-    $('#enrGuardCont').val("");
-    $('#enrReqP9').val("");
-    $('select[name="enrCivStatus"]').val('civ0');
-    $('input[name="enrReqP"]').prop('checked', false);
-    $("#enrReqT1").prop("checked", true);
+function viewRegForm(){
+    $('#viewRegFormModal').modal('show');
 }
 
-function resetReqA(){
-    document.getElementById("rA1").checked = false;
-    document.getElementById("rA2").checked = false;
-    document.getElementById("rA3").checked = false;
+function remRegForm(){ //Remove or reject registration form
+    swal({
+        title: "Warning!",
+        text: "Are you sure you want to reject/remove this registration form?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes",
+        cancelButtonText: "Cancel",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },
+    function(isConfirm){
+        if (isConfirm) {
+            $('#viewRegFormModal').modal('hide');
+            swal("Success!", "Registration form is rejected.", "success");
+            //DB: Remove registration function here
+        }
+    });
 }
 
-
-function resetReqB(){
-    document.getElementById("rB1").checked = false;
-    document.getElementById("rB2").checked = false;
-    document.getElementById("rB3").checked = false;
-}
-
-
-function resetReqC(){
-    document.getElementById("rC1").checked = false;
-    document.getElementById("rC2").checked = false;
-    document.getElementById("rC3").checked = false;
-}
-
-function enrollStud(){
-    isCheck1 = checkEnr1();
-    isCheck2 = checkEnr2();
-    isCheck3 = checkEnr3();
-    // alert(isCheck1 + isCheck2 + isCheck3);
-    if (isCheck1==0 || isCheck2==0){
+function saveEnrReg(){ //Save changes on View Registration Modal
+    var check = checkEnrReg();
+    if (check==0){
         swal("Oops!", "Please fill out all required fields.", "error");
-    }else{
-        if (isCheck3==0){
-            textReq="All requirements are not met. Proceed?";
-        }
-        else{
-            var x = countT;
-            if (x==1) textReq= ("Only " + x +" requirement is met. Proceed?");
-            else if (x==2) textReq= ("Only " + x + " requirements are met. Proceed?");
-            else if (x==3) textReq= "Are you sure you want to enroll this student and create an account?";
-        }
+    }
+    else{
         swal({
             title: "Warning!",
-            text: textReq + "",
+            text: "Are you sure you want to save the changes?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
@@ -105,115 +52,94 @@ function enrollStud(){
         },
         function(isConfirm){
             if (isConfirm) {
-                swal("Success!", "Student is enrolled and account is created!", "success");
-                resetEnrollment();
-                //DB: Adding of new student here
-                //DB: Go back to students list
+                swal("Changes have been saved!", "" ,"success");
+                $('#viewRegFormModal').modal('hide');
             }
         });
     }
 }
 
-function checkEnr1 (){
-    var fn = $('#enrFN').val();
-    var sn = $('#enrSN').val();
-    var bday = $('#enrBday').val();
-    var bplace = $('#enrBplace').val();
-    var add = $('#enrAddress').val();
-    var cont = $('#enrCont').val();
-    var guard = $('#enrGuard').val();
-    var gCont = $('#enrGuardCont').val();
-    var civ = $('select[name="enrCivStatus"]').val();
-
-    fn = fn.replace(/\s+/g, '');
-    sn = sn.replace(/\s+/g, '');
-    bplace = bplace.replace(/\s+/g, '');
-    add = add.replace(/\s+/g, '');
-    cont = cont.replace(/\s+/g, '');
-    guard = guard.replace(/\s+/g, '');
-    gCont = gCont.replace(/\s+/g, '');
-
-    if (fn=="" && sn=="" && bday==""
-    && bplace=="" && add=="" && cont==""
-    && guard=="" && gCont=="" && civ=="civ0"){
-        canCancel=1;
+function appRegForm(){ //Approve Registration
+    swal({
+        title: "Warning!",
+        text: "Are you sure you want to approve this registration form?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes",
+        cancelButtonText: "Cancel",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },
+    function(isConfirm){
+        if (isConfirm) {
+            swal("Registration has been accepted", "" ,"success");
+            $('#viewRegFormModal').modal('hide');
         }
-    else canCancel=0;
+    });
+}
 
-    if (fn=="" || sn=="" || bday==""
-        || bplace=="" || add=="" || cont==""
-        || guard=="" || gCont=="" || civ=="civ0"){
+function checkEnrReg (){ //Checker of empty fields
+    var a, b, c, d, e, f, g; //checker variables
+    var fn = $('#enrRegFN').val();
+    var mn = $('#enrRegMN').val();
+    var sn = $('#enrRegSN').val();
+    var bday = $('#enrRegBday').val();
+    var bplace = $('#enrRegBplace').val();
+    var add = $('#enrRegAddress').val();
+    var occ = $('#enrRegOcc').val();
+    var cont = $('#enrRegCont').val();
+    var email = $('#enrRegEmail').val();
+    var guard = $('#enrRegGuard').val();
+    var gCont = $('#enrRegGuardCont').val();
+    var civ = $('select[name="enrRegCivStatus"]').val();
+    var crs = $('select[name="enrRegBranch"]').val();
+    var branch = $('select[name="enrRegCivStatus"]').val();
+    var sex = $('input[name="enrRegSex"]:checked').val();
+    var nat = $('input[name="enrRegNat"]:checked').val();
+    
+    a = fn.replace(/\s+/g, '');
+    b = sn.replace(/\s+/g, '');
+    c = bplace.replace(/\s+/g, '');
+    d = add.replace(/\s+/g, '');
+    e = cont.replace(/\s+/g, '');
+    f = guard.replace(/\s+/g, '');
+    g = gCont.replace(/\s+/g, '');
+
+    if (a=="" || b=="" || bday==""
+        || c=="" || d=="" || e==""
+        || f=="" || g=="" || civ=="civ0"){
             return "0";
+            //DB: Add validation for course and branch here
         }
-    else return "1";
-}
-
-function checkEnr2 (){
-    checkedReqP = $('input[name="enrReqP"]:checked').map(function () {
-        return this.value;
-    }).get();
-    countP = $('input[name="enrReqP"]:checked').length;
-    if (countP==0) return "0";
     else{
-        if ($('select[name="enrReqP"]').val("reqP8")){
-            var x = $('#enrReqP9').val();
-            x = x.replace(/\s+/g, '');
-            if(x=="") return 0;
-            else return 1;
-        }
-        else{
-            return "1";
-        }
-    }
-}
-
-function checkEnr3 (){
-    if (checkedReqT==1){ //req. for 17-18 yrs. old
-        checkedValReq = $('input[name="enrReqA"]:checked').map(function () {
-            return this.value;
-        }).get();
-        countT = $('input[name="enrReqA"]:checked').length;
-        if (countT==0) return "0";
-        else return "1";
-    }
-    else if (checkedReqT==2){ //req. for 19 yrs. old +
-        checkedValReq = $('input[name="enrReqB"]:checked').map(function () {
-            return this.value;
-        }).get();
-        countT = $('input[name="enrReqB"]:checked').length;
-        if (countT==0) return "0";
-        else return "1";
-    }
-    else if (checkedReqT==3){ //req. non-filipino
-        checkedValReq = $('input[name="enrReqC"]:checked').map(function () {
-            return this.value;
-        }).get();
-        countT = $('input[name="enrReqC"]:checked').length;
-        if (countT==0) return "0";
-        else return "1";
-    }
-}
-
-function cancEnrollStud(){
-    isCheck2 = checkEnr2();
-    isCheck3 = checkEnr3();
-    if (canCancel==0 || isCheck2==1 || isCheck3==1){
-        swal({
-            title: "Cancel?",
-            text: "Are you sure to cancel and discard all changes?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes",
-            cancelButtonText: "No",
-            closeOnConfirm: false,
-            closeOnCancel: true
-        },
-        function(isConfirm){
-            if (isConfirm) {
-                swal("Changes have been discarded!", "" ,"success")
-                resetEnrollment();
-            }
-        });
-    }
+        return "1";
+        // preRegData.info["fullname"] = fn + "_" + mn + "_" + sn;
+        // preRegData.info["birthdate"] = bday;
+        // preRegData.info["birthplace"] = bplace;
+        // preRegData.info["address"] = add;
+        // preRegData.info["telno"] = cont;
+        // preRegData.info["occupation"] = occ;
+        // preRegData.info["email"] = email;
+        // preRegData.info["civilStatus"] = civ;
+        // preRegData.info["sex"] = sex;
+        // preRegData.info["nationality"] = nat;
+        // preRegData.info["guardian"] = {
+        //     name: guard,
+        //     telno: gCont,
+        // };
+        // var age = parseInt(Date.parse("today").toString("yyyy")) - parseInt(Date.parse(preRegData.info.birthdate).toString("yyyy"));
+        // $('.req').hide();
+        // if(age < 17){
+        //     swal("", "Sorry, only 17 years old and above are allowed to register.", "error");
+        //     return "0";            
+        // }else if(preRegData.info.nationality == "Non-Filipino"){
+        //     $('.reqC').show();
+        // }else if(age < 19 && age > 16){
+        //     $('.reqA').show();
+        // }else if(age > 19){
+        //     $('.reqB').show();
+        // }
+        // return "1";
+    } 
 }
