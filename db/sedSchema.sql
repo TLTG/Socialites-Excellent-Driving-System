@@ -9,21 +9,22 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
-CREATE DATABASE IF NOT EXISTS `sed` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `sed`;
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getInst` (IN `_id` VARCHAR(15))  READS SQL DATA
 SELECT i.id as instID, i.vacant, u.* FROM instructor i, userinfo u WHERE i.id = _id AND i.userInfo = u.id$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getInstList` (IN `_offset` INT(7), IN `_limit` INT(5))  READS SQL DATA
-SELECT i.id as instID, i.dateRegistered, i.educAttain,i.vacant,i.status, u.*  FROM instructor i, userinfo u WHERE u.id = i.userInfo AND i.status > 0 ORDER BY i.id ASC limit _offset, _limit$$
+SELECT i.id as instID, i.dateRegistered, i.dateRetired, i.educAttain,i.vacant,i.status, a.username, u.*  FROM instructor i, userinfo u, useraccount a WHERE u.id = i.userInfo AND u.userAcc = a.id AND i.status > 0 ORDER BY i.id ASC limit _offset, _limit$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPastStud` (IN `_offset` INT(5), IN `_limit` INT(2))  READS SQL DATA
+SELECT s.id as studID, i.* FROM student s, userinfo i WHERE s.id > _offset AND i.id = s.userInfo AND s.status = 0 ORDER BY s.id ASC limit _limit$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getStud` (IN `_id` VARCHAR(15))  READS SQL DATA
 SELECT s.id as studID, s.dateRegistered, u.* FROM student s, userinfo u WHERE s.id = _id AND s.userInfo = u.id$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getStudList` (IN `_offset` INT(7), IN `_limit` INT(5))  NO SQL
-SELECT s.id as studID, i.* FROM student s, userinfo i WHERE s.id > _offset AND i.id = s.userInfo ORDER BY s.id ASC limit _limit$$
+SELECT s.id as studID, i.* FROM student s, userinfo i WHERE s.id > _offset AND i.id = s.userInfo AND s.status > 0 ORDER BY s.id ASC limit _limit$$
 
 CREATE DEFINER=`root`@`localhost` FUNCTION `addUserAcc` (`un` VARCHAR(30), `pw` VARCHAR(40), `atype` INT(2)) RETURNS INT(10) UNSIGNED MODIFIES SQL DATA
 BEGIN
@@ -66,12 +67,26 @@ CREATE TABLE `activity` (
   `lessonID` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `admin` (
+  `id` int(7) NOT NULL,
+  `userInfo` int(7) NOT NULL,
+  `branchID` int(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `branch` (
   `id` int(3) NOT NULL,
   `address` varchar(150) NOT NULL,
-  `telno` varchar(12) NOT NULL,
-  `name` varchar(5) NOT NULL,
-  `purgeFlag` int(1) NOT NULL DEFAULT '0'
+  `telno` varchar(24) NOT NULL,
+  `name` varchar(15) NOT NULL,
+  `purgeFlag` int(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `course` (
+  `id` int(3) NOT NULL,
+  `carType` varchar(10) NOT NULL,
+  `amount` int(5) NOT NULL,
+  `days` int(3) NOT NULL,
+  `status` int(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `defect` (
@@ -114,15 +129,28 @@ CREATE TABLE `instructor` (
 CREATE TABLE `lesson` (
   `id` int(3) NOT NULL,
   `title` varchar(15) NOT NULL,
-  `prerequisite` int(3) NOT NULL,
+  `prerequisite` int(3) DEFAULT NULL,
   `description` varchar(150) NOT NULL,
   `purgeFlag` int(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `lesson_courses` (
+  `id` int(3) NOT NULL,
+  `lessonID` int(3) NOT NULL,
+  `courseID` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `passedRequirement` (
   `id` int(10) NOT NULL,
   `studID` varchar(15) NOT NULL,
   `requirementID` int(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `preRegStudent` (
+  `id` int(10) NOT NULL,
+  `data` varchar(400) NOT NULL,
+  `dateSubmit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` int(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `requirement` (
@@ -198,7 +226,15 @@ ALTER TABLE `activity`
   ADD KEY `vehicleID` (`vehicleID`),
   ADD KEY `lessonID` (`lessonID`);
 
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userInfo` (`userInfo`),
+  ADD KEY `branchID` (`branchID`);
+
 ALTER TABLE `branch`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `course`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `defect`
@@ -219,12 +255,21 @@ ALTER TABLE `instructor`
   ADD KEY `userInfo` (`userInfo`);
 
 ALTER TABLE `lesson`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `prerequisite` (`prerequisite`);
+
+ALTER TABLE `lesson_courses`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `courseID` (`courseID`),
+  ADD KEY `lessonID` (`lessonID`);
 
 ALTER TABLE `passedRequirement`
   ADD PRIMARY KEY (`id`),
   ADD KEY `requirementID` (`requirementID`),
   ADD KEY `studID` (`studID`);
+
+ALTER TABLE `preRegStudent`
+  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `requirement`
   ADD PRIMARY KEY (`id`);
@@ -261,7 +306,13 @@ ALTER TABLE `accounttype`
 ALTER TABLE `activity`
   MODIFY `id` int(15) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `admin`
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;
+
 ALTER TABLE `branch`
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `course`
   MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `defect`
@@ -275,6 +326,12 @@ ALTER TABLE `guardian`
 
 ALTER TABLE `lesson`
   MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `lesson_courses`
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `preRegStudent`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `requirement`
   MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
@@ -301,6 +358,10 @@ ALTER TABLE `activity`
   ADD CONSTRAINT `activity_ibfk_3` FOREIGN KEY (`vehicleID`) REFERENCES `vehicle` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `activity_ibfk_4` FOREIGN KEY (`lessonID`) REFERENCES `lesson` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
+ALTER TABLE `admin`
+  ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`userInfo`) REFERENCES `userinfo` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `admin_ibfk_2` FOREIGN KEY (`branchID`) REFERENCES `branch` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
 ALTER TABLE `defect`
   ADD CONSTRAINT `defect_ibfk_1` FOREIGN KEY (`vehicle`) REFERENCES `vehicle` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
@@ -313,6 +374,13 @@ ALTER TABLE `guardian`
 
 ALTER TABLE `instructor`
   ADD CONSTRAINT `instructor_ibfk_1` FOREIGN KEY (`userInfo`) REFERENCES `userinfo` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+ALTER TABLE `lesson`
+  ADD CONSTRAINT `lesson_ibfk_1` FOREIGN KEY (`prerequisite`) REFERENCES `lesson` (`id`);
+
+ALTER TABLE `lesson_courses`
+  ADD CONSTRAINT `lesson_courses_ibfk_1` FOREIGN KEY (`courseID`) REFERENCES `course` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `lesson_courses_ibfk_2` FOREIGN KEY (`lessonID`) REFERENCES `lesson` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 ALTER TABLE `passedRequirement`
   ADD CONSTRAINT `passedRequirement_ibfk_1` FOREIGN KEY (`requirementID`) REFERENCES `requirement` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
