@@ -529,7 +529,6 @@ var topic = {
             if(res.success){
                 self.pages[self.currPage] = res.data;
                 self.offset = res.data[res.data.length-1].id;
-                self.getAllLocalData();
                 cb(null);
             }else{
                 cb("Error: " + res.detail);
@@ -603,7 +602,9 @@ var topic = {
         var data = [];
         for(var x=0; x<this.pages.length; x++){
             for(var y=0; y<this.pages[x].length; y++){
-                this.allData.push(this.pages[x][y]);
+                if(this.pages[x][y].purgeFlag == 1){
+                    this.allData.push(this.pages[x][y]);
+                }
             }
         }
     },
@@ -732,5 +733,45 @@ var ajaxHandler = {
     },
     send: function(xhr, setting){
 
+    },
+}
+/* 
+*   search Module,
+*/
+var search = {
+    keyword: "",
+    target: [],
+    targetField: [],
+    filtered: [],
+    tempStore: [],
+    callback: null,
+    init: function(arrData, fields, cb){
+        this.target = arrData;
+        this.targetField = fields;
+        this.callback = cb;
+    },
+    keypress: function(key){
+        this.keyword = key;
+        var regex = new RegExp(this.keyword, "gi");
+        var count = this.target.length;
+        this.tempStore = [];
+        this.target.forEach(item=>{
+            this.targetField.forEach(field=>{
+                if((item[field]+"").search(regex) != -1){
+                    return this.addItem(item);
+                }
+            });
+            count--;
+            if(count == 0) this.done();
+        });
+    },
+    addItem: function(item){
+        if(this.tempStore.indexOf(item) == -1){
+            this.tempStore.push(item);
+        }
+    },
+    done: function(){
+        this.filtered = this.tempStore;
+        this.callback(this.filtered);
     },
 }
