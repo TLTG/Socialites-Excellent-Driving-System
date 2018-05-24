@@ -2,9 +2,14 @@ var db = require('./db');
 var ModelModule = require('./model');
 var table = "student";
 
-var Student = Object.create(ModelModule);
+var Student = {};
+Student = Object.create(ModelModule);
 Student.table = table;
 Student.db = db;
+
+var PreRegister = Object.create(ModelModule);
+PreRegister.table = "preRegStudent";
+PreRegister.db = db;
 
 //Business Logic Code Below:
 Student.getList = function(offset, limit, type, cb){
@@ -34,6 +39,10 @@ Student.get = function (id, field, cb) {
             cb(null, result[0][field]);
         }
     });
+}
+
+Student.preRegStud = function(data, cb){
+    PreRegister.create(data, cb);
 }
 
 module.exports = Student;

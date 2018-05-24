@@ -28,6 +28,12 @@ var lessonRouter = express.Router();
 lessonRouter.route('/')
     .post(auth.auth, lMiddleware.create)
     .get(lMiddleware.get);
+lessonRouter.route('/course')
+    .get(lMiddleware.getCourse)
+    .post(lMiddleware.addCourse);
+lessonRouter.route('/course/:id')    
+    .put(lMiddleware.editCourse)
+    .delete(lMiddleware.delCourse);
 lessonRouter.route('/:id')
     .put(auth.auth, lMiddleware.update)
     .get(lMiddleware.get)

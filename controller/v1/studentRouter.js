@@ -8,6 +8,7 @@ router.route('/')
     .put(middleware.updateAll) //subject for removal
     .delete(middleware.delAll) //subject for removal
     .get(middleware.get);
+router.post('/register', middleware.preReg);
 router.route('/:id')
     .get(middleware.get)
     .put(middleware.update)

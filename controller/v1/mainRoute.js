@@ -21,12 +21,12 @@ router.use('/branch', branchRoute);
 var util = require('./utilRouter');
 router.use('/util', util);
 
-// All routes below are secured with authentication.
-router.use(auth.auth, err.error401);
-
 //Student route
 var studentRoute = require('./studentRouter');
 router.use('/stud', studentRoute);
+
+// All routes below are secured with authentication.
+router.use(auth.auth, err.error401);
 
 //Instructor route
 var instructorRoute = require('./instructorRoute');
