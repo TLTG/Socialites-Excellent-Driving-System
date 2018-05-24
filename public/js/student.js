@@ -36,9 +36,9 @@ var loadStud = function(){
     }
 };
 
-function clrSearchStudentC ()
+function clrSearchStudent ()
 {
-    $('#searchStudentC').val("");
+    $('#searchStudent').val("");
 }
 
 function resetSettingsStud (){

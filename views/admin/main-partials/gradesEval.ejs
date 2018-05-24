@@ -1,0 +1,147 @@
+<div class="view-gradesEval">
+    <!-- Bread crumb -->
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-primary">Grades &amp; Evaluation</h3> 
+        </div>
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a onclick="dashboard()">Home</a></li>
+                <li class="breadcrumb-item active"><a>Grades &amp; Evaluation</a></li>
+            </ol>
+        </div>
+    </div>
+    <!-- End Bread crumb -->
+    <!-- Container fluid  -->
+    <div class="container-fluid">
+        <!-- Start of Card  -->
+        <div class="studentCard">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <div class="input-group input-group-flat">
+                            <span class="input-group-btn"><button class="btn btn-custom" type="submit"><i class="ti-search"></i></button></span>
+                            <input type="text" id="searchStudent" class="form-control" placeholder="Search..." style="font-size: 12px;">
+                            <span class="input-group-btn"><button class="btn btn-primary input-group-close-icon" type="button" onclick="clrSearchStudent()"><i class="ti-close"></i></button></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                </div>
+            </div>
+            <div class="row">
+                <!-- Start of col-lg-6 -->
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <hr class="hrCustom">
+                    <div class="card studCard">
+                        <div class="pull-left">
+                            <h3>List of Students</h3>
+                        </div><br>
+                        <div class="table-responsive">
+                            <table class="table tableStud tblCustom table-hover"> 
+                                <!-- //DB: to change to tblStudent -->
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Student Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="studentTable">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Graciella Tatel</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Christian Paul Tupas</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Janelle Joy Gabat</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Perrine Laganzo</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- End of col-lg-6 -->
+
+                <!-- Start of col-lg-6 -->
+                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                    <hr class="hrCustom">
+                    <div class="card studCard">
+                        <h3>Grades &amp; Evaluation Record</h3><hr>
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                <h5 class="studName">Graciella Custodio Tatel</h5>
+                                <h5 class="studNum">2018-0001-01</h5>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                <h3 class="pull-right">Course: <span class="studCourse">CRS-001-A</span></h3>
+                            </div><br><br>
+                        </div>
+                        <div><br><br><br>
+                            <div class="pull-right">
+                                <button type="button" id="btnAddPayment" class="btn btn-warning m-b-10 m-l-5">Add Grade</button>
+                                <button type="button" id="btnEditPayment" class="btn btn-light m-b-10 m-l-5">Edit Grade</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table tblStudGrades1 table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>#</th>
+                                            <th>Lesson</th>
+                                            <th>Time</th>
+                                            <th>Instructor</th>
+                                            <th>Vehicle Used</th>
+                                            <th>Grade</th>
+                                            <th>Comment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="studentTable">
+                                        <tr>
+                                            <td>05/11/18</td>
+                                            <td>1</td>
+                                            <td>Start &amp; Stop</td>
+                                            <td>9:00 A.M.</td>
+                                            <td>Harry James Potter</td>
+                                            <td>Toyota, Vios</td>
+                                            <td>90</td>
+                                            <td>---</td>
+                                        </tr>
+                                        <tr>
+                                            <td>05/12/18</td>
+                                            <td>2</td>
+                                            <td>Backing &amp; Turning</td>
+                                            <td>9:00 A.M.</td>
+                                            <td>Harry James Potter</td>
+                                            <td>Toyota, Vios</td>
+                                            <td>92</td>
+                                            <td>Hanep!</td>
+                                        </tr>
+                                        <tr>
+                                            <td>05/12/18</td>
+                                            <td>3</td>
+                                            <td>Road Crossing &amp; Light Traffic</td>
+                                            <td>9:00 A.M.</td>
+                                            <td>Harry James Potter</td>
+                                            <td>Toyota, Vios</td>
+                                            <td>95</td>
+                                            <td>Active listener</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- End of col-lg-6 -->
+            </div> <!-- End of row -->
+        </div><!-- End of Card  -->
+    </div>
+    <!-- End Container fluid  -->
+</div>

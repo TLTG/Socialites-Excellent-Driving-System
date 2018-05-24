@@ -227,7 +227,8 @@ h6 {
   color: #7460ee;
 }
 .text-primary {
-  color: #5c4ac7;
+  /* color: #5c4ac7; */
+  color: #5D0000;
 }
 .text-megna {
   color: #00897b;
@@ -763,7 +764,8 @@ h6.h1 {
 -------------------*/
 .color-primary,
 .text-primary {
-  color: #4680ff;
+  /* color: #4680ff; */
+  color: #5D0000;
 }
 .color-success,
 .text-success {
@@ -6892,7 +6894,7 @@ tbody tr td:last-child {
 }
 
 .view-dashboard, .view-instructor, .view-student, .view-schedule, .view-vehicleA, .view-branches,
-.view-requirement, .view-lessons, .view-account, .view-courses,
+.view-requirement, .view-lessons, .view-account, .view-courses, .view-payment, .view-gradesEval,
 .view-viewInstructor, .view-viewStudent,
 .view-error500, .view-error404
 {
@@ -7188,6 +7190,7 @@ tbody tr td:last-child {
 .studEvalGrade, .instEvalGrade
 {
   color: #455a64;
+  font-weight: bolder;
 }
 #studEvalName, #instEvalName
 {
@@ -8046,6 +8049,12 @@ tiCustom
 .divBottom{
   position: absolute;
   bottom: 10px;
+  width: 100%;
+}
+
+.divBottom2{
+  position: absolute;
+  bottom: 50px;
   width: 100%;
 }
 .cstSmall{
