@@ -210,8 +210,6 @@ function resetSettingsInst (){
     $("#editInstAccCPW").prop("disabled", true);
     $("#editInstAccEduc").prop("disabled", true);
     $("#editInstAccSex").prop("disabled", true);
-    $('.btnDelInstAcc').show();
-    $('.btnUpdateInstAcc').show();
     $('.btnCancUpdInst').hide();
     $('.btnResetUpdInst').hide();
     $('.btnSaveUpdInst').hide();
@@ -467,7 +465,7 @@ function resignInst(){
     inst.getLocalData(function(data){
         var register = Date.parse(data.dateRegistered);
         if(resDate.toString("yyyy-MM-dd") == register.toString("yyyy-MM-dd") || register.addDays(1).toString("yyyy-MM-dd") == resDate.toString("yyyy-MM-dd")){
-            swal("Oops!", "Not soo fast.", "error");            
+            swal("Oops!", "Instructor cannot be resigned.", "error");            
         }else{
             if (resDate=="" || resDate.length==0 ||resDate==null){
                 swal("Oops!", "Please enter the resignation date.", "error");
@@ -521,10 +519,14 @@ var viewInstProfile = function(id){
         if(profile.dateRetired != null){
             $('.instDateResigned').html(Date.parse(profile.dateRetired).toString("MMM d, yyyy"));
             $('.divResigned').show();
-            $('.btnDelInstAcc').attr("disabled", true);
+            // $('.btnDelInstAcc').attr("disabled", true);
+            $(".btnDelInstAcc").hide();
+            $(".btnUpdateInstAcc").hide();
         }else{
             $('.divResigned').hide();         
-            $('.btnDelInstAcc').attr("disabled", false);
+            // $('.btnDelInstAcc').attr("disabled", false);
+            $(".btnDelInstAcc").show();
+            $(".btnUpdateInstAcc").show();
         }
     });
 }

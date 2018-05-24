@@ -38,6 +38,8 @@ var dashboard = function()
     $(".view-lessons").hide();
     $(".view-courses").hide();
     $(".view-account").hide();
+    $(".view-payment").hide();
+    $(".view-gradesEval").hide();
     document.getElementById("li2").classList.remove('active');
     document.getElementById("li3").classList.remove('active');
     document.getElementById("li4").classList.remove('active');
@@ -88,6 +90,8 @@ var activeStudA = function ()
     $(".view-lessons").hide();
     $(".view-account").hide();
     $(".view-courses").hide();
+    $(".view-payment").hide();
+    $(".view-gradesEval").hide();
     document.getElementById("li1").classList.remove('active');
     document.getElementById("li3").classList.remove('active');
     document.getElementById("li4").classList.remove('active');
@@ -120,6 +124,8 @@ var activeStudB = function ()
     $(".view-lessons").hide();
     $(".view-account").hide();
     $(".view-courses").hide();
+    $(".view-payment").hide();
+    $(".view-gradesEval").hide();
     document.getElementById("li1").classList.remove('active');
     document.getElementById("li3").classList.remove('active');
     document.getElementById("li4").classList.remove('active');
@@ -138,13 +144,71 @@ var activeStudB = function ()
 }
 
 var activeStudC = function ()
-{
-
+{              
+    $(".search-box").hide();
+    $(".view-instructor").hide();
+    $(".view-schedule").hide();
+    $(".view-dashboard").hide();
+    $(".view-vehicleA").hide();
+    $(".view-branches").hide();
+    $(".view-viewInstructor").hide();
+    $(".view-viewStudent").hide();
+    $(".view-enrollment").hide();
+    $(".view-student").hide();
+    $(".view-requirement").hide();
+    $(".view-lessons").hide();
+    $(".view-account").hide();
+    $(".view-courses").hide();
+    $(".view-gradesEval").hide();
+    $(".view-payment").show();
+    document.getElementById("li1").classList.remove('active');
+    document.getElementById("li3").classList.remove('active');
+    document.getElementById("li4").classList.remove('active');
+    document.getElementById("li5").classList.remove('active');
+    document.getElementById("li6").classList.remove('active');
+    document.getElementById("li2B").classList.remove('active');
+    document.getElementById("li2A").classList.remove('active');
+    document.getElementById("li2D").classList.remove('active');
+    document.getElementById("li2").classList.add('active');
+    document.getElementById("li2C").classList.add('active');
+    document.getElementById("li7").classList.remove('active');
+    document.getElementById("li9").classList.remove('active');
+    document.getElementById("li9A").classList.remove('active');
+    document.getElementById("li9B").classList.remove('active');
 }
 
 var activeStudD = function ()
 {
-
+    $(".search-box").hide();
+    $(".view-instructor").hide();
+    $(".view-schedule").hide();
+    $(".view-dashboard").hide();
+    $(".view-vehicleA").hide();
+    $(".view-branches").hide();
+    $(".view-viewInstructor").hide();
+    $(".view-viewStudent").hide();
+    $(".view-enrollment").hide();
+    $(".view-student").hide();
+    $(".view-requirement").hide();
+    $(".view-lessons").hide();
+    $(".view-account").hide();
+    $(".view-courses").hide();
+    $(".view-payment").hide();
+    $(".view-gradesEval").show();
+    document.getElementById("li1").classList.remove('active');
+    document.getElementById("li3").classList.remove('active');
+    document.getElementById("li4").classList.remove('active');
+    document.getElementById("li5").classList.remove('active');
+    document.getElementById("li6").classList.remove('active');
+    document.getElementById("li2B").classList.remove('active');
+    document.getElementById("li2A").classList.remove('active');
+    document.getElementById("li2C").classList.remove('active');
+    document.getElementById("li2").classList.add('active');
+    document.getElementById("li2D").classList.add('active');
+    document.getElementById("li7").classList.remove('active');
+    document.getElementById("li9").classList.remove('active');
+    document.getElementById("li9A").classList.remove('active');
+    document.getElementById("li9B").classList.remove('active');
 }
 
 var instLoaded = 0;
@@ -168,6 +232,8 @@ var instructor = function ()
     $(".view-lessons").hide();
     $(".view-account").hide();
     $(".view-courses").hide();
+    $(".view-payment").hide();
+    $(".view-gradesEval").hide();
     document.getElementById("li1").classList.remove('active');
     document.getElementById("li2").classList.remove('active');
     document.getElementById("li4").classList.remove('active');
@@ -205,6 +271,8 @@ var vehicle = function ()
     $(".view-lessons").hide();
     $(".view-courses").hide();
     $(".view-account").hide();
+    $(".view-payment").hide();
+    $(".view-gradesEval").hide();
     document.getElementById("li1").classList.remove('active');
     document.getElementById("li2").classList.remove('active');
     document.getElementById("li3").classList.remove('active');
@@ -237,6 +305,8 @@ var schedule = function()
     $(".view-lessons").hide();
     $(".view-account").hide();
     $(".view-courses").hide();
+    $(".view-payment").hide();
+    $(".view-gradesEval").hide();
     document.getElementById("li1").classList.remove('active');
     document.getElementById("li2").classList.remove('active');
     document.getElementById("li3").classList.remove('active');
@@ -270,6 +340,8 @@ var branches = function ()
     $(".view-lessons").hide();
     $(".view-courses").hide();
     $(".view-account").hide();
+    $(".view-payment").hide();
+    $(".view-gradesEval").hide();
     document.getElementById("li1").classList.remove('active');
     document.getElementById("li2").classList.remove('active');
     document.getElementById("li3").classList.remove('active');
@@ -302,6 +374,8 @@ var account = function ()
     $(".view-lessons").hide();
     $(".view-courses").hide();
     $(".view-account").show();
+    $(".view-payment").hide();
+    $(".view-gradesEval").hide();
     document.getElementById("li1").classList.remove('active');
     document.getElementById("li2").classList.remove('active');
     document.getElementById("li3").classList.remove('active');
@@ -383,6 +457,8 @@ var lessons = function ()
     $(".view-account").hide();
     $(".view-courses").hide();
     $(".view-lessons").show();
+    $(".view-payment").hide();
+    $(".view-gradesEval").hide();
     document.getElementById("li1").classList.remove('active');
     document.getElementById("li2").classList.remove('active');
     document.getElementById("li3").classList.remove('active');
@@ -416,6 +492,8 @@ var courses = function ()
     $(".view-account").hide();
     $(".view-lessons").hide();
     $(".view-courses").show();
+    $(".view-payment").hide();
+    $(".view-gradesEval").hide();
     document.getElementById("li1").classList.remove('active');
     document.getElementById("li2").classList.remove('active');
     document.getElementById("li3").classList.remove('active');
