@@ -1,4 +1,10 @@
 $(function() {
+
+  $("#schedStudName").prop("disabled", true);
+  $("#schedInstName").prop("disabled", true);
+  $("#schedTime").prop("disabled", true);
+  $("#schedBranch").prop("disabled", true);
+
   $('.calendar').fullCalendar({
       header:
       {
@@ -7,4 +13,11 @@ $(function() {
         right:  'month prev,next'
       }
   });
+});
+
+$('#btnUpdSched').on('click', function(){
+  $("#schedStudName").removeAttr("disabled");
+  $("#schedInstName").removeAttr("disabled");
+  $("#schedTime").removeAttr("disabled");
+  $("#schedBranch").removeAttr("disabled");
 });

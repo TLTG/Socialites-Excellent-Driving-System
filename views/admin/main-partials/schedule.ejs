@@ -14,10 +14,66 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12">
-                <div class='calendar'></div>
+                <div class="form-group">
+                    <div class="input-group input-group-flat">
+                        <span class="input-group-btn"><button class="btn btn-custom" type="submit"><i class="ti-search"></i></button></span>
+                        <input type="text" id="searchSched" class="form-control" placeholder="Search..." style="font-size: 12px;">
+                        <span class="input-group-btn"><button class="btn btn-primary input-group-close-icon" type="button" onclick="clrSearchStudentC()"><i class="ti-close"></i></button></span>
+                    </div>
+                </div>
             </div>
             <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
-
+                <div class="pull-right">
+                    <button type="button" id="btnAddSched" class="btn btn-success m-b-10 m-l-5">New Schedule</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12">
+                <div class="card card700">
+                    <div class='calendar'></div>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                <div class="card cardBT card100">
+                    <center>
+                        <h4 style="font-weight: bold;">TODAY'S SCHEDULE</h4>
+                        <h3 class="schedCount">1</h3>
+                    </center>
+                </div>
+                <div class="card card501">
+                    <h4 style="font-weight: bold;">Schedule Details</h4><hr>
+                    <form>
+                        <div>
+                            <h5 class="h5Enr">Student Name:</h5>
+                            <input type="text" class="txtEnr" required name="schedStudName" id="schedStudName" value="Graciella C. Tatel"><br>
+                        </div><hr>
+                        <div>
+                            <h5 class="h5Enr">Instructor Name:</h5>
+                            <input type="text" class="txtEnr" required name="schedInstName" id="schedInstName" value="Harry James Potter"><br>
+                        </div><hr>
+                        <div>
+                            <h5 class="h5Enr">Time:</h5>
+                            <input type="text" class="txtEnr" required name="schedTime" id="schedTime" value="9:00"><br>
+                        </div><hr>
+                        <div>
+                            <h5 class="h5Enr">Branch<span class="asterisk">*</span></h5>
+                            <select class="enrCivStatus" name="schedBranch" id="schedBranch">
+                                <option value="SEDQC">SEDQC</option>
+                                <option value="SEDPC">SEDPC</option>
+                                <option value="SEDTC">SEDTC</option>
+                            </select>
+                        </div><hr>
+                    </form>
+                    <div class="row">
+                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                            <button type="button" id="btnCancSched" class="btn btn-danger m-b-10 m-l-5" style="width: 100%">Cancel</button>
+                        </div>
+                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                            <button type="button" id="btnUpdSched" class="btn btn-warning m-b-10 m-l-5" style="width: 100%">Update</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

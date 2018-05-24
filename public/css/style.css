@@ -6984,7 +6984,7 @@ tbody tr td:last-child {
   color: #5D0000;
 }
 
-#btnNewInstructor, #btnNewVehicle, #btnNewBranch, #btnNewLesson, #btnNewCourse
+#btnNewInstructor, #btnNewVehicle, #btnNewBranch, #btnNewLesson, #btnNewCourse, #btnAddSched
 {
   width: 200px;
   font-size: 14px;
@@ -8053,6 +8053,21 @@ tiCustom
   overflow-y: visible;
   overflow-x: hidden;
 }
+.card700{
+  height: 700;
+  overflow-y: visible;
+  overflow-x: hidden;
+}
+.card501{
+  height: 430px;
+  overflow-y: visible;
+  overflow-x: hidden;
+}
+.card100{
+  height: 100px;
+  overflow-y: visible;
+  overflow-x: hidden;
+}
 #btnRemBrnch, #btnUpdBrnch, #btnUpdLesson, #btnRemLesson,
 #btnRemCourse, #btnUpdCourse
 {
@@ -8185,4 +8200,13 @@ tiCustom
 .regEnrName, .regEnrDeadline, .regEnrBranch{
   text-transform: uppercase;
   font-weight: bolder;
+}
+.schedCount{
+  font-weight: bolder;
+  color: #5D0000;
+}
+.cardBT{
+  border-top: solid 2px #5D0000;
+  border-bottom: solid 2px #5D0000;
+  overflow: hidden;
 }
