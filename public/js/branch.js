@@ -102,7 +102,7 @@ function confAddBranch(){
         },
         function(isConfirm){
             if (isConfirm) {
-                getBranchFormData(function(data){
+                getBranchFormData(function(ok, data){
                     office.add(data, function(err){
                         if(err){
                             console.error(err);

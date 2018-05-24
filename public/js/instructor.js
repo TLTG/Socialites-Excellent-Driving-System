@@ -546,7 +546,7 @@ var renderInstEdit = function(){
         $('#editInstAccFN').val(name[0]);        
         $('#editInstAccMN').val(name[1]);        
         $('#editInstAccLN').val(name[2]);        
-        $('#editInstAccSex').val(profile.sex);        
+        //$('input[name="editInstAccSex"][value="'+ profile.sex +'"]').attr('checked', 'checked');
         $('#editInstAccBday').val(Date.parse(profile.birthdate).toString("yyyy-MM-dd"));        
         $('#editInstAccPhone').val(profile.telno);            
         $('#editInstAccEmail').val(profile.email);            

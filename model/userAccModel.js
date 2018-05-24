@@ -52,4 +52,12 @@ UserAccount.edit = function(id, user, pass, type, cb){
     });
 }
 
+UserAccount.getList = function(offset, limit, type, cb){
+    var sql = "SELECT * FROM "+ this.table +" WHERE id > ? AND accType = ? ORDER BY id ASC LIMIT ?";
+    this.db.get().query(sql, [offset,  type, limit], function(err, result){
+        if(err) return cb(err);
+        cb(null, result);
+    });
+}
+
 module.exports = UserAccount;

@@ -1,13 +1,43 @@
 $(function () {
     clrSearchCourses();
-    $('.tblCourses tbody tr:first').addClass("highlightTr");
-    $('.tblCourses tbody tr').click(function () {
-        var selected = $(this).hasClass("highlightTr");
-        $('.tblCourses tbody tr').removeClass("highlightTr");
-        if (!selected)
-            $(this).addClass("highlightTr");
+    Number.prototype.formatMoney = function(c, d, t){
+        var n = this, 
+        c = isNaN(c = Math.abs(c)) ? 2 : c, 
+        d = d == undefined ? "." : d, 
+        t = t == undefined ? "," : t, 
+        s = n < 0 ? "-" : "", 
+        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+        j = (j = i.length) > 3 ? j % 3 : 0;
+       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    };
+    $('#searchCourses').on('click', function(e){
+        search.init(courseModule.pages[courseModule.currPage], ["courseID","carType","amount","days"], function(data){
+            renderCourseTable(data);
+        });
+    });
+    $('#searchCourses').on('keyup', function(e){
+        search.keypress($('#searchCourses').val());
     });
 });
+
+var courseLoaded = 0;
+var loadCourse = function(){
+    if(courseLoaded == 0){
+        $(".preloader").fadeIn();          
+        courseModule.getList(()=>{
+            renderCourseTable(courseModule.pages[courseModule.currPage]);
+            $('.tblCourses tbody tr:first').addClass("highlightTr");
+            $('.tblCourses tbody tr').click(function () {
+                var selected = $(this).hasClass("highlightTr");
+                $('.tblCourses tbody tr').removeClass("highlightTr");
+                if (!selected)
+                    $(this).addClass("highlightTr");
+            });
+            $(".preloader").fadeOut();
+            courseLoaded = 1;              
+        });
+    }
+}
 
 function clrSearchCourses(){
     $('#searchCourses').val("");
@@ -23,8 +53,14 @@ function addCourse(){
     $('#addCourseModal').modal('show');
 }
 
-function editCourse(){
+function editCourse(id){
     resetAddCourse();
+    courseModule.selected = id;
+    courseModule.getLocalData(function(profile){
+        $("#newCrsDays").val(profile.days);
+        $("#newCrsPrice").val(profile.amount);
+        $("#newCrsVehiType").val(profile.carType);
+    });
     $('.h6AddCourse').html("UPDATE COURSE");
     $('#btnConfAddCourse').hide();
     $('#btnCancAddCourse').show();
@@ -39,7 +75,8 @@ function resetAddCourse(){
     $('select[name="newCrsVehiType"]').val("0");
 }
 
-function remCourse(){
+function remCourse(id){
+    courseModule.selected = id;    
     swal({
         title: "Warning!",
         text: "Are you sure you want to remove this course?",
@@ -53,9 +90,15 @@ function remCourse(){
     },
     function(isConfirm){
         if (isConfirm) {
-            $('#addCourseModal').modal('hide');
-            swal("Success!", "Course is now unavailable.", "success");
-            //DB: Remove course function here
+            courseModule.delete(function(err){
+                if(err){
+                    swal("Failed!", err.message, "error");
+                }else{
+                    $('#addCourseModal').modal('hide');
+                    swal("Success!", "Course is now unavailable.", "success");
+                    //DB: Remove course function here
+                }
+            })
         }
     });
 }
@@ -97,8 +140,7 @@ function confCancAddCourse(){
     }
 }
 
-function confAddCourse()
-{
+function confAddCourse(){
     var check = checkFieldsCourse();
     if (check==0)
         swal("Oops!", "Please fill out all required fields.", "error");
@@ -116,9 +158,19 @@ function confAddCourse()
         },
         function(isConfirm){
             if (isConfirm) {
-                swal("Success!", "New course has been added!", "success");
-                $('#addCourseModal').modal('hide');
-                //DB: Adding of course function here
+                var data = {};
+                data["days"] = $('#newCrsDays').val();
+                data["price"] = $('#newCrsPrice').val();
+                data["carType"] = $('select[name="newCrsVehiType"]').val();
+                courseModule.add(data, function(err){
+                    if(err){
+                        swal("Failed!", err.message, "error");
+                    }else{
+                        swal("Success!", "New course has been added!", "success");
+                        $('#addCourseModal').modal('hide');
+                        //DB: Adding of course function here
+                    }
+                });
             }
         });
     }
@@ -142,6 +194,13 @@ function confEditCourse(){
         },
         function(isConfirm){
             if (isConfirm) {
+                var data = {};
+                data["days"] = $('#newCrsDays').val();
+                data["price"] = $('#newCrsPrice').val();
+                data["carType"] = $('select[name="newCrsVehiType"]').val();
+                courseModule.update(data, function(err){
+
+                });
                 swal("Success!", "Course has been successully updated!", "success");
                 $('#addCourseModal').modal('hide');
                 //DB: Updating of course function here
@@ -152,4 +211,20 @@ function confEditCourse(){
 
 function confResetCourse(){
     resetAddCourse();
+}
+
+var renderCourseTable = function(data){
+    var html = "";
+    data.forEach(item=>{
+        if(item.purgeFlag !=0 ){
+            html += "<tr onclick=''>";
+            html += "<td>"+ item.courseID +"</td>";
+            html += "<td>"+ item.days +" Days</td>";
+            html += "<td>" + parseInt(item.amount).formatMoney(2) + "</td>";
+            html += "<td>" + (item.carType == "a" ? "Automatic" : "Manual") + "</td>";
+            html += "<td><i class='ti-pencil tiDef2 btnRemCourse' onclick='editCourse("+ item.id +")' data-toggle='tooltip' data-placement='bottom' title='Edit'></i><i class='ti-close tiDef2 btnEditCourse' onclick='remCourse("+ item.id +")' data-toggle='tooltip' data-placement='bottom' title='Remove'></i></td>";
+            html += "</tr>";
+        }
+    });
+    $('#courseTable').html(html);
 }

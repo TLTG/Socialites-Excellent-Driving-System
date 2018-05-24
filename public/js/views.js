@@ -358,8 +358,13 @@ var branches = function ()
     document.getElementById("li9B").classList.remove('active');
 }
 
+var accLoad = 0;
 var account = function ()
 {
+    if(accLoad == 0){
+        loadAccount();
+        accLoad =1 ;
+    }
     $(".search-box").hide();
     $(".view-instructor").hide();
     $(".view-schedule").hide();
@@ -478,6 +483,7 @@ var lessons = function ()
 
 var courses = function ()
 {
+    loadCourse();
     $(".search-box").hide();
     $(".view-instructor").hide();
     $(".view-schedule").hide();
