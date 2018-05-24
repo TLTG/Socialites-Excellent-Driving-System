@@ -11,6 +11,7 @@ exports.create = function(req, res, next){
 }
 
 exports.get = function(req, res, next){
+    if(res.locals.authenticated == 0) return next();    
     var query = Object.keys(req.query).length ? req.query : {};
     var param = Object.keys(req.params).length ? req.params : null;
     if(param){
@@ -64,6 +65,7 @@ exports.updateAll = function(req, res, next){
 }
 
 exports.del = function(req, res, next){
+    if(res.locals.authenticated == 0) return next();    
     var id = req.params.id;
     student.delete(id, "status", function(err){
         if(err) return next(err);
@@ -72,3 +74,14 @@ exports.del = function(req, res, next){
 }
 
 exports.delAll = function(req, res, next){}
+
+exports.preReg = function(req, res, next){
+    var data = [null];
+    data.push(req.body.data);
+    data.push(null);
+    data.push(1);
+    student.preRegStud(data, function(err, done){
+        if(err) return next(err);
+        res.status(200).send({success: true, detail: "Successfully Added!"});
+    });
+}

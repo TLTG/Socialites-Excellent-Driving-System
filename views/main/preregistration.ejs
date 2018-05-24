@@ -45,11 +45,11 @@
                         <h5 class="h5Enr">Civil Status<span class="asterisk">*</span></h5>
                         <select class="enrCivStatus" name="enrCivStatus">
                             <option value="civ0">---</option>
-                            <option value="civ1">Single</option>
-                            <option value="civ2">Married</option>
-                            <option value="civ3">Divorced</option>
-                            <option value="civ4">Separated</option>
-                            <option value="civ5">Widowed</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Divorced">Divorced</option>
+                            <option value="Separated">Separated</option>
+                            <option value="Widowed">Widowed</option>
                         </select>
                     </div><hr>
                     <div>
@@ -84,7 +84,7 @@
                 </center>
                 <div>
                     <h5 class="h5Enr">Branches<span class="asterisk">*</span></h5>
-                    <select class="enrCivStatus1" name="enrBranchList">
+                    <select id="branch" class="enrCivStatus1" name="enrBranchList">
                         <option value="0">---</option>
                         <option value="1">Maria Clara eme eme</option>
                         <option value="2">Huawaww</option>
@@ -112,7 +112,7 @@
                                                 <th>PRICE</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="coursesA">
                                             <tr>
                                                 <td>CRS-M001</td>
                                                 <td>5 Days</td>
@@ -142,7 +142,7 @@
                                                 <th>PRICE</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="coursesB">
                                             <tr>
                                                 <td>CRS-A001</td>
                                                 <td>5 Days</td>
@@ -202,19 +202,19 @@
                     </center>
                     <form class="reqForm">
                         <hr class="hrCustom"><br>
-                        <input type="radio" class="enrReqPerm" id="enrReqP1" name="enrReqP" value="reqP1">
+                        <input type="radio" class="enrReqPerm" id="enrReqP1" name="enrReqP" value="1">
                             <label class="enrSexLbl" for="enrReqP1">To apply student driver's permit at LTO</label><br>
-                        <input type="radio" class="enrReqPerm" id="enrReqP2" name="enrReqP" value="reqP2">
+                        <input type="radio" class="enrReqPerm" id="enrReqP2" name="enrReqP" value="2">
                             <label class="enrSexLbl" for="enrReqP2">To apply student driver's permit thru S-Excellent</label><br>
-                        <input type="radio" class="enrReqPerm" id="enrReqP3" name="enrReqP" value="reqP3">
+                        <input type="radio" class="enrReqPerm" id="enrReqP3" name="enrReqP" value="3">
                             <label class="enrSexLbl" for="enrReqP3">With student driver's permit</label><br>
-                        <input type="radio" class="enrReqPerm" id="enrReqP4" name="enrReqP" value="reqP4">
+                        <input type="radio" class="enrReqPerm" id="enrReqP4" name="enrReqP" value="4">
                             <label class="enrSexLbl" for="enrReqP4">With non-professional license</label><br>
-                        <input type="radio" class="enrReqPerm" id="enrReqP5" name="enrReqP" value="reqP5">
+                        <input type="radio" class="enrReqPerm" id="enrReqP5" name="enrReqP" value="5">
                             <label class="enrSexLbl" for="enrReqP5">With professional license</label><br>
-                        <input type="radio" class="enrReqPerm" id="enrReqP6" name="enrReqP" value="reqP6">
+                        <input type="radio" class="enrReqPerm" id="enrReqP6" name="enrReqP" value="6">
                             <label class="enrSexLbl" for="enrReqP6">To apply non-professional license thru S-Excellent</label><br>
-                        <input type="radio" class="enrReqPerm" id="enrReqP7" name="enrReqP" value="reqP7">
+                        <input type="radio" class="enrReqPerm" id="enrReqP7" name="enrReqP" value="7">
                             <label class="enrSexLbl" for="enrReqP7">To apply professional license thru S-Excellent</label><br>
                     </form>
                 </div>
@@ -225,7 +225,7 @@
                     </center>
                     <form class="reqForm">
                         <hr class="hrCustom"><br>
-                        <div class="reqA">
+                        <div class="req reqA">
                             <h5 class="h5Enr">For 17-18 yrs. old</h5>
                             <label class="lblCB1">
                                 &emsp;&nbsp;Original Birth Certificate (NSO)</label><br>
@@ -235,7 +235,7 @@
                                 &emsp;&nbsp;Parental Consent</label><br>
                         <hr></div>
 
-                        <div class="reqB">
+                        <div class="req reqB">
                             <h5 class="h5Enr">For 19 yrs. old &amp; above</h5>
                             <label class="lblCB1">
                                 &emsp;&nbsp;Photocopy of Birth Certificate (NSO)</label><br>
@@ -245,7 +245,7 @@
                                 &emsp;&nbsp;Baranggay Clearance</label><br>
                         <hr></div>
 
-                        <div class="reqC">
+                        <div class="req reqC">
                             <h5 class="h5Enr">For Non-Filipino Students/ Tourists</h5>
                             <label class="lblCB1">
                                 &emsp;&nbsp;Original Passport</label><br>
@@ -287,7 +287,7 @@
            <h5>Remember to bring <strong>ALL</strong> requirements for your registration to be approved,
                together with the <strong>partial payment (atleast 10%)</strong> of your tuition fee.</h5><br>
             <h5>Please come to your selected branch to submit all requirements and your payment 
-                    until <strong><span class="oneWeekDeadline"></span>June 1, 2018</strong>. (One week)</h5><br>
+                    until <strong><span class="oneWeekDeadline"></span></strong>. (One week)</h5><br>
             <h5>Failure to show up before the deadline will automatically <strong>CANCEL</strong> your pre-registration form.</h5>
         </div><br><br><hr>
       </div>

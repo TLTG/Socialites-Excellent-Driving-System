@@ -75,3 +75,47 @@ exports.delete = function(req, res, next){
         res.status(200).send({success: true, detail:"Successfully Deleted!"});
     }); 
 }
+
+exports.addCourse = function(req, res, next){
+    var dataIn = JSON.parse(req.body.data);
+}
+
+exports.editCourse = function(req, res, next){
+
+}
+
+exports.delCourse = function(req, res, next){
+
+}
+
+exports.getCourse = function(req, res, next){
+    var query = req.query;
+    var param = Object.keys(req.params).length ? req.params : null;
+    if(param){
+        /* if(query){
+        }else{ */
+            var field = param.field == undefined ? null : param.field;
+            lesson.getListCourse(param.id, field, function(err, result){
+                if(err) return next(err);
+                res.status(200).send({success: true, data: result});                
+            });
+        //}
+    }else{
+        var offset = query.offset == undefined ? 0 : parseInt(query.offset);
+        var limit = query.limit == undefined ? 10 : parseInt(query.limit);
+        lesson.getListCourse(offset, limit, function(err, result){
+            if(err) return next(err);
+            var processData = [];
+            var response = function(){
+                res.status(200).send({success: true, data: result});
+            };
+            var count = result.length;
+            result.forEach(element => {
+                var pad = "000";
+                element["lessonID"] = "SED-L" + (pad.substring(0,pad.length-(element.id+"").length) + element.id);
+                count--;
+                if(count == 0) response();
+            });
+        });
+    }
+}
