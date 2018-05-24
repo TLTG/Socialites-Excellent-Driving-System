@@ -1,11 +1,26 @@
 var express = require('express'); 
 //Utility Router
 var router = express.Router();
+var auth = require('../../middleware/authentication');
+
+//system account middleware
+var systemAccount = require('../../middleware/lib/util/sysAccount');
+
+var systemAccountRouter = express.Router();
+systemAccountRouter.route('/')
+    .post(auth.auth, systemAccount.create)
+    .get(systemAccount.get);
+systemAccountRouter.route('/:id')
+    .get(systemAccount.get)
+    .put(auth.auth, systemAccount.update)
+    .delete(auth.auth, systemAccount.delete);
+systemAccountRouter.route('/:id/:field')
+    .get(systemAccount.get)
+    .put(auth.auth, systemAccount.update);
+router.use('/sysacc', systemAccountRouter);
 
 //requirement Middelware
 var rMiddleware = require('../../middleware/lib/util/requirement');
-
-var auth = require('../../middleware/authentication');
 
 var requirementsRouter = express.Router();
 requirementsRouter.route('/')
@@ -31,7 +46,7 @@ lessonRouter.route('/')
 lessonRouter.route('/course')
     .get(lMiddleware.getCourse)
     .post(lMiddleware.addCourse);
-lessonRouter.route('/course/:id')    
+lessonRouter.route('/course/:id/modify')    
     .put(lMiddleware.editCourse)
     .delete(lMiddleware.delCourse);
 lessonRouter.route('/:id')

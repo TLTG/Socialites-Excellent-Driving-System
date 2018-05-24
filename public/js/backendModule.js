@@ -723,9 +723,13 @@ var ajaxHandler = {
                     break;
                 }
                 case "util" : {
-                    if(url[3] == "lesson"){
+                    if(url[4] == "course"){
+                        courseModule.refresh();
+                    }else if(url[3] == "lesson"){
                         topic.refresh();
-                    }   
+                    }else if(url[3] == "sysacc"){
+                        acc.refresh();
+                    }                    
                     break;
                 }
             }
@@ -774,4 +778,208 @@ var search = {
         this.filtered = this.tempStore;
         this.callback(this.filtered);
     },
+}
+/* 
+*   course module,
+*/
+var courseModule = {
+    selected: 0,
+    offset: 0,
+    limit: 10,
+    currPage: 0,
+    pages: [],
+    getList: function(cb){
+        var self = this;
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.get('api/v1/util/lesson/course?offset='+this.offset+'&limit='+this.limit, function(res){
+            if(res.success){
+                self.pages[self.currPage] = res.data;
+                self.offset = res.data[res.data.length-1].id;
+                cb(null);
+            }else{
+                cb("Error: " + res.detail);
+            }
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    add: function(data, cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.post('api/v1/util/lesson/course', {data: JSON.stringify(data)}, function(res){
+            if(res.success){
+                cb(null);
+            }else{
+                onFail(res.detail);
+            }
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    update: function(data, cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.ajax({
+            type: "PUT",
+            url: "api/v1/util/lesson/course/" + this.selected + "/modify",
+            data: {data: JSON.stringify(data)},
+            success: function(res){
+                if(res.success){
+                    cb(null);
+                }else{
+                    onFail(res.detail);
+                }
+            },
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    delete: function(cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.ajax({
+            type: "DELETE",
+            url: "api/v1/util/lesson/course/" + this.selected + "/modify",
+            success: function(res){
+                if(res.success){
+                    cb(null);
+                }else{
+                    onFail(res.detail);
+                }
+            },
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    getLocalData: function(cb){
+        this.pages[this.currPage].forEach(x=>{
+            if(x.id == this.selected){
+                return cb(x);
+            } 
+        });
+    },
+    refresh: function(){
+        this.offset = 0;
+        this.currPage = 0;
+        this.getList(()=>{
+            renderCourseTable(this.pages[this.currPage]);
+        });
+    }
+}
+/* 
+*   system account module,
+*/
+var acc = {
+    selected: 0,
+    offset: [0,0,0],
+    limit: 10,
+    currPage: [0,0,0],
+    currTbl: 0,
+    pages: [[],[],[]],
+    getList: function(cb){
+        var self = this;
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }; 
+        return $.get('api/v1/util/sysacc?offset=' + this.offset[this.currTbl] + '&limit=' + this.limit + '&type=' + (this.currTbl + 1), function(res){
+            if(res.success){
+                if(res.data.length !=0){
+                    self.pages[self.currTbl][self.currPage[self.currTbl]] = res.data;
+                    self.offset[self.currTbl] = res.data[res.data.length-1].id;
+                }
+                cb(null);
+            }else{
+                cb("Error: " + res.detail);
+            }
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    add: function(data, cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.post('api/v1/util/sysacc', {data: JSON.stringify(data)}, function(res){
+            if(res.success){
+                cb(null);
+            }else{
+                onFail(res.detail);
+            }
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    update: function(data, cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.ajax({
+            type: "PUT",
+            url: "api/v1/util/sysacc/" + this.selected,
+            data: {data: JSON.stringify(data)},
+            success: function(res){
+                if(res.success){
+                    cb(null);
+                }else{
+                    onFail(res.detail);
+                }
+            },
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    delete: function(cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.ajax({
+            type: "DELETE",
+            url: "api/v1/util/sysacc/" + this.selected,
+            success: function(res){
+                if(res.success){
+                    cb(null);
+                }else{
+                    onFail(res.detail);
+                }
+            },
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    getLocalData: function(cb){
+        this.pages[this.currTbl][this.currPage[this.currTbl]].forEach(x=>{
+            if(x.id == this.selected){
+                return cb(x);
+            } 
+        });
+        /* this.pages[this.currPage].forEach(x=>{
+        }); */
+    },
+    refresh: function(){
+        this.offset[this.currTbl] = 0;
+        this.currPage[this.currTbl] = 0;
+        this.getList((err)=>{
+            if(err) return console.error(err);
+            var data = acc.pages[acc.currTbl];            
+            if(data.length != 0){
+                renderAccTbl(data[acc.currPage[acc.currTbl]]);            
+                accountLoaded = 1;
+            }else{
+                renderAccTbl([]);                            
+            }        
+        });
+    }
 }

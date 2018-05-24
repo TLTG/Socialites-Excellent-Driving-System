@@ -35,12 +35,15 @@ exports.get = function(req, res, next){
             if(err) return next(err);
             var processData = [];
             var response = function(){
-                res.status(200).send({success: true, data: result});
+                res.status(200).send({success: true, data: processData});
             };
             var count = result.length;
             result.forEach(element => {
                 var pad = "000";
                 element["lessonID"] = "SED-L" + (pad.substring(0,pad.length-(element.id+"").length) + element.id);
+                if(element.purgeFlag != 0){
+                    processData.push(element);
+                }
                 count--;
                 if(count == 0) response();
             });
@@ -77,15 +80,46 @@ exports.delete = function(req, res, next){
 }
 
 exports.addCourse = function(req, res, next){
+    if(res.locals.authenticated == 0) return next();        
     var dataIn = JSON.parse(req.body.data);
+    
+    var data = [null];
+    data.push(dataIn.carType);
+    data.push(dataIn.price);
+    data.push(dataIn.days);
+    data.push(1);
+
+    lesson.addCourse(data, function(err){
+        if(err) return next(err);
+        res.status(200).send({success:true, detail: "Successfully Added!"});
+    });
 }
 
 exports.editCourse = function(req, res, next){
+    if(res.locals.authenticated == 0) return next();   
+    var id = req.params.id; 
+    var dataIn = JSON.parse(req.body.data);
+    
+    var data = [];
+    data.push(dataIn.carType);
+    data.push(dataIn.price);
+    data.push(dataIn.days);
+    data.push(1);
 
+    lesson.editCourse(id, data, function(err){
+        if(err) return next(err);
+        res.status(200).send();
+    });
 }
 
 exports.delCourse = function(req, res, next){
+    if(res.locals.authenticated == 0) return next();   
+    var id = req.params.id; 
 
+    lesson.delCourse(id, function(err){
+        if(err) return next(err);
+        res.status(200).send({success: true, detail: "Successfully Deleted!"});
+    })
 }
 
 exports.getCourse = function(req, res, next){
@@ -112,7 +146,7 @@ exports.getCourse = function(req, res, next){
             var count = result.length;
             result.forEach(element => {
                 var pad = "000";
-                element["lessonID"] = "SED-L" + (pad.substring(0,pad.length-(element.id+"").length) + element.id);
+                element["courseID"] = "CRS-M" + (pad.substring(0,pad.length-(element.id+"").length) + element.id);
                 count--;
                 if(count == 0) response();
             });
