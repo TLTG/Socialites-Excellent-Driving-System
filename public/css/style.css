@@ -8048,6 +8048,11 @@ tiCustom
   overflow-y: auto;
   overflow-x: hidden;
 }
+.card500{
+  height: 443px;
+  overflow-y: visible;
+  overflow-x: hidden;
+}
 #btnRemBrnch, #btnUpdBrnch, #btnUpdLesson, #btnRemLesson,
 #btnRemCourse, #btnUpdCourse
 {
@@ -8073,6 +8078,10 @@ tiCustom
 }
 .btnCstom1{
   width: 100px;
+}
+.btnCstom2{
+  width: 120px;
+  font-size: 13px;
 }
 .lesID{
   color: #5D0000;
@@ -8172,4 +8181,8 @@ tiCustom
 
 .not17span{
   color: red;
+}
+.regEnrName, .regEnrDeadline, .regEnrBranch{
+  text-transform: uppercase;
+  font-weight: bolder;
 }
