@@ -110,6 +110,7 @@ var activeStudA = function ()
 
 var activeStudB = function ()
 {
+    loadPreReg();    
     $(".search-box").hide();
     $(".view-instructor").hide();
     $(".view-schedule").hide();

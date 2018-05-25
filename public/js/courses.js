@@ -34,6 +34,10 @@ var loadCourse = function(){
                     $(this).addClass("highlightTr");
             });
             $(".preloader").fadeOut();
+            $('.enrCourse').html("");
+            courseModule.pages[courseModule.currPage].forEach(x=>{
+                $('.enrCourse').append("<option value='"+ x.id +"'>"+ x.days +" Days</option>");
+            });
             courseLoaded = 1;              
         });
     }

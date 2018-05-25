@@ -37,11 +37,13 @@ INSERT INTO `branch` (`id`, `address`, `telno`, `name`, `purgeFlag`) VALUES
 (3, 'Pasay City', '751-5331', 'SEDPC', 1),
 (4, 'Makati City', '752-2413', 'SEDMC', 1),
 (5, 'Pasig City', '750-5239', 'SEDPC', 0),
-(8, '123asd_asvsd_Queasfaw_1233_qwcfq', '1453545345/3453453553', 'asdasd', 0);
+(8, '123asd_asvsd_Queasfaw_1233_qwcfq', '1453545345/3453453553', 'asdasd', 0),
+(9, 'asdasd_ASD_avsfd_3524_fvwad', '12123123/3234324', 'asd', 0);
 
 INSERT INTO `course` (`id`, `carType`, `amount`, `days`, `status`) VALUES
 (1, 'a', 1500, 5, 1),
-(2, 'm', 1000, 5, 1);
+(2, 'm', 1000, 5, 1),
+(3, 'a', 2000, 6, 1);
 
 INSERT INTO `defect` (`id`, `vehicle`, `part`, `description`, `importance`, `repaired`) VALUES
 (1, 123, 'Gas', 'Gas is half empty', 1, 1),
@@ -77,16 +79,18 @@ INSERT INTO `instructor` (`id`, `userInfo`, `educAttain`, `vacant`, `dateRegiste
 ('INST-014008', 8, 3, '', '2018-05-20 17:05:05', '2018-05-23', 3);
 
 INSERT INTO `lesson` (`id`, `title`, `prerequisite`, `description`, `purgeFlag`) VALUES
-(1, 'start and stop', NULL, '', 1),
-(2, 'Backing and tur', 1, '', 1),
-(3, 'Road crossing l', 2, '', 1),
+(1, 'start and stop', NULL, '', 0),
+(2, 'Backing and turn', 1, '', 1),
+(3, 'Road crossing ', 2, '', 1),
 (4, 'Manuevering', 1, '', 1),
 (5, 'Hanging', 3, '', 1),
 (6, 'bam!', 3, 'hit all pedestrian and overspeed when tree is on your way', 0),
-(7, '12312', 4, 'vasada', 0);
+(7, '12312', 4, 'vasada', 0),
+(8, 'asdas', 2, 'vasdasd', 0);
 
 INSERT INTO `preRegStudent` (`id`, `data`, `dateSubmit`, `status`) VALUES
-(1, '{\"info\":{\"fullname\":\"Christian Paul _Rojero_Tupas\",\"birthdate\":\"1998-12-08\",\"birthplace\":\"Manila\",\"address\":\"#18 Guyabano St. Amparo Capri Q.C\",\"telno\":\"09094527651\",\"occupation\":\"programmer\",\"email\":\"christianpaultupas@gmail.com\",\"civilStatus\":\"civ1\",\"sex\":\"Male\",\"nationality\":\"Filipino\",\"guardian\":{\"name\":\"graciella tatel\",\"telno\":\"09185671538\"}},\"course\":0,\"branch\":\"1\",\"license\":\"2\"}', '2018-05-24 02:38:25', 1);
+(1, '{\"info\":{\"fullname\":\"Christian Paul _Rojero_Tupas\",\"birthdate\":\"1998-12-08\",\"birthplace\":\"Manila\",\"address\":\"#18 Guyabano St. Amparo Capri Q.C\",\"telno\":\"09094527651\",\"occupation\":\"programmer\",\"email\":\"christianpaultupas@gmail.com\",\"civilStatus\":\"civ1\",\"sex\":\"Male\",\"nationality\":\"Filipino\",\"guardian\":{\"name\":\"graciella tatel\",\"telno\":\"09185671538\"}},\"course\":0,\"branch\":\"1\",\"license\":\"2\"}', '2018-05-24 02:38:25', 1),
+(2, '{\"info\":{\"fullname\":\"Christian Paul_Rojero_Tupas\",\"birthdate\":\"1998-12-08\",\"birthplace\":\"Manila\",\"address\":\"#18 Guyabano St. Amparo Capri Novaliches Q.C\",\"telno\":\"09185671538\",\"occupation\":\"Student\",\"email\":\"christianpaultupas@gmail.com\",\"civilStatus\":\"Divorced\",\"sex\":\"Male\",\"nationality\":\"Filipino\",\"guardian\":{\"name\":\"edgar p. tupas\",\"telno\":\"090945276541\"}},\"course\":0,\"branch\":\"2\",\"license\":\"1\"}', '2018-05-24 05:36:00', 1);
 
 INSERT INTO `requirement` (`id`, `title`, `description`, `importance`) VALUES
 (1, 'license', 'To apply drivers permit at LTO', 1);
@@ -106,8 +110,8 @@ INSERT INTO `student` (`id`, `userInfo`, `dateRegistered`, `status`) VALUES
 ('89432', 5, '2017-08-22', 1);
 
 INSERT INTO `useraccount` (`id`, `username`, `password`, `accType`, `status`) VALUES
-(1, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 1, 0),
-(14, 'paula', 'e8383d7eb027388fa68def9a6ae6b4f28850f4df', 2, 1);
+(1, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 1, 1),
+(14, 'paul', 'e8383d7eb027388fa68def9a6ae6b4f28850f4df', 2, 0);
 
 INSERT INTO `userinfo` (`id`, `userAcc`, `fullname`, `address`, `telno`, `birthdate`, `birthplace`, `sex`, `civilStatus`, `email`, `userType`) VALUES
 (1, 1, 'Janelle Joy R. Gabat', '31-D G.L. Jaena St. West Rembo, Makati City ', '882-7273', '1998-12-18', 'Makati City', 'F', 'Single', 'janellejoygabat@gmail.com', 1),
@@ -124,10 +128,7 @@ INSERT INTO `vehicle` (`id`, `model`, `brand`, `transmission`, `plate`, `driver`
 (456, 'Vios', 'Toyota', 'M', 'VDS634', '45678', 7, 1),
 (567, 'Accent', 'Hyundai', 'M', 'FAS', '56789', 4, 2),
 (568, 'paul', 'wagon', 'M', 'SEX699', NULL, 5, 1),
-(569, 'LX34', 'Ford', 'M', 'LAS295', NULL, 3, 1),
-(572, 'vqweqw', 'asdasd', 'A', 'asd123', NULL, 2, 0),
-(573, 'qvwdq', 'asdasd', 'A', 'acas123', NULL, 2, 0),
-(574, 'papapa', 'mamama', 'A', 'asm193', NULL, 2, 0);
+(569, 'LX34', 'Ford', 'M', 'LAS295', NULL, 3, 1);
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
 

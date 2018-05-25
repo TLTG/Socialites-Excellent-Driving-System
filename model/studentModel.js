@@ -41,8 +41,25 @@ Student.get = function (id, field, cb) {
     });
 }
 
+Student.updateInfo = function(id, data, cb){
+    var userinfo = require('../model/userInfoModel');
+    userinfo.update(id, data, null, cb);
+} 
+
 Student.preRegStud = function(data, cb){
     PreRegister.create(data, cb);
+}
+
+Student.preRegDel = function(id, cb){
+    PreRegister.delete(id, "status", cb);
+}
+
+Student.preRegEdit = function(id, data, cb){
+    PreRegister.update(id, data, null, cb);
+}
+
+Student.getPreRegList = function(offset, limit, cb){
+    PreRegister.getList(offset, limit, cb);
 }
 
 module.exports = Student;

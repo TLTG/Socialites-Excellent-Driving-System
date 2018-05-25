@@ -122,17 +122,20 @@ function cancUpdStud(){
 function saveUpdStud(){
     var a, b, c, d, e, f, g, h, i ,j;  //for checking lang to
     var fn = $("#editStudAccFN").val();
+    var mn = $("#editStudAccMN").val();
     var sn = $("#editStudAccSN").val();
     var bday = $("#editStudAccBday").val();
     var bplace = $("#editStudAccBplace").val();
     var add = $("#editStudAccAdd").val();
+    var sex = $('input[name="editStudAccSex"]:checked').val();
     var cont = $("#editStudAccCont").val();
     var guard = $("#editStudAccGuard").val();
     var guardCont = $("#editStudAccGuardCont").val();
-    var un = $("#editStudAccUN").val();
-    var pw = $("#editStudAccPW").val();
-    var cpw = $("#editStudAccCPW").val();
+    var un = "asd";//$("#editStudAccUN").val();
+    var pw = "123";//$("#editStudAccPW").val();
+    var cpw = "123";//$("#editStudAccCPW").val();
     var civ = $('select[name="editStudAccCivStatus"]').val();
+    var email = $('#editStudAccEmail').val();
 
     a = fn.replace(/\s+/g, '');
     b = sn.replace(/\s+/g, '');
@@ -186,9 +189,29 @@ function saveUpdStud(){
                     },
                     function(isConfirm){
                         if (isConfirm) {
-                            swal("Success!", "Student account is updated successfully!", "success");
-                            resetSettingsStud();
-                            //DB: Update student account function
+                            stud.getLocalData(function(profile){
+                                var data = {
+                                    userAcc: profile.userAcc,
+                                    fullname: fn + "_" + mn + "_" + sn,
+                                    address: add,
+                                    birthdate: bday,
+                                    birthplace: bplace,
+                                    telno: cont, 
+                                    civilStatus: civ,
+                                    sex: sex,
+                                    email: email,
+                                };
+                                stud.edit(data, function(err){
+                                    if(err){
+                                        swal("Failed!", err.message, "error");
+                                        return console.error(err);
+                                    }else{
+                                        swal("Success!", "Student account is updated successfully!", "success");
+                                        resetSettingsStud();
+                                        //DB: Update student account function
+                                    }
+                                });
+                            });
                         }
                     });
                 }
@@ -210,9 +233,29 @@ function saveUpdStud(){
                 },
                 function(isConfirm){
                     if (isConfirm) {
-                        swal("Success!", "Student account is updated successfully!", "success");
-                        resetSettingsStud();
-                        //DB: Update student account function
+                        stud.getLocalData(function(profile){
+                            var data = {
+                                userAcc: profile.userAcc,
+                                fullname: fn + "_" + mn + "_" + sn,
+                                address: add,
+                                birthdate: bday,
+                                birthplace: bplace,
+                                telno: cont, 
+                                civilStatus: civ,
+                                sex: sex,
+                                email: email,
+                            };
+                            stud.edit(data, function(err){
+                                if(err){
+                                    swal("Failed!", err.message, "error");
+                                    return console.error(err);
+                                }else{
+                                    swal("Success!", "Student account is updated successfully!", "success");
+                                    resetSettingsStud();
+                                    //DB: Update student account function
+                                }
+                            });
+                        });
                     }
                 });
             }
@@ -289,7 +332,7 @@ var renderStudentTable = function(data, cb){ // <--- nag declare ng var na may l
     data.forEach(element => { // <--- expecting na array yung data, gagamitin natin yung forEach() which is asynchronous function. ilalagay sa element variable yung bawat element nung data and i perform yung action below it.       
         html += "<tr onclick='viewStud("+ element.id +")'>";
         html += "<td>" + element.id + "</td>";
-        html += "<td>" + element.fullname + "</td>";
+        html += "<td>" + element.fullname.replace(/_/g, " ") + "</td>";
         //html += "<td>" + element.accStatus + "</td>"; // <-- pa edit nalang nito kung pano yung may warning/sucess
         html += "</tr>"; // <--- common sense na siguro yung start nito till here. hahaha
         loopCounter--; // <--- reduce counter value.
@@ -369,7 +412,7 @@ var viewStud = function(id){
     stud.getLocalData(function(profile){
         stud.selectedID = profile.studID;
         $('.studNum').html(profile.studID);
-        $('.studName').html(profile.fullname);
+        $('.studName').html(profile.fullname.replace(/_/g, " "));
         $('.studAddress').html(profile.address);
         $('.studPhone').html(profile.fullname);
         $('.studEmail').html(profile.email);

@@ -29,6 +29,10 @@ var loadBranch = function(){
                 });
                 viewBranchProfile(office.pages[office.currPage][0].id);
                 $(".preloader").fadeOut();                  
+                $('.enrBranch').html("");
+                office.pages[office.currPage].forEach(x=>{
+                    $('.enrBranch').append("<option value='"+ x.id +"'>"+ x.name +"</option>");
+                });
             }
         });        
     }

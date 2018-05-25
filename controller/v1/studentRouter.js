@@ -3,12 +3,17 @@ var router = require('express').Router();
 //Student Middleware
 var middleware = require('../../middleware/lib/student');
 
+router.route('/register')
+    .post(middleware.preReg)
+    .get(middleware.getPreRegList);
+router.route('/register/:id')
+    .put(middleware.preRegEdit)
+    .delete(middleware.preRegDel);
 router.route('/')
     .post(middleware.create)
     .put(middleware.updateAll) //subject for removal
     .delete(middleware.delAll) //subject for removal
     .get(middleware.get);
-router.post('/register', middleware.preReg);
 router.route('/:id')
     .get(middleware.get)
     .put(middleware.update)

@@ -38,7 +38,7 @@
                                             <th>Branch</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="preRegTbl">
                                         <tr>
                                             <td>May 24, 2018</td>
                                             <td>Graciella C. Tatel</td>
@@ -77,7 +77,7 @@
                             <div><hr>
                                 <h5>Requirements:</h5>
                                 <form class="requirementCheckForm">
-                                    <div class="reqA">
+                                    <div class="reqForm reqA">
                                         <label class="lblCB1"><input type="checkbox" name="enrReqA" id="rA1" value="Original Birth Certificate (NSO)">
                                             &emsp;&nbsp;Original Birth Certificate (NSO)</label><br>
                                         <label class="lblCB1"><input type="checkbox" name="enrReqA" id="rA2" value="Photocopy of Birth Certificate (NSO)">
@@ -86,7 +86,7 @@
                                             &emsp;&nbsp;Parental Consent</label><br>
                                     <hr></div>
             
-                                    <div class="reqB">
+                                    <div class="reqForm reqB">
                                         <h5 class="h5Enr">For 19 yrs. old &amp; above</h5>
                                         <label class="lblCB1"><input type="checkbox" name="enrReqB" id="rB1" value="Photocopy of Birth Certificate (NSO)">
                                             &emsp;&nbsp;Photocopy of Birth Certificate (NSO)</label><br>
@@ -96,7 +96,7 @@
                                             &emsp;&nbsp;Baranggay Clearance</label><br>
                                     <hr></div>
             
-                                    <div class="reqC">
+                                    <div class="reqForm reqC">
                                         <h5 class="h5Enr">For Non-Filipino Students/ Tourists</h5>
                                         <label class="lblCB1"><input type="checkbox" name="enrReqC" id="rC1" value="Original Birth Certificate (NSO)">
                                             &emsp;&nbsp;Original Passport</label><br>
@@ -149,12 +149,12 @@
                         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
                             <div>
                                 <h5 class="h5Enr">Course<span class="asterisk">*</span></h5>
-                                <select class="enrCivStatus" name="enrRegCourse">
+                                <select class="enrCivStatus enrCourse" name="enrRegCourse">
                                 </select>
                             </div><hr>
                             <div>
                                 <h5 class="h5Enr">Branch<span class="asterisk">*</span></h5>
-                                <select class="enrCivStatus" name="enrRegBranch">
+                                <select class="enrCivStatus enrBranch" name="enrRegBranch">
                                 </select>
                             </div>
                         </div>

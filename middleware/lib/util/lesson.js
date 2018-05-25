@@ -141,12 +141,15 @@ exports.getCourse = function(req, res, next){
             if(err) return next(err);
             var processData = [];
             var response = function(){
-                res.status(200).send({success: true, data: result});
+                res.status(200).send({success: true, data: processData});
             };
             var count = result.length;
             result.forEach(element => {
-                var pad = "000";
-                element["courseID"] = "CRS-M" + (pad.substring(0,pad.length-(element.id+"").length) + element.id);
+                if(element.status != 0){
+                    var pad = "000";
+                    element["courseID"] = "CRS-M" + (pad.substring(0,pad.length-(element.id+"").length) + element.id);
+                    processData.push(element);
+                }
                 count--;
                 if(count == 0) response();
             });

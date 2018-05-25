@@ -983,3 +983,84 @@ var acc = {
         });
     }
 }
+/* 
+*   assessment preregister student module
+*/
+var preRegAssess = {
+    selected: 0,
+    offset: 0,
+    limit: 10,
+    currPage: 0,
+    pages: [],
+    getList: function(cb){
+        var self = this;
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.get('api/v1/stud/register?offset='+this.offset+'&limit='+this.limit, function(res){
+            if(res.success){
+                self.pages[self.currPage] = res.data;
+                self.offset = res.data[res.data.length-1].id;
+                cb(null);
+            }else{
+                cb("Error: " + res.detail);
+            }
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    delete: function(cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.ajax({
+            type: "DELETE",
+            url: "api/v1/stud/register/" + this.selected,
+            success: function(res){
+                if(res.success){
+                    cb(null);
+                }else{
+                    onFail(res.detail);
+                }
+            },
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    getLocalData: function(cb){
+        this.pages[this.currPage].forEach(x=>{
+            if(x.id == this.selected){
+                return cb(x);
+            } 
+        });
+    },
+    update: function(data, cb){
+        var onFail = function(detail){
+            var err = new Error(detail);
+            cb(err);
+        }
+        return $.ajax({
+            type: "PUT",
+            url: "api/v1/stud/register/" + this.selected,
+            data: {data: JSON.stringify(data)},
+            success: function(res){
+                if(res.success){
+                    cb(null);
+                }else{
+                    onFail(res.detail);
+                }
+            },
+        }).fail(function(xhr){
+            onFail("Error: " + xhr.status + "\n" + xhr.statusText);
+        });
+    },
+    refresh: function(){
+        this.offset = 0;
+        this.currPage = 0;
+        this.getList(()=>{
+            renderCourseTable(this.pages[this.currPage]);
+        });
+    }
+}

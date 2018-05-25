@@ -37,11 +37,22 @@ exports.get = function(req, res, next){
 
 exports.update = function(req, res, next){
     var id = req.params.id;
-    var data = req.params.data;
+    var dataIn = JSON.parse(req.body.data);
     var field = req.params.field;
     
     if(field == undefined){
-        student.update(id, data, function(err, result){
+        var data = [];
+        data.push(dataIn.userAcc);
+        data.push(dataIn.fullname);
+        data.push(dataIn.address);
+        data.push(dataIn.telno);
+        data.push(dataIn.birthdate);
+        data.push(dataIn.birthplace);
+        data.push(dataIn.sex);
+        data.push(dataIn.civilStatus);
+        data.push(dataIn.email);
+        data.push(2);
+        student.updateInfo(id, data, function(err, result){
             if(err) return next(new Error(err));
             res.status(200).send({detail: "Successfully Added!"});
         });
@@ -49,7 +60,7 @@ exports.update = function(req, res, next){
         field = field.replace(';', '');        
         student.update(id, data, field, function(err, result){
             if(err) return next(new Error(err));
-            res.status(200).send({detail: "Successfully Added!"});
+            res.status(200).send({success: true, detail: "Successfully Added!"});
         });
     }
 }
@@ -84,4 +95,46 @@ exports.preReg = function(req, res, next){
         if(err) return next(err);
         res.status(200).send({success: true, detail: "Successfully Added!"});
     });
+}
+
+exports.getPreRegList = function(req, res, next){
+    var processData = [];
+    var response = function(){
+        res.status(200).send({success: true, data: processData});
+    };
+    var offset = req.query.offset == undefined ? 0 : req.query.offset;
+    var limit = req.query.limit == undefined ? 10 : parseInt(req.query.limit);
+    student.getPreRegList(offset, limit, function(err, result){
+        if(err) return next(err);
+        var res_length = result.length;
+        if(res_length == 0) return response();
+        result.forEach(element => {
+            var data = JSON.parse(element.data);
+            element.data = data;
+            processData.push(element);
+            res_length--;
+            if(res_length == 0) return response();
+        });
+    });
+}
+
+exports.preRegDel = function(req, res, next){
+    var id = req.params.id;
+    student.preRegDel(id, function(err){
+        if(err) return next(err);
+        res.status(200).send({success: true, detail: "Successfully Deleted"});
+    })
+}
+
+exports.preRegEdit = function(req, res, next){
+    var id = req.params.id;
+    var dataIn = JSON.parse(req.body.data);
+    var data = [];
+    data.push(dataIn.data);
+    data.push(dataIn.dateSubmit);
+    data.push(1);
+    student.preRegEdit(id, data, function(err){
+        if(err) return next(err);
+        res.status(200).send({success: true, detail: "Successfully Modify"});
+    })
 }
