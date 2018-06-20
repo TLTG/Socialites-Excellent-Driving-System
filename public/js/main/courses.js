@@ -18,20 +18,12 @@ $(function(){
 function crs1Click (){
     $(".toKnowCrs1").show();
     $(".toKnowCrs2").hide();
-    $(".toKnowCrs3").hide();
     renderCourse(0);
 }
 function crs2Click (){
     $(".toKnowCrs1").hide();
     $(".toKnowCrs2").show();
-    $(".toKnowCrs3").hide();
     renderCourse(1);
-}
-function crs3Click (){
-    $(".toKnowCrs1").hide();
-    $(".toKnowCrs2").hide();
-    $(".toKnowCrs3").show();
-    renderCourse(2);
 }
 
 var renderCourse = function(type){

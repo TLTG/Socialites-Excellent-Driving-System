@@ -8199,7 +8199,7 @@ tiCustom
 .not17span{
   color: red;
 }
-.regEnrName, .regEnrDeadline, .regEnrBranch{
+.regEnrName, .regEnrDeadline, .regEnrBranch, .regPaymeth{
   text-transform: uppercase;
   font-weight: bolder;
 }

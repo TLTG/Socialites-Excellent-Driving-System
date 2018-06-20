@@ -1,5 +1,30 @@
+var a;
+$(function(){
+    $('#specialCrs').change(function(){
+        if (this.checked){
+            $('.divPickup').show();
+            $('#enrPickup').val("");
+            a=1;
+        }
+        else{
+            $('.divPickup').hide();
+            $('#enrPickup').val("");
+            a=2;
+        }
+    });
+});
+
 function enrollClick (){
-    $('#enrollClickModal').modal('show');
+    var x = $('#enrPickup').val();
+    if (a==1){
+        if (x == '' || x == null ){
+            swal("Oops!", "Please fill out all required fields.", "error");
+        }else{
+            $('#enrollClickModal').modal('show');
+        }
+    }else{
+        $('#enrollClickModal').modal('show');
+    }
 }
 
 function enroll1Click (){

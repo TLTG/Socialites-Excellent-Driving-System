@@ -119,6 +119,7 @@ function saveEnrReg(){ //Save changes on View Registration Modal
 }
 
 function appRegForm(){ //Approve Registration
+    $('#enrRegFN').modal('show');
     swal({
         title: "Warning!",
         text: "Are you sure you want to approve this registration form?",
