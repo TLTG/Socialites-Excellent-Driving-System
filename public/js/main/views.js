@@ -147,6 +147,8 @@ var cartClick = function()
     $("#login").hide();
     $("#courses").hide();
     $("#enrollment").hide();
+    $('.divPickup').hide();
+    $('#specialCrs').prop('checked', false);
     $("#cart").show();
 }
 
