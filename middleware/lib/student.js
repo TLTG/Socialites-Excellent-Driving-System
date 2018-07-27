@@ -1,6 +1,9 @@
 var student = require('../../model/studentModel');
+var Email = require('../../bin/emailer');
+var Validation = require('../../bin/util/validation');
+var valid = new Validation();
 
-exports.create = function(req, res, next){
+exports.create = function(req, res, next){ //Deprecated. Soon to delete from API
     var data = req.body["data[]"];
     //VALIDATIONS 
     data.unshift(null);
@@ -52,9 +55,16 @@ exports.update = function(req, res, next){
         data.push(dataIn.civilStatus);
         data.push(dataIn.email);
         data.push(2);
-        student.updateInfo(id, data, function(err, result){
-            if(err) return next(new Error(err));
-            res.status(200).send({detail: "Successfully Added!"});
+
+        valid.checkUndef(data, function(passed){
+            if(passed){
+                student.updateInfo(id, data, function(err, result){
+                    if(err) return next(new Error(err));
+                    res.status(200).send({detail: "Successfully Updated!"});
+                });
+            }else{
+                res.status(200).send({detail: "Invalid Data!"});
+            }
         });
     }else{
         field = field.replace(';', '');        
@@ -86,6 +96,12 @@ exports.del = function(req, res, next){
 
 exports.delAll = function(req, res, next){}
 
+/**
+ * *NOTE: This module needs proper documentation* This enroll a pending student registration.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
 exports.register = function(req, res, next){
     var data = JSON.parse(req.body.data);
     var generatePass = function(length){
@@ -120,17 +136,33 @@ exports.register = function(req, res, next){
             info.push(infoData.data.info.civilStatus);
             info.push(infoData.data.info.email);
             info.push(3);
-            infoModel.register(info, function(errr, infoID){
-                if(errr) return next(errr);
-                var id = generateID(accID,infoID);
-                student.create([id,infoID,data.license,null,1],function(errrr, result){
-                    if(errrr) return next(errrr);
-                    student.preRegDel(data.info,function(e){
-                        if(e) return next(e);
-                        res.status(200).send({success:result});
+
+            valid.checkUndef(info, function(passed){
+                if(passed){
+                    infoModel.register(info, function(errr, infoID){
+                        if(errr) return next(errr);
+                        var id = generateID(accID,infoID);
+                        student.create([id,infoID,data.license,null,1],function(errrr, result){
+                            if(errrr) return next(errrr);
+                            student.preRegDel(data.info,function(e){
+                                if(e) return next(e);
+                                res.status(200).send({success:result});
+                                var accountMail = new Email();
+                                var mailBody = {
+                                    subject: "Welcome to Socialites Driving Excellent!",
+                                    body: "\tTo login to your own personal Dashboard, use your email as Username.\n This is your password: " + password + "\n\t\t-Welcome from SED family",
+                                };
+                                accountMail.send(dataIn.info.email,mailBody,function(err, response){
+                                    if(err) return next(err);
+                                    require('../../bin/logger').logger("E-Mail Send to " + dataIn.info.email);
+                                });
+                            });
+                        });
                     });
-                });
-            });
+                }else{
+                    res.status(200).send({success: false, detail: "Invalid Data."});
+                }
+            })
         });
     });
     /* var data = [null];
