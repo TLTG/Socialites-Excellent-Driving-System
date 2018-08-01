@@ -2,6 +2,7 @@ var db = require('./db');
 var modelModule = require('./model');
 var Defect = require('./defectModel');
 var table = "vehicle";
+var schemeTbl = "codingscheme";
 
 var Car = {};
 Car = Object.create(modelModule);
@@ -9,7 +10,7 @@ Car.table = table;
 Car.db = db;
 
 //Custom Code:
-Car.getDefect = Defect.getListByID;
+Car.getDefect = Defect.getListByID; // IS THIS WORKING????? HOWW?
 Car.addDefect = function(data, cb){
     Defect.create(data, cb);
 };
