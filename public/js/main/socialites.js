@@ -40,7 +40,7 @@ var course = {
             html += "<td>"+ elem.days +"</td>";
             html += "<td>"+ self.generateHour(elem.hour) +"/day</td>";
             html += "<td>₱"+ parseFloat(elem.price).formatMoney(0) +"</td>";
-            html += "<td><a href='#' onclick='cart.addToCart("+ elem.courseID +")' class='btn btn-lg btnCstm addToCart cart_"+ elem.courseID +"'>ADD TO CART</a></td>";
+            html += "<td><a href='#' onclick='cart.addToCart("+ elem.courseID +")' class='btn btn-lg btnCstm addToCart cart_"+ elem.courseID +"'>ENROLL</a></td>";
             html += "</tr>";
             $('#course_' + table).append(html);
         });
@@ -265,13 +265,15 @@ var lesson = {
 
 var enrollment = {
     data: {},
-    enroll: function(info, course, branch, payment, apply, special){
+    enroll: function(info, course, branch, payment, apply, special,transaction,_vehicle,_schedule){
         this.data.info = info;
         this.data.course = course;
         this.data.branch = branch;
         this.data.payment = payment;
         this.data.applyLicense = apply;
         this.data.special = special;
+        this.data.transaction = transaction;
+        this.data.preference = {vehicle: _vehicle, schedule: _schedule};
         return this;
     },
     enrollWithAcc:function(accID, course, lesson, branch, payment, special){

@@ -11,18 +11,30 @@ exports.admin = function (req, res, next){
         getUserInfo(user, function(err, data){
             if(err) return next(err);
             if(req.xhr == true){
-                res.status(200).send({sucess: true, detail: "Successfully Login!"});
+                res.status(200).send({sucess: true, detail: "Successfully Logged In!"});
             }else{
                 res.render('admin/index', data);
             }
         });
-    } else {
+    }else {
         res.render('admin/login');
     }
 }
 
 exports.user = function(req, res, next){
-    res.render('main/index',{title: 'Socialites Excellent Driving'});
+    var WebModel = require('../model/webModel');
+    var Car = require('../model/vehicleModel');
+    new WebModel().getLicenseApply(function(err, data){
+        if(err) return next(err);
+        Car.getList(function(errr,vehicle){
+            if(errr) return next(errr);
+            res.render('main/index',{title: 'Socialites Excellent Driving', license: data, car: vehicle});
+        });
+    });
+}
+
+exports.student = function(req, res, next){
+    res.render('student/index',{title: 'Socialites Excellent Driving'});
 }
 
 var getUserInfo = function(data, cb){ //REPAIR THIS WHOLE UNIT!!!! 

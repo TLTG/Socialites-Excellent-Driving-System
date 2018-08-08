@@ -26,14 +26,14 @@ exports.create = function(req, res, next){
     info.push(dataIn.info.email);
     info.push(2);
  
-    var inst = [null];
-    inst.push(null);
+    var inst = [''];
+    inst.push('');
     inst.push(dataIn.license);
     inst.push(dataIn.licenseExp == undefined ? Date.parse("next 5 years").toString("yyyy-MM-dd") : dataIn.licenseExp);
     inst.push(dataIn.info.education);
     inst.push("");
-    inst.push(null);
-    inst.push(null);
+    inst.push('');
+    inst.push('');
     inst.push(1);
 
     data.credential = credential;
@@ -46,7 +46,7 @@ exports.create = function(req, res, next){
         var accountMail = new Email();
         var mailBody = {
             subject: "Welcome to Socialites Driving Excellent!",
-            body: "\tTo login to your own personal Dashboard, use your email as Username.\n This is your password: " + password + "\n\t\t-Welcome from SED family",
+            body: "Good day, " + (dataIn.info.fullname).replace(/_/g,' ') + "!\n\nWe, at Socialites Excellent Driving, welcome you as a new instructor of our family! \n\nYour password is: " + password + "\n(You can still change your password later on)\n\nMany aspiring prospective drivers are looking forward to meet you! So, what are you waiting for? Login to your instructor account now and let's keep on making S.E.D. the best driving school in the Philippines! :)\n\nVery truly yours,\nSocialites Excellent Driving",
         };
         accountMail.send(dataIn.info.email,mailBody,function(err, response){
             if(err) return next(err);
