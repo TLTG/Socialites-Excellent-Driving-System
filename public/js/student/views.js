@@ -7,11 +7,11 @@ $(function() {
     $("#liStud1").addClass("active");
     $('.view-studSchedule').show();
 
-    $( document ).ajaxComplete(function(e, xhr, settings) {
+    /* $( document ).ajaxComplete(function(e, xhr, settings) {
         ajaxHandler.complete(xhr, settings);
     }).ajaxSend(function(e, xhr, settings){
         ajaxHandler.send(xhr, settings);
-    });
+    }); */
 });
 
 function viewActiveStud (a){
@@ -56,6 +56,7 @@ var studPayment = function (){
 }
 var studAccount = function (){
     $('.viewDiv').hide();
+    resetSettingsStudent();
     $(".view-studAccount").show();
 }
 var studLicAssist = function (){
