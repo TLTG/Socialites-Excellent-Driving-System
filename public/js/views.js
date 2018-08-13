@@ -1,8 +1,12 @@
 $(function() {    
     $('.navAdmin').show();
     $('.navStudent').hide();
+    $('.navInstructor').hide();
+    $('.navBranch').hide();
     $('.headerAdmin').show();
     $('.headerStudent').hide();
+    $('.headerInstructor').hide();
+    $('.headerBranch').hide();
     
     var x = $(window).height();
     $(".page-wrapper").height(x);
@@ -27,7 +31,7 @@ function viewActive (a){
     for (var x=1; x<=17; x++){
         li += a.toString();
         if (x==a){
-            if (a==2 || a==9 || a==5){
+            if (a==9 || a==5){
                 $('.colSide').addClass("in");
             }
             else{
@@ -42,6 +46,7 @@ function viewActive (a){
     }
 
     if (a==1) dashboard();
+    else if (a==2) student();
     else if (a==3) instructor();
     else if (a==4) vehicle();
     else if (a==6) branches();
@@ -56,24 +61,24 @@ function viewActive (a){
     else if (a==16) payment();
 }
 
-function viewActiveStud(a){
-    var li = "#liS";
-    $(".liSide").removeClass("active");
-    for (var x=1; x<=5; x++){
-        li += a.toString();
-        if (x==a){
-            $("li").removeClass("active");
-        }
-        else{
-            $(li).addClass("active");
-            $("#li2").addClass("active");
-        }
-        li = "#liS";
-    }
-    $('.viewDiv').hide();
-    if (a==1) student();
-    else if (a==4) gradesEval();
-}
+// function viewActiveStud(a){
+//     var li = "#liS";
+//     $(".liSide").removeClass("active");
+//     for (var x=1; x<=5; x++){
+//         li += a.toString();
+//         if (x==a){
+//             $("li").removeClass("active");
+//         }
+//         else{
+//             $(li).addClass("active");
+//             $("#li2").addClass("active");
+//         }
+//         li = "#liS";
+//     }
+//     $('.viewDiv').hide();
+//     if (a==1) student();
+//     else if (a==4) gradesEval();
+// }
 
 function viewActiveCrs(a){
     var li = "#liC";
