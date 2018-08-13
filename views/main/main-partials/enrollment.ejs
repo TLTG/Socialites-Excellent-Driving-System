@@ -130,14 +130,14 @@
                     </div>
                     <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12">
                         <form class="reqForm">
-                            <input type="radio" class="enrReqPerm" id="enrReqP1" data-id='0' name="enrReqP" value="1">
-                                <label class="enrReqLbl" for="enrReqP1">To apply student driver's permit at LTO</label><br>
                             <input type="radio" class="enrReqPerm" id="enrReqP2" data-id='0' name="enrReqP" value="2">
                                 <label class="enrReqLbl" for="enrReqP3">With student driver's permit</label><br>
                             <input type="radio" class="enrReqPerm" id="enrReqP3" data-id='0' name="enrReqP" value="3">
                                 <label class="enrReqLbl" for="enrReqP4">With non-professional license</label><br>
                             <input type="radio" class="enrReqPerm" id="enrReqP4" data-id='0' name="enrReqP" value="4">
                                 <label class="enrReqLbl" for="enrReqP5">With professional license</label><br>
+                            <input type="radio" class="enrReqPerm" id="enrReqP1" data-id='0' name="enrReqP" value="1">
+                                <label class="enrReqLbl" for="enrReqP1">To apply Student Driver's Permit at LTO</label><br>
                             <% license.forEach((e,i)=>{ %><input type='radio' class='enrReqPerm' id='enrReqP<%=(5 + i)%>' data-id='<%=e.id%>' data-price='<%=e.price%>' data-desc='<%=e.desc%>' name='enrReqP' value='<%=(5 + i)%>'><label class="enrReqLbl" for="enrReqP<%=(5 + i)%>">To apply <%=e.desc%> license thru S-Excellent</label><br><% }); %>
                         </form>
                     </div>
@@ -266,7 +266,7 @@
                     </div>
                 </div><br>
 
-                <div class="paymentOptionDiv" id="paymentOptionDivNoOnline">
+                <!-- <div class="paymentOptionDiv" id="paymentOptionDivNoOnline">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <center>
@@ -280,7 +280,7 @@
                             </center>
                         </div>
                     </div>
-                </div><br>
+                </div><br> -->
                 
                 <div class="paymentOptionBack">
                     <a href="#paymentOptionDiv" onclick="paymentBack()" class="paymentBack"><i class="icon icon-chevron-left"></i> Change payment method</a>
