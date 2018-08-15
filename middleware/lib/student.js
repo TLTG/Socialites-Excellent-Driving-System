@@ -311,7 +311,6 @@ exports.register = function(req, res, next){
                     next(new Error("One/All of the Executing tasks after enrollment failed"));
                 }
             }).catch(function(reason){
-                throw reason;
                 next(reason);
             });
         }
