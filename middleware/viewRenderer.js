@@ -36,14 +36,36 @@ exports.user = function(req, res, next){
 
 exports.student = function(req, res, next){
     var WebModel = require('../model/webModel');
+    var courses = require ('../model/lessonModel');
     var schedule = require('../model/scheduleModel');
     if(req.session.studID != -1){
-        schedule.getAvailable(req.session.studID, function(err, sched){ //change id later when login implemented.
-            if(err) return next(err);
-            new WebModel().getLicenseApply(function(err, data){
-                if(err) return next(err);
-                res.render('student/index',{title: 'Socialites Excellent Driving', license: data, schedule: sched});
+        var getSched = new Promise((resolve, reject)=>{
+            schedule.getAvailable(req.session.studID, function(err, sched){
+                if(err) return reject(err);
+                resolve(sched);
             });
+        });
+        var getLicense = new Promise((resolve, reject)=>{
+            new WebModel().getLicenseApply(function(err, data){
+                if(err) return reject(err);
+                resolve(data);
+            });
+        });
+        var getCourse = new Promise((resolve, reject)=>{
+            courses.getCourseEnrolled(req.session.studID, function(err, crs){
+                if(err) return reject(err);
+                resolve(crs);
+            });
+        });
+        var getLessons = new Promise((resolve, reject)=>{
+            courses.getLessonEnrolled(req.session.studID, function(err, crs){
+                if(err) return reject(err);
+                resolve(crs);
+            });
+        });
+        Promise.all([getSched, getLicense, getCourse, getLessons]).catch(next).then((results)=>{
+            console.log(results);
+            res.render('student/index',{title: 'Socialites Excellent Driving', schedule: results[0], license: results[1], courses: results[2], lessons: results[3]});
         });
     }else{
         res.locals.login = 'loginStudent';

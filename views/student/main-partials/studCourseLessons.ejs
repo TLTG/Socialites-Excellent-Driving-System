@@ -37,7 +37,9 @@
                                             <th>Date Ended</th>
                                        </tr>
                                    </thead>
-                                   <tbody id="enrolledCrsTbl"></tbody>
+                                   <tbody id="enrolledCrsTbl">
+                                        <% courses.forEach((e,i)=>{ %><tr><td><%=e.id%></td></tr><% }); %>
+                                   </tbody>
                                </table>
                             </div>
                         </div>

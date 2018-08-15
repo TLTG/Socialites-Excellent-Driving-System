@@ -126,6 +126,7 @@ Lesson.enrollCourse = function(enrollmentID, courseData, cb){
 Lesson.getCourseEnrolled = function(studID, cb){
     var sql = "SELECT ce.* FROM course_enrolled ce, enrollment en WHERE en.id = ce.enrollmentID AND en.studID = ?";
     db.get().query(sql, [studID], function(err, result){
+        console.log(studID);
         if(err) return cb(err);
         cb(null, result);
     });
@@ -135,7 +136,8 @@ Lesson.getLessonEnrolled = function(studID, cb){
     var sql = "SELECT ce.selectedLesson FROM course_enrolled ce, enrollment en WHERE en.id = ce.enrollmentID AND en.studID = ? AND ce.status = 1";
     db.get().query(sql, [studID], function(err, result){
         if(err) return cb(err);
-        if(result[0].selectedLesson == ""){
+        if(result.length == 0) return cb(null, []);
+        if(result[0].selectedLesson == "[]"){
             Lesson.getList(0,50, function(err, result){
                 if(err) return cb(err);
                 cb(result);

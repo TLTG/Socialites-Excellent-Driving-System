@@ -85,3 +85,13 @@ describe('Enrollment Module', function(){
         });
     });
 });
+
+describe('get enrolled course', function(){
+    it('get course enrolled of specific student', function(done){
+        (require('../model/lessonModel')).getCourseEnrolled(043017, function(err,data){
+            console.log(data);
+            expect(data).not.null; 
+            done();
+        });
+    });
+});
