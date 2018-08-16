@@ -15,7 +15,10 @@ router.route('/student')
     .get(auth.studentAuth, renderer.student)
     .post(auth.studentLogin, renderer.student);
     
-router.get('/instructor'/* , auth.studentAuth */, renderer.instructor);
+router.route('/instructor')
+    .get(auth.instAuth, renderer.instructor)
+    .post(auth.instLogin, renderer.instructor);
+    
 router.get('/branch'/* , auth.studentAuth */, renderer.branch);
 
 module.exports = router;

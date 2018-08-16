@@ -21,7 +21,7 @@ Account.getBalance = function(ORno){
     });
 };
 
-Account.addBill = function(transaction, transData, feeType, bill, cb){
+Account.addBill = function(transaction,transData, feeType, bill, cb){
     var randPost = generator.generateToken(9);
     var datePre = Date.parse("today").toString("yyMMdd");
 
@@ -93,7 +93,7 @@ Account.getEnrollBal = function(ORnum){
                 var callback = new Promise((resolve1, reject1)=>{
                     course.getCourse(e.course, function(error, courseData){
                         if(error) return reject1(error);
-                        output.course.push({id: e.course, special: e.special, price: courseData.amount, trans: courseData.carType});
+                        output.course.push({id: e.course, special: e.special, price: courseData.amount, trans: courseData.carType, duration: courseData.days});
                         var amount = parseFloat(courseData.amount);
                         total += e.special ? (amount * 2) : amount;
                         resolve1();
@@ -121,6 +121,7 @@ Account.getTransactions = function(ORnum){
             var accSummary = {
                 transaction: [],
                 balance: 0,
+                bill: 0
             };
             accSummary.transaction = result;
             accSummary.balance = result[0].balance;
@@ -128,5 +129,13 @@ Account.getTransactions = function(ORnum){
         });
     });
 };
+
+Account.getStudentTransactions = function(studID, cb){
+    var sql = "SELECT acc.* FROM enrollment en, account acc WHERE en.accountID = acc.ORno AND en.studID = ?";
+    db.get().query(sql, [studID], function(err, result){
+        if(err) return cb(err);
+        cb(null, result)
+    });
+}
 
 module.exports = Account;

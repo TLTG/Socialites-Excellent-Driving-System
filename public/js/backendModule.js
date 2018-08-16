@@ -508,7 +508,13 @@ var stud = {
         this.getList(()=>{
             renderStudentTable(stud.pages[(stud.tableType == 0 ? "current" : "past")][stud.currPage[stud.tableType]], ()=>{});
         });
-    }
+    },
+    getPaymentAccount: function(id,cb){
+        $.get('/api/v1/stud/payment/' +id, function(res){
+            if(!res.success) return cb(res.detail);
+            cb(null, res.data);
+        });
+    },
 }
 /* 
 *   lesson module,

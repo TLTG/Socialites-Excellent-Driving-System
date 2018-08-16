@@ -42,10 +42,10 @@ var studSchedule = function (){
     $('.viewDiv').hide();
     $(".view-studSchedule").show();
 }
-var crsLes = 0;
+// var crsLes = 0;
 var studCourseLessons = function (){
     $('.viewDiv').hide();
-    loadCourseLessons();
+    // loadCourseLessons();
     $(".view-studCourseLessons").show();
 }
 var studInstructors = function (){

@@ -118,6 +118,7 @@ exports.register = function(req, res, next){
    
     var studentID;
     var ORcode;
+    var enrollmentID;
     var enrolleeData;
 
     var generateID = function(accID,infoID){
@@ -216,7 +217,7 @@ exports.register = function(req, res, next){
                 return new Promise((resolve0, reject0)=>{
                     var fixedID = generateID(idArr[0],idArr[1]);
                     studentID = fixedID;
-                    student.create([fixedID,idArr[1], "", JSON.stringify(enrollee.data.preference.schedule), enrollee.data.preference.vehicle , null, 1],function(err, result){
+                    student.create([fixedID,idArr[1], "", 0, JSON.stringify(enrollee.data.preference.schedule), enrollee.data.preference.vehicle , null, 1],function(err, result){
                         if(err) return reject0(err);
                         student.preRegDel(id, function(e){
                             if(e) return reject0(e);
@@ -241,7 +242,7 @@ exports.register = function(req, res, next){
         return new Promise((resolve, reject)=>{
             var accountMail = new Email();
             var mailBody = {
-                subject: "Welcome to Socialites Driving Excellent!",
+                subject: "Welcome to Socialites Excellent Driving!",
                 body: "<center><div style='width: 600px'><h1 style='color: black; font-weight: lighter;'>Good day, " + (dataIn.data.info.fullname).replace(/_/g,' ') + "!</h1><hr style='width=400px'><br><h3 style='color:black; font-weight: lighter; text-align: justify;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We, at Socialites Excellent Driving, are very pleased to inform you that you are now successfully enrolled to your selected course! With this, you are only a few steps closer now to becoming a prospective driver! Yey! <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So, what are you waiting for? Login to your student account and schedule now so you can get started!</h3><br><br><div style='width: 250px; height: 150px; padding: 10px; border: black solid 1px'><h3 style='color: black; font-weight: lighter;'>Your password is:</h3><input type='text' style='width: 200px; text-align: center' readonly value='" + password + "'><br><small style='color: red;'>(You can still change your password later on)</small><br><br><center><button href='https://www.facebook.com/' type='button' style='width: 150px; background-color: #3075AE; color: white; font-size: 12px; cursor: pointer; border: none; padding: 5px'>Login Now</button></center></div><br><h3 style='color: black; font-weight: lighter; text-align: left;'>Sincerely yours,<br>Socialites Excellent Driving</h3></div></center>",
             };
             accountMail.send(dataIn.data.info.email,mailBody,function(err, response){
@@ -260,6 +261,7 @@ exports.register = function(req, res, next){
         return new Promise((resolve, reject)=>{
             student.enrollCourse([studID, accID],function(err, result1){
                 if(err) return reject(err);
+                enrollmentID = result1.insertId;
                 var courseData = [];
                 enrolleeData.data.course.forEach((e,i)=>{
                     if(enrolleeData.data.course.length == 1){
@@ -289,6 +291,46 @@ exports.register = function(req, res, next){
         });
     };
 
+    var payEnrollment = function(ORnum){
+        return new Promise((resolve, reject)=>{
+            payments.getBalance(ORnum).then(function(transaction){
+                return (parseFloat(transaction.price) - parseFloat(transaction.balance));
+            }).then(function(amountPaid){
+                return new Promise((resolve1, reject1)=>{
+                    payments.getEnrollBal(ORnum).then(function(courseList){
+                        var toPay = false;
+                        courseList.course.forEach((e,i)=>{
+                            if(e.trans == "m" && !toPay){
+                                toPay = e;
+                            }
+                            if(i == courseList.course.length-1){
+                                if(!toPay){
+                                    toPay = courseList.course[0];
+                                }
+                                var price = parseFloat(toPay.price);
+                                price = toPay.special ? (price*2) : price; 
+                                if((amountPaid - price) >= 0){
+                                    resolve1({courseID: toPay.id, paid: 1, hours: toPay.duration});
+                                }else if((amountPaid - (price*0.5)) >= 0){
+                                    resolve1({courseID: toPay.id, paid: 2, hours: toPay.duration});
+                                }else{
+                                    reject("not fully/partially paid");
+                                }
+                            }
+                        });
+                    }).catch(reject1);
+                });
+            }).then(function(paidCourse){
+                student.payCourseEnrolled(enrollmentID, paidCourse.courseID, paidCourse.paid, function(err){
+                    if(err) return reject(err);
+                    student.addHours(studentID, paidCourse.hours, function(er){
+                        if(er) return reject(er);
+                        resolve(true);
+                    });
+                });
+            }).catch(reject);
+        });
+    };
 
     // <------ Execute Synchronously ------> //
     getEnrollee(id).catch(next).then(enrollee=>{
@@ -304,8 +346,18 @@ exports.register = function(req, res, next){
         if(data.success){
             var task = [];
             task.push(sendEmail(data.userData));
-            task.push(enrollCourse(studentID, ORcode, data.userData.data.course));
-
+            var sideTask = new Promise((resolve, reject)=>{
+                enrollCourse(studentID, ORcode, data.userData.data.course).then(function(flag){
+                    if(flag) return payEnrollment(ORcode);
+                }).then(function(flag){
+                    var sched = require('../../model/scheduleModel');
+                    if(flag) return sched.autoAssignSched(studentID);
+                }).then(function(flag){
+                    if(flag) return resolve(true);
+                }).catch(reject);
+            });
+            task.push(sideTask);
+            
             Promise.all(task).then(function(results){
                 if(results.indexOf(false) != -1){
                     next(new Error("One/All of the Executing tasks after enrollment failed"));
@@ -396,4 +448,13 @@ exports.getCourse = function(req , res, next){
 
 exports.getLesson = function(req, res, next){
     
+}
+
+exports.getStudPayments = function(req, res, next){
+    var studID = req.params.id == 'sessionID' ? req.session.studID : req.params.id;
+    var payments = require('../../model/accountModel');
+    payments.getStudentTransactions(studID, function(err, result){
+        if(err) return next(err);
+        res.status(200).send({success: true, data: result});
+    });
 }

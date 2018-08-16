@@ -7,4 +7,5 @@ $(function() {
     $('.headerStudent').show();
     $('.headerInstructor').hide();
     $('.headerBranch').hide();
+    app.start();
 });

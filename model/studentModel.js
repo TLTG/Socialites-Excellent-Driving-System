@@ -42,6 +42,14 @@ Student.get = function (id, field, cb) {
     });
 }
 
+Student.getData = function(id, cb){
+    var sql = "SELECT * FROM " + table + " WHERE id = ?";
+    db.get().query(sql, [id], function(err, result){
+        if(err) return cb(err);
+        cb(null, result[0]);
+    });
+}
+
 Student.updateInfo = function(id, data, cb){
     var userinfo = require('../model/userInfoModel');
     userinfo.update(id, data, null, cb);
@@ -105,7 +113,7 @@ Student.getStudentByID = function(accID, cb){
 
 Student.getEnrollment = function(studentID){
     
-}
+};
 
 Student.getStudentInfo = function(accID, cb){
     var sql = "SELECT s.id as 'studid', i.* FROM student s, userinfo i, useraccount a WHERE a.id = i.userAcc AND s.userInfo = i.id AND a.id = ?";
@@ -113,6 +121,27 @@ Student.getStudentInfo = function(accID, cb){
         if(err) return cb(err);
         cb(null, result[0]);
     });
-}
+};
+
+Student.payCourseEnrolled = function(enrollmentID, courseEnrolledID, paid, cb){
+    var sql = "UPDATE course_enrolled SET paid = ?, status = ?, dateEnrolled = CURRENT_TIMESTAMP WHERE enrollmentID = ? AND courseID = ?";
+    db.get().query(sql, [paid, 1, enrollmentID, courseEnrolledID], function(err){
+        if(err) return cb(err);
+        cb(null);
+    });
+};
+
+Student.addHours = function(studentID, hours, cb){
+    var sql = "SELECT hours FROM " + table + " WHERE id = ?";
+    db.get().query(sql, [studentID], function(err, student){
+        if(err) return cb(err);
+        var newHours = parseInt(student[0].hours) + hours;
+        sql = "UPDATE " + table + " SET hours = ? WHERE id = ?";
+        db.get().query(sql, [newHours, studentID], function(err){
+            if(err) return cb(err);
+            cb(null);
+        });
+    })
+};
 
 module.exports = Student;

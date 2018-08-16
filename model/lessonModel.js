@@ -105,7 +105,7 @@ Lesson.enrollCourse = function(enrollmentID, courseData, cb){
             entry.push(e.special ? 1 : 0);
             entry.push(null);
             entry.push(0);
-            entry.push(1);
+            entry.push(2);
             bulk.push(entry);
             if(i == courseData.length-1){
                 insert();
@@ -113,7 +113,7 @@ Lesson.enrollCourse = function(enrollmentID, courseData, cb){
         });
         data.push(bulk);
     }else{
-        sql += "VALUES(null,?,?,?,?,?,CURRENT_TIMESTAMP,0,1)";
+        sql += "VALUES(null,?,?,?,?,?,CURRENT_TIMESTAMP,0,2)";
         data.push(enrollmentID);
         data.push(courseData.id);
         data.push(courseData.branch);
@@ -135,10 +135,11 @@ Lesson.getLessonEnrolled = function(studID, cb){
     var sql = "SELECT ce.selectedLesson FROM course_enrolled ce, enrollment en WHERE en.id = ce.enrollmentID AND en.studID = ? AND ce.status = 1";
     db.get().query(sql, [studID], function(err, result){
         if(err) return cb(err);
-        if(result[0].selectedLesson == ""){
+        if(result.length == 0) return cb(null, []);
+        if(result[0].selectedLesson == "[]"){
             Lesson.getList(0,50, function(err, result){
                 if(err) return cb(err);
-                cb(result);
+                cb(null,result);
             });
         }else{
             var lessonsIDArr = JSON.parse(result[0].selectedLesson);
@@ -150,7 +151,7 @@ Lesson.getLessonEnrolled = function(studID, cb){
                         resolve(result);
                     });
                 }));
-                if(i == lessons.length-1){
+                if(i == lessonsIDArr.length-1){
                     Promise.all(query).catch(cb).then(function(lessons){
                         cb(null, lessons);
                     });
