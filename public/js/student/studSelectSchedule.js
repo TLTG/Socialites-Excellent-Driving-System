@@ -118,6 +118,7 @@ $(function() {
 
 function changePref(){
   //DB: Load preferred vehicle and sched here.
+  
   $('#changePrefModal').modal("show");
 }
 

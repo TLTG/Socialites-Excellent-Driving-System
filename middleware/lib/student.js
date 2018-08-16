@@ -118,6 +118,7 @@ exports.register = function(req, res, next){
    
     var studentID;
     var ORcode;
+    var enrollmentID;
     var enrolleeData;
 
     var generateID = function(accID,infoID){
@@ -216,7 +217,7 @@ exports.register = function(req, res, next){
                 return new Promise((resolve0, reject0)=>{
                     var fixedID = generateID(idArr[0],idArr[1]);
                     studentID = fixedID;
-                    student.create([fixedID,idArr[1], "", JSON.stringify(enrollee.data.preference.schedule), enrollee.data.preference.vehicle , null, 1],function(err, result){
+                    student.create([fixedID,idArr[1], "", 0, JSON.stringify(enrollee.data.preference.schedule), enrollee.data.preference.vehicle , null, 1],function(err, result){
                         if(err) return reject0(err);
                         student.preRegDel(id, function(e){
                             if(e) return reject0(e);
@@ -260,6 +261,7 @@ exports.register = function(req, res, next){
         return new Promise((resolve, reject)=>{
             student.enrollCourse([studID, accID],function(err, result1){
                 if(err) return reject(err);
+                enrollmentID = result1.insertId;
                 var courseData = [];
                 enrolleeData.data.course.forEach((e,i)=>{
                     if(enrolleeData.data.course.length == 1){
@@ -289,6 +291,46 @@ exports.register = function(req, res, next){
         });
     };
 
+    var payEnrollment = function(ORnum){
+        return new Promise((resolve, reject)=>{
+            payments.getBalance(ORnum).then(function(transaction){
+                return (parseFloat(transaction.price) - parseFloat(transaction.balance));
+            }).then(function(amountPaid){
+                return new Promise((resolve1, reject1)=>{
+                    payments.getEnrollBal(ORnum).then(function(courseList){
+                        var toPay = false;
+                        courseList.course.forEach((e,i)=>{
+                            if(e.trans == "m" && !toPay){
+                                toPay = e;
+                            }
+                            if(i == courseList.course.length-1){
+                                if(!toPay){
+                                    toPay = courseList.course[0];
+                                }
+                                var price = parseFloat(toPay.price);
+                                price = toPay.special ? (price*2) : price; 
+                                if((amountPaid - price) >= 0){
+                                    resolve1({courseID: toPay.id, paid: 1, hours: toPay.duration});
+                                }else if((amountPaid - (price*0.5)) >= 0){
+                                    resolve1({courseID: toPay.id, paid: 2, hours: toPay.duration});
+                                }else{
+                                    reject("not fully/partially paid");
+                                }
+                            }
+                        });
+                    }).catch(reject1);
+                });
+            }).then(function(paidCourse){
+                student.payCourseEnrolled(enrollmentID, paidCourse.courseID, paidCourse.paid, function(err){
+                    if(err) return reject(err);
+                    student.addHours(studentID, paidCourse.hours, function(er){
+                        if(er) return reject(er);
+                        resolve(true);
+                    });
+                });
+            }).catch(reject);
+        });
+    };
 
     // <------ Execute Synchronously ------> //
     getEnrollee(id).catch(next).then(enrollee=>{
@@ -304,7 +346,14 @@ exports.register = function(req, res, next){
         if(data.success){
             var task = [];
             task.push(sendEmail(data.userData));
-            task.push(enrollCourse(studentID, ORcode, data.userData.data.course));
+            var sideTask = new Promise((resolve, reject)=>{
+                enrollCourse(studentID, ORcode, data.userData.data.course).then(function(flag){
+                    if(flag) return payEnrollment(ORcode);
+                }).then(function(flag){
+                    if(flag) return resolve(true);
+                }).catch(reject);
+            });
+            task.push(sideTask);
 
             Promise.all(task).then(function(results){
                 if(results.indexOf(false) != -1){

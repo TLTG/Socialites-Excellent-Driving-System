@@ -10,6 +10,12 @@ var haven = function(){
 
 haven.prototype.start = function(cb){
     var self = this;
+    
+    process.on('uncaughtException', function(err){
+        /* SYSTEM BACKUP PROCESS   */
+        process.exit(1);
+    });
+
     if(this.cluster.isMaster){
         this.cluster.fork();
         this.cluster.on('exit', function(child, code, signal){

@@ -1,7 +1,8 @@
 var schedule = require('../../model/scheduleModel');
+var student = require('../../model/studentModel');
 
 exports.calendar = function(req, res, next){
-    schedule.getAssigned(/* req.session.studID */"06597", function(err, data){
+    schedule.getAssigned(req.session.studID, function(err, data){
         if(err) return next(err);
         var sched = [];
         data.forEach((e,i) => {
@@ -55,6 +56,38 @@ exports.removeSchedFromCalendar = function(req, res, next){
     schedule.removeSched(req.params.id, function(err){
         if(err) return next(err);
         res.status(200).send({success: true});
+    });
+};
+
+exports.changePref = function(req, res, next){
+    if(req.session.studID == -1) return next();
+
+    var id = req.session.studID;
+    var days = req.body.days;
+    var car = req.body.car;
+    
+    student.update(id, JSON.stringify(days), 'prefDays', function(err){
+        if(err) return next(err);
+        student.update(id, car, 'prefCar', function(er){
+            if(er) return next(er);
+            res.status(200).send({success: true});
+        });
+    });
+};
+
+exports.getPreference = function(req, res, next){
+    if(req.session.studID == -1) return next();
+    student.getData(req.session.studID, function(err, result){
+        if(err) return next(err);
+        var output;
+        (require('../../model/vehicleModel')).get(result.prefCar, null, function(er, car){
+            if(er) return next(er);
+            output = {
+                days: result.prefDays,
+                car: {id:result.prefCar, brand: car.brand + " " + car.model}
+            };
+            res.status(200).send({success: true, data: output});
+        });
     });
 };
 

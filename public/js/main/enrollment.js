@@ -124,6 +124,15 @@ $(function(){
             $('.lessonsOpt2').show();
         }
     });
+
+    $(".prefDaysCB").on('change',function(){
+        if($(this).prop('checked')){
+            preRegData.sched.push(this.value);
+        }else{
+            var elem = preRegData.sched.indexOf(this.value);
+            preRegData.sched.splice(elem,1);
+        }
+    });
 });
 
 function hideVehicleOptions(){
@@ -714,7 +723,7 @@ function regNextAdd(){
         swal("Oops!", "Please fill out all required fields.", "error");
     }else{
         preRegData.vehicle = $('#manualVehiclesSelect').val() != 0 ? $('#manualVehiclesSelect').val() : $('#autoVehiclesSelect').val() == 0 ? "" : $('#autoVehiclesSelect').val();
-        $("input[name=prefDaysCB]:checked").each((a)=>{preRegData.sched.push(a)});
+        //$("input[name=prefDaysCB]:checked").each((a)=>{preRegData.sched.push(a)});
         $('.step4').html("Step 4: Select payment method.");
         $('.pr2A').hide();
         $('.pr1').hide();

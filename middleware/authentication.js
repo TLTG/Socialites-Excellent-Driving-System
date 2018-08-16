@@ -90,7 +90,7 @@ exports.lastHandler = function(req, res, next){
 }
 
 exports.studentAuth = function(req, res, next){
-    var sessionID = req.session.sessionID;
+    var sessionID = req.sessionID;
     checkUser(sessionID, function(user){
         if(!user){
             req.session.studID = -1;

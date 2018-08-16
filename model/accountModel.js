@@ -77,7 +77,7 @@ Account.addPayment = function(ORnum, amount, cb){
 
 Account.getEnrollBal = function(ORnum){
     return new Promise(function(resolve, reject){
-        var sql = "SELECT balance, transaction, data, price FROM "+ table +" WHERE ORno = ?";
+        var sql = "SELECT balance, transaction, data, price, days FROM "+ table +" WHERE ORno = ?";
         db.get().query(sql, [ORnum], function(err, transaction){
             if(err) return reject(err);
             var course = require('./lessonModel');
@@ -93,7 +93,7 @@ Account.getEnrollBal = function(ORnum){
                 var callback = new Promise((resolve1, reject1)=>{
                     course.getCourse(e.course, function(error, courseData){
                         if(error) return reject1(error);
-                        output.course.push({id: e.course, special: e.special, price: courseData.amount, trans: courseData.carType});
+                        output.course.push({id: e.course, special: e.special, price: courseData.amount, trans: courseData.carType, duration: courseData.days});
                         var amount = parseFloat(courseData.amount);
                         total += e.special ? (amount * 2) : amount;
                         resolve1();
@@ -121,6 +121,7 @@ Account.getTransactions = function(ORnum){
             var accSummary = {
                 transaction: [],
                 balance: 0,
+                bill: 0
             };
             accSummary.transaction = result;
             accSummary.balance = result[0].balance;
