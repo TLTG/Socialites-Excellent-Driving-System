@@ -110,4 +110,12 @@ Instructor.update = function(id, data, cb){
     });
 }
 
+Instructor.getInstInfo = function(accID, cb){
+    var sql = "SELECT s.id as 'instid', i.* FROM instructor s, userinfo i, useraccount a WHERE a.id = i.userAcc AND s.userInfo = i.id AND a.id = ?";
+    db.get().query(sql, [accID], function(err, result){
+        if(err) return cb(err);
+        cb(null, result[0]);
+    });
+}
+
 module.exports = Instructor; //Export model for middleware use.

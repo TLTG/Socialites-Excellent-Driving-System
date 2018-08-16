@@ -52,7 +52,12 @@ exports.student = function(req, res, next){
 }
 
 exports.instructor = function(req, res, next){
-    res.render('instructor/index',{title: 'Socialites Excellent Driving'});
+    if(req.session.instID != -1){
+        res.render('instructor/index',{title: 'Socialites Excellent Driving'});
+    }else{
+        res.locals.login = 'loginInst';
+        exports.user(req,res,next);
+    }
 }
 
 exports.branch = function(req, res, next){
