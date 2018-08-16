@@ -21,7 +21,7 @@ Account.getBalance = function(ORno){
     });
 };
 
-Account.addBill = function(transaction, transData, feeType, bill, cb){
+Account.addBill = function(transaction,transData, feeType, bill, cb){
     var randPost = generator.generateToken(9);
     var datePre = Date.parse("today").toString("yyMMdd");
 
@@ -77,7 +77,7 @@ Account.addPayment = function(ORnum, amount, cb){
 
 Account.getEnrollBal = function(ORnum){
     return new Promise(function(resolve, reject){
-        var sql = "SELECT balance, transaction, data, price, days FROM "+ table +" WHERE ORno = ?";
+        var sql = "SELECT balance, transaction, data, price FROM "+ table +" WHERE ORno = ?";
         db.get().query(sql, [ORnum], function(err, transaction){
             if(err) return reject(err);
             var course = require('./lessonModel');
@@ -129,5 +129,13 @@ Account.getTransactions = function(ORnum){
         });
     });
 };
+
+Account.getStudentTransactions = function(studID, cb){
+    var sql = "SELECT acc.* FROM enrollment en, account acc WHERE en.accountID = acc.ORno AND en.studID = ?";
+    db.get().query(sql, [studID], function(err, result){
+        if(err) return cb(err);
+        cb(null, result)
+    });
+}
 
 module.exports = Account;

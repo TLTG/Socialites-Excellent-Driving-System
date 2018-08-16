@@ -1,6 +1,20 @@
 var app = {
     start: function(){
         this.preference.getPreference('',function(){});
+        this.paymentAccount.getPayment(function(err, data){
+            if(err) throw new Error('Null result');
+            $('#accountTable').html('');
+            data.forEach((e,i)=>{
+                var html = "<tr>";
+                html += "<td>"+ Date.parse(e.date).toString('MM/dd/yyyy') +"</td>";
+                html += "<td>"+ e.transaction +"</td>";
+                html += "<td>"+ parseFloat(e.price).formatMoney(2) +"</td>";
+                html += "<td>"+ (parseFloat(e.price) - parseFloat(e.balance)).formatMoney(2) +"</td>";
+                html += "<td>"+ parseFloat(e.balance).formatMoney(2) +"</td>";
+                html += "</tr>";
+                $('#accountTable').append(html);
+            });
+        });
     },
     preference: {
         getPreference: function(target,cb){
@@ -53,5 +67,16 @@ var app = {
                 },
             });
         },
+    },
+    paymentAccount: {
+        getPayment: function(cb){
+            $.get('/api/v1/stud/payment/sessionID', function(res){
+                if(res.success){
+                    cb(null, res.data);
+                }else{
+                    cb(new Error(res.detail));
+                }
+            });
+        },  
     },
 }

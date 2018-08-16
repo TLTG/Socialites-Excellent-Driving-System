@@ -108,7 +108,6 @@ CREATE TABLE IF NOT EXISTS `course` (
 CREATE TABLE IF NOT EXISTS `course_enrolled` (
 `id` int(9) NOT NULL,
   `enrollmentID` int(5) NOT NULL,
-  `studID` varchar(15) NOT NULL,
   `courseID` int(3) NOT NULL,
   `branch` int(3) NOT NULL,
   `selectedLesson` varchar(30) NOT NULL,
@@ -126,6 +125,14 @@ CREATE TABLE IF NOT EXISTS `defect` (
   `importance` int(1) NOT NULL,
   `repaired` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `enrollment` (
+`id` int(10) NOT NULL,
+  `studID` varchar(15) NOT NULL,
+  `accountID` varchar(15) NOT NULL,
+  `date_enrolled` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` int(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `evaluation` (
 `id` int(5) NOT NULL,
@@ -187,6 +194,13 @@ CREATE TABLE IF NOT EXISTS `newsletter` (
   `status` int(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE IF NOT EXISTS `other_info` (
+`id` int(9) NOT NULL,
+  `referenceID` int(9) NOT NULL,
+  `data` text NOT NULL,
+  `status` int(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+
 CREATE TABLE IF NOT EXISTS `passedrequirement` (
   `id` int(10) NOT NULL,
   `studID` varchar(15) NOT NULL,
@@ -223,7 +237,7 @@ CREATE TABLE IF NOT EXISTS `schedule` (
   `time` time NOT NULL,
   `hour` int(3) NOT NULL,
   `studID` varchar(15) NOT NULL,
-  `instID` varchar(15) NOT NULL,
+  `instID` varchar(15) DEFAULT NULL,
   `branch` int(3) NOT NULL,
   `status` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -232,6 +246,7 @@ CREATE TABLE IF NOT EXISTS `student` (
   `id` varchar(15) NOT NULL,
   `userInfo` int(7) NOT NULL,
   `license` varchar(50) NOT NULL,
+  `hours` int(3) NOT NULL,
   `prefDays` varchar(50) NOT NULL,
   `prefCar` varchar(20) NOT NULL,
   `dateRegistered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -314,10 +329,13 @@ ALTER TABLE `course`
  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `course_enrolled`
- ADD PRIMARY KEY (`id`), ADD KEY `studID` (`studID`), ADD KEY `courseID` (`courseID`), ADD KEY `branch` (`branch`);
+ ADD PRIMARY KEY (`id`), ADD KEY `courseID` (`courseID`), ADD KEY `branch` (`branch`), ADD KEY `enrollment` (`enrollmentID`);
 
 ALTER TABLE `defect`
  ADD PRIMARY KEY (`id`), ADD KEY `vehicle` (`vehicle`);
+
+ALTER TABLE `enrollment`
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `accountID` (`accountID`), ADD KEY `studentID` (`studID`);
 
 ALTER TABLE `evaluation`
  ADD PRIMARY KEY (`id`), ADD KEY `studID` (`studID`), ADD KEY `instID` (`instID`);
@@ -339,6 +357,9 @@ ALTER TABLE `license_apply_price`
 
 ALTER TABLE `newsletter`
  ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `email` (`email`);
+
+ALTER TABLE `other_info`
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `referenceID` (`referenceID`);
 
 ALTER TABLE `passedrequirement`
  ADD PRIMARY KEY (`id`), ADD KEY `requirementID` (`requirementID`), ADD KEY `studID` (`studID`);
@@ -392,6 +413,8 @@ ALTER TABLE `course_enrolled`
 MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `defect`
 MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `enrollment`
+MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `evaluation`
 MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `guardian`
@@ -404,6 +427,8 @@ ALTER TABLE `license_apply_price`
 MODIFY `id` int(2) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `newsletter`
 MODIFY `id` int(4) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `other_info`
+MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `payment`
 MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `preregstudent`
@@ -437,12 +462,16 @@ ALTER TABLE `codingscheme`
 ADD CONSTRAINT `scheme_fk1` FOREIGN KEY (`branch`) REFERENCES `branch` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 ALTER TABLE `course_enrolled`
-ADD CONSTRAINT `course_enrolled_ibfk_1` FOREIGN KEY (`studID`) REFERENCES `student` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
 ADD CONSTRAINT `course_enrolled_ibfk_2` FOREIGN KEY (`courseID`) REFERENCES `course` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-ADD CONSTRAINT `course_enrolled_ibfk_3` FOREIGN KEY (`branch`) REFERENCES `branch` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ADD CONSTRAINT `course_enrolled_ibfk_3` FOREIGN KEY (`branch`) REFERENCES `branch` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+ADD CONSTRAINT `course_enrolled_ibfk_4` FOREIGN KEY (`enrollmentID`) REFERENCES `enrollment` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 ALTER TABLE `defect`
 ADD CONSTRAINT `defect_ibfk_1` FOREIGN KEY (`vehicle`) REFERENCES `vehicle` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+ALTER TABLE `enrollment`
+ADD CONSTRAINT `enrollment_ibfk_2` FOREIGN KEY (`studID`) REFERENCES `student` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+ADD CONSTRAINT `enrollment_ibfk_3` FOREIGN KEY (`accountID`) REFERENCES `account` (`ORno`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 ALTER TABLE `evaluation`
 ADD CONSTRAINT `evaluation_ibfk_1` FOREIGN KEY (`studID`) REFERENCES `student` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
@@ -460,6 +489,9 @@ ADD CONSTRAINT `lesson_ibfk_1` FOREIGN KEY (`prerequisite`) REFERENCES `lesson` 
 ALTER TABLE `lesson_courses`
 ADD CONSTRAINT `lesson_courses_ibfk_1` FOREIGN KEY (`courseID`) REFERENCES `course` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
 ADD CONSTRAINT `lesson_courses_ibfk_2` FOREIGN KEY (`lessonID`) REFERENCES `lesson` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+ALTER TABLE `other_info`
+ADD CONSTRAINT `other_info_ibfk_1` FOREIGN KEY (`referenceID`) REFERENCES `userinfo` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 ALTER TABLE `passedrequirement`
 ADD CONSTRAINT `passedRequirement_ibfk_1` FOREIGN KEY (`requirementID`) REFERENCES `requirement` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,

@@ -350,11 +350,14 @@ exports.register = function(req, res, next){
                 enrollCourse(studentID, ORcode, data.userData.data.course).then(function(flag){
                     if(flag) return payEnrollment(ORcode);
                 }).then(function(flag){
+                    var sched = require('../../model/scheduleModel');
+                    if(flag) return sched.autoAssignSched(studentID);
+                }).then(function(flag){
                     if(flag) return resolve(true);
                 }).catch(reject);
             });
             task.push(sideTask);
-
+            
             Promise.all(task).then(function(results){
                 if(results.indexOf(false) != -1){
                     next(new Error("One/All of the Executing tasks after enrollment failed"));
@@ -445,4 +448,13 @@ exports.getCourse = function(req , res, next){
 
 exports.getLesson = function(req, res, next){
     
+}
+
+exports.getStudPayments = function(req, res, next){
+    var studID = req.params.id == 'sessionID' ? req.session.studID : req.params.id;
+    var payments = require('../../model/accountModel');
+    payments.getStudentTransactions(studID, function(err, result){
+        if(err) return next(err);
+        res.status(200).send({success: true, data: result});
+    });
 }

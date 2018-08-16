@@ -448,6 +448,20 @@ var viewStud = function(id){
         $('.studPhone').html(profile.telno);
         $('.studEmail').html(profile.email);
         $('.enrolledCrs').html("");
+        stud.getPaymentAccount(profile.studID, function(err, data){
+            if(err) return console.error(err);
+            $('#tblStudPayment1').html('');
+            data.forEach((e,i) => {
+                var html = "<tr>";
+                html += "<td>"+ Date.parse(e.date).toString('MM/dd/yyyy') +"</td>";
+                html += "<td>"+ e.transaction +"</td>";
+                html += "<td>"+ parseFloat(e.price).formatMoney(2) +"</td>";
+                html += "<td>"+ (parseFloat(e.price) - parseFloat(e.balance)).formatMoney(2) +"</td>";
+                html += "<td>"+ parseFloat(e.balance).formatMoney(2) +"</td>";
+                html += "</tr>";
+                $('#tblStudPayment1').append(html);
+            });
+        });
         renderEditInfo();
     });
 }

@@ -1,59 +1,17 @@
 var db = require('./db');
+var Timeline = require('../bin/scheduling/timeline');
 var table = "schedule";
 
-var businessHours = {
-    opening: '9:00',
-    closing: '5:30',
-    break: [{start: '12:00', end: '1:30'}],
+var timelineOptions = {
+    start: '9:00',
+    end: '17:30',
+    break: [{start: '12:00', end: '13:30'}],
 };
-
-var Timeline = function(options){
-    var self = this;
-
-    var convertToTime = function(strtime){
-        var time = strtime.split(':');
-        return {hour:parseInt(time[0]), minute: parseInt(time[1])};
-    };
-    var addTime = function(time, duration){
-        var minutes = time.minute + duration;
-        var hour = parseInt(time.hour + (minutes / 60));
-        return {hour: hour, minutes: (minutes % 60)};
-    };
-    var getTimeInMinute = function(time){
-        var minute = (time.hour * 60);
-        minute += time.minute;
-        return minute;
-    };
-
-    var currentTime = '00:00';
-    var totalMinute = 1440;
-    var occupyTime = 0;
-    var freeTime = 1440;
-    var events = [];
-    var start = options.start ? convertToTime(options.start) : convertToTime('00:00');
-    var end = options.end ? convertToTime(options.end) : convertToTime('23:59');
-    var breakTime = options.break ? options.break : [];
-
-    this.reserveTime = function(startTime, duration){
-        var _startTime = convertToTime(startTime);
-        var _end = addTime(startTime,parseInt(duration));
-        freeTime -= parseInt(duration);
-        events.push({id: getTimeInMinute(convertToTime(currentTime)), start: _startTime, end: _end, duration: parseInt(duration)});
-    };
-
-    this.getFreeTime = function(duration){
-        if(duration){
-            return (freeTime >= duration ? freeTime : false);
-        }else{
-            return freeTime;
-        }
-    };
-}
 
 var Model = {}
 
-Model.create = function (data = [], cb = (error=new Error, result=[])=>{}) {
-    var sql = "INSERT INTO `schedule` (`date`, `time`, `hour`, `studentID`, `instructorID`, `branchID`) VALUES (?, ?, ?, ?, ?, ?);";
+Model.create = function (data, cb) { //data = [], cb = (error=new Error, result=[])=>{}
+    var sql = "INSERT INTO "+ table +" VALUES (NULL,?,?, ?, ?, ?, ?, ?, ?);";
     db.get().query(sql, data, function(err, result){
         if(err) return cb(err);
         cb(null, true);
@@ -153,35 +111,68 @@ Model.assignSched = function(id, cb){
 
 Model.autoAssignSched = function(studID){
     return new Promise((resolve, reject)=>{
+        var studentModel = require('./studentModel');
         var days = ['','monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
-        var nextWeek = Date.parse('next sunday');
-
-        var studentData;
 
         var getStudent = new Promise((ok, not)=>{
-            var studentModel = require('./studentModel');
             studentModel.getData(studID, function(err, student){
                 if(err) return not(err);
-                studentData = student;
-                ok(true);
+                ok(student);
             });
         });
 
-        var assignNextWeek = new Promise((ok,not)=>{
-            var hours = parseInt(studentData.hours);
-            var prefdays = JSON.parse(studentData.prefDays);
-            var pos = 0;
-            for(var x=0; x<hours; x++){
-                if(prefdays[pos] <= 0){ //for security reason, preventing invalid data from crashing the system
-                    prefdays[pos] = 1;
+        var assignNextWeek = function(student){
+            return new Promise((ok,not)=>{
+                var hours = parseInt(student.hours);
+                var prefdays = JSON.parse(student.prefDays);
+                var pos = 0;
+                var promises = [];
+                for(var x=0; x<hours; x++){
+                    if(prefdays[pos] <= 0){ //for security reason, preventing invalid data from crashing the system
+                        prefdays[pos] = 1;
+                    }
+                    promises.push(Model.getAvailableSchedOnDay(1, days[prefdays[pos]])); //Include branch filter someday, after pre-final
+                    pos = pos == (prefdays.length-1) ? 0 : pos+1;
+                    if(x == hours-1){
+                        Promise.all(promises).catch(not).then(function(dates){
+                            ok(dates);     
+                        });
+                    }
                 }
-                var nextDay = Date.parse('next ' + days[prefdays[pos]]);
-                if(Date.compare(nextDay,nextWeek) >= 0){
+            });
+        } 
 
+        getStudent.then(function(stud){
+            if(stud) return assignNextWeek(stud);
+        }).then(function(dates){
+            var promises = [];
+            dates.forEach((e,i)=>{
+                promises.push(new Promise((ok,not)=>{
+                    var data = [
+                        'session#' + (i+1),
+                        e.date,
+                        e.time,
+                        1,
+                        studID,
+                        null, //    <------- this is suppose to be instructor update value 
+                        1,
+                        2       //  <------- changes this, by default it's 1 for main,
+                    ];
+                    Model.create(data, function(err,result){
+                        if(err) return not(err);
+                        ok(result);
+                    });
+                }));
+                if(i == dates.length-1){
+                    Promise.all(promises).catch(reject).then(function(result){
+                        studentModel.update(studID,0,'hours', function(err){
+                            if(err) return reject(err);
+                            resolve(true);
+                        });
+                    });
                 }
-            }
-        });
-
+            });
+        }).catch(reject);
     });
 };
 
@@ -195,21 +186,60 @@ Model.getSchedOnDay = function(branch, day){
     });
 };
 
-Model.getAvailableSchedOnDay = function(branch, weekday){
+Model.getAvailableSchedOnDay = function(branch, weekday, ){
     return new Promise((resolve, reject)=>{
         var nextWeek = Date.parse('next sunday');
         var nextDay = Date.parse('next ' + weekday);
+        var dateTimeSched = {};
         if(Date.compare(nextDay, nextWeek) == -1){
             nextDay.addWeeks(1);
         }
-        var getFreeOnDay = function(){
-            Model.getSchedOnDay(branch, nextDay).then(function(schedules){
-                var timeline = [];
-                schedules.forEach((e,i)=>{
-                    
-                });
-            }).catch(reject);
+        var getFreeOnDay = function(fn, check, isDone = false){
+            if(isDone){
+                resolve(dateTimeSched);
+                return;
+            } 
+            const promise = fn();
+            return promise.then(result => getFreeOnDay(fn, check, check(result)));
         }
+        var lookForSched = function(){
+            return new Promise((ok, not)=>{
+                Model.getSchedOnDay(branch, nextDay).then(function(schedules){
+                    var timeline = new Timeline(timelineOptions);
+                    var getSched = function(){
+                        timeline.getFreeTime(60, res=>{
+                            if(res.length > 0){
+                                dateTimeSched.date = nextDay.toString('yyyy-MM-dd');
+                                dateTimeSched.time = res[0].start;
+                                ok(true);
+                            }else{
+                                ok(false);
+                            }
+                        });
+                    }
+                    if(schedules.length == 0){
+                        getSched();
+                    }else{
+                        schedules.forEach((e,i)=>{
+                            timeline.reserveTime(e.time, 60);
+                            if(i == schedules.length-1){
+                                getSched();
+                            };
+                        });
+                    }
+                }).catch(not);
+            });
+        };
+        var checker = function(flag){
+            if(flag){
+                return true;
+            }else{
+                nextDay.addWeeks(1);
+                return false;
+            }
+        };
+        
+        getFreeOnDay(lookForSched, checker);
     });
 };
 
