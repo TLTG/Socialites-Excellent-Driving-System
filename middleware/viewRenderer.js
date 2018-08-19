@@ -69,7 +69,6 @@ exports.student = function(req, res, next){
             });
         });
         Promise.all([getSched, getLicense, getCourse, getLessons]).then((results)=>{
-            console.log(results);
             res.render('student/index', res.locals);
         }).catch(next);
     }else{
@@ -112,7 +111,6 @@ exports.instructor = function(req, res, next){
             });
         });
         Promise.all([getLessons, addGrade, getStudents]).then((results)=>{
-            console.log(results);
             res.render('instructor/index', res.locals);
         }).catch(next);
     }else{

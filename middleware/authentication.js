@@ -157,9 +157,11 @@ exports.instLogin = function(req, res, next){
                 (require('../model/instructorModel')).getInstInfo(user.id, function(err, info){
                     req.session.instID = info.instid;
                     users[req.sessionID] = {accID: user.id, instID: info.instid, accType: user.accType};
+                    next();
                 });
             }else{
                 req.session.instID = -1;
+                next();
             }
         }else{
             next();
