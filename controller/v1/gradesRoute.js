@@ -2,6 +2,12 @@ var router = require('express').Router();
 var middleware = require('../../middleware/lib/grades');
 var auth = require('../../middleware/authentication');
 
+router.get('/student/:id/sum', middleware.getGradesSum);
+router.get('/student/:id/lesson', middleware.getLessonEnrolled);
+router.get('/student/:id/sched', middleware.addGradeModal);
+router.route('/student/:id')
+    .get(middleware.getGradesInst)
+    .post(middleware.addGrade);
 router.route('/')
     .post(auth.auth, middleware.create)
     .get(middleware.get);

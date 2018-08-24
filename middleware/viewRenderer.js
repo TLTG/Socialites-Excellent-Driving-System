@@ -35,9 +35,59 @@ exports.user = function(req, res, next){
 }
 
 exports.student = function(req, res, next){
+    var WebModel = require('../model/webModel');
+    var courses = require ('../model/lessonModel');
+    var schedule = require('../model/scheduleModel');
+    var grades = require ('../model/evaluationModel');
+    var ejs = require ('../bin/ejs')
     if(req.session.studID != -1){
         res.locals.title = 'Socialites Excellent Driving';
-        res.render('student/index', res.locals);
+        res.locals.instID = req.session.studID;
+        var getSched = new Promise((resolve, reject)=>{
+            schedule.getAvailable(req.session.studID, function(err, sched){
+                if(err) return reject(err);
+                res.locals.schedule = sched;
+                resolve(sched);
+            });
+        });
+        var getLicense = new Promise((resolve, reject)=>{
+            new WebModel().getLicenseApply(function(err, data){
+                if(err) return reject(err);
+                res.locals.license = data;
+                resolve(data);
+            });
+        });
+        var getCourse = new Promise((resolve, reject)=>{
+            courses.getCourseEnrolled(req.session.studID, function(err, crs){
+                if(err) return reject(err);
+                res.locals.courses = crs;
+                resolve(crs);
+            });
+        });
+        var getGradesStudent = new Promise((resolve, reject)=>{
+            grades.getGradesStudent(req.session.studID, function(err, crs){
+                if(err) return reject(err);
+                res.locals.gradesStud = crs;
+                resolve(crs);
+            });
+        });
+        var getInstructors = new Promise((resolve, reject)=>{
+            grades.getAssignedInst(req.session.studID, function(err, inst){
+                if(err) return reject(err);
+                res.locals.instructors = inst;
+                resolve(inst);
+            });
+        });
+        var getEvalStud = new Promise((resolve, reject)=>{
+            grades.getEvalStud(req.session.studID, function(err, eval){
+                if(err) return reject(err);
+                res.locals.evalStud = eval;
+                resolve(eval);
+            });
+        });
+        Promise.all([getSched, getLicense, getCourse, getGradesStudent, getInstructors, getEvalStud]).then((results)=>{
+            res.render('student/index', res.locals);
+        }).catch(next);
     }else{
         res.locals.login = 'loginStudent';
         exports.user(req,res,next);
@@ -50,27 +100,7 @@ exports.instructor = function(req, res, next){
     var grades = require ('../model/evaluationModel');
     if(req.session.instID != -1){
         res.locals.title = 'Socialites Excellent Driving';
-        // var getSched = new Promise((resolve, reject)=>{
-        //     schedule.getAvailable(req.session.instID, function(err, sched){
-        //         if(err) return reject(err);
-        //         res.locals.schedule = sched;
-        //         resolve(sched);
-        //     });
-        // });
-        var getLessons = new Promise((resolve, reject)=>{
-            students.getLessons('048025', function(err, crs){
-                if(err) return reject(err);
-                res.locals.lessons = crs;
-                resolve(crs);
-            });
-        });
-        var addGradeModal = new Promise((resolve, reject)=>{
-            grades.addGradeModal(req.session.instID, function(err, grade){
-                if(err) return reject(err);
-                res.locals.grade = grade;
-                resolve(grade);
-            });
-        });
+        res.locals.instID = req.session.instID;
         var getStudents = new Promise((resolve, reject)=>{
             students.getHandledStudents(req.session.instID, function(err, stud){
                 if(err) return reject(err);
@@ -92,7 +122,28 @@ exports.instructor = function(req, res, next){
                 resolve(evalI);
             });
         });
-        Promise.all([getLessons, addGradeModal, getStudents, getEvalInst, getEvalInstNumber]).then((results)=>{
+        var getGradesInst = new Promise((resolve, reject)=>{
+            grades.getGradesInst(req.session.instID, function(err, crs){
+                if(err) return reject(err);
+                res.locals.gradesInst = crs;
+                resolve(crs);
+            });
+        });
+        var getGradesSum = new Promise((resolve, reject)=>{
+            grades.getGradesSum(req.session.instID, function(err, sum){
+                if(err) return reject(err);
+                res.locals.gradeSum = sum;
+                resolve(sum);
+            });
+        });
+        var getAvailableLessons = new Promise((resolve, reject)=>{
+            students.getAvailableLessons(req.session.instID, function(err, lessonsAv){
+                if(err) return reject(err);
+                res.locals.avLess = lessonsAv;
+                resolve(lessonsAv);
+            });
+        });
+        Promise.all([getStudents, getEvalInst, getEvalInstNumber, getGradesInst, getGradesSum, getAvailableLessons]).then((results)=>{
             res.render('instructor/index', res.locals);
         }).catch(next);
     }else{

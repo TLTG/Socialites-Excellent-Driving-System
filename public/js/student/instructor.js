@@ -1,11 +1,13 @@
 var instID, studID;
+var studID = $('body').data('studid');
+
 function evaluateInst(a){
     instID = a;
     var data = $('#a'+a).data('info');
     var name = data.fullname.replace(/_/g, ' ');
     $('.instNameToEval').val(name);
-    $('input[name="rbInstEval"]:checked').attr('checked', false);
-    $('.taInstEval').val("");
+    $('input:radio[name=rbInstEval]').each(function () { $(this).prop('checked', false); });    
+    $('#taInstEval').val("");
     $('#evalInstModal').modal("show");
 }
 
@@ -33,6 +35,7 @@ function doneEvalInst(){
         swal ("Oops!", "Please select your evaluation grade.", "error");
     else{
         var _data = {
+            studID: studID,
             instID: instID,
             comment: comment,
             target: 0,
