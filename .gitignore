@@ -60,6 +60,7 @@ typings/
 public/vendor
 public/js/main/vendor
 public/images
+public/pdf
 public/css/*
 public/css/main/*
 
