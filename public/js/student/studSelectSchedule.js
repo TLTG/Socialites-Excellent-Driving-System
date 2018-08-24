@@ -28,6 +28,7 @@ $(function() {
       center: 'title',
       right: 'month,agendaWeek,agendaDay'
     },
+    eventDurationEditable : false,
     editable: true,
     droppable: true, // this allows things to be dropped onto the calendar
     dragRevertDuration: 0,
@@ -36,6 +37,8 @@ $(function() {
     eventLimit: true, // allow "more" link when too many events
     eventClick: function(event, jsEvent, view){
       //console.log(event); OPEN A MODAL THAT SHOWS THE INFO ABOUT THIS SCHEDULE <----------------------------------------
+      console.log(event._id);
+      editRecSched1(event._id);
     },
     drop: function(date, jsEvent, ui, resourceId) {
       // is the "remove after drop" checkbox checked?
@@ -66,7 +69,7 @@ $(function() {
         updateCalendar(event);
         var date = moment(event.start).format("YYYY-MM-DD");
         var time = moment(event.start).format("HH:mm:ss");
-        app.scheduler.checkIfAvailable(date, time, function(err, available){
+        app.scheduler.checkIfAvailable(event, date, time, function(err, available){
           if(err){
             event.color = "#ff1e1e";
             updateCalendar(event);
@@ -101,6 +104,11 @@ $(function() {
         start: '09:00', // 8am
         end: '17:30' // 6pm
       },
+      {
+        dow: [7],
+        start: '09:00', 
+        end: '17:30'
+      }
     ],
   });
 
@@ -120,6 +128,18 @@ $(function() {
         // if so, remove the element from the "Draggable Events" list
         $(this).remove();
       }
+    },
+    eventClick: function(event, jsEvent, view){
+      app.others.getInstName(event.data.instructor.instID, function(err, name){
+        app.others.getBranchName(event.data.branch, function(er, bname){
+          if(Array.isArray(name)) name = "Not assigned";
+          $('#schedDate').html(moment(event.start).format("MM/DD/YYYY"));
+          $('#timeSched').html(moment(event.start).format("hh:mm A") + " - " + moment(event.start).add('hour',1).format("hh:mm A"));
+          $('#instSched').html(name.replace(/_/g, " "));
+          $('#venueSched').html(bname);
+          $('#viewSchedModal').modal("show");
+        });
+      });
     },
     selectable: true,
     selectHelper: true,
@@ -207,6 +227,9 @@ $(function() {
         && y <= offset.bottom) { return true; }
     return false;
   }
+
+  $('.todaySched').hide();
+  $('.option2').hide();
 });
 
 function changePref(){
@@ -245,6 +268,22 @@ function doneChangePref(){
 }
 
 function seeRecSched(){
+  var events = $('#calendarMainStudSched').fullCalendar("clientEvents");
+  $('#calendarRecSched').fullCalendar('removeEventSources');
+  $('#calendarRecSched').fullCalendar('addEventSource', events);
+
+  $('#recSched').html("");
+  events.forEach((e,i)=>{
+    var dateTime = moment(e.start);
+    var html = "<tr>";
+    html += "<td>"+ dateTime.format("MM/DD/YYYY") +"</td>";
+    html += "<td>"+ dateTime.format("hh:mm A") + " - " + dateTime.add(1,'hour').format("hh:mm A") +"</td>";
+    html += "<td>"+ "" +"</td>";
+    html += "<td>"+ '<button type="button" class="btn btn-success btnLicense" onclick="editRecSched1('+ e._id +')">Edit</button><button type="button" class="btn btn-danger btnLicense" onclick="delRecSched('+ e._id +')">Delete</button>' +"</td>";
+    html += "</tr>";
+    $('#recSched').append(html);
+  });
+
   $('.viewDiv').hide();
   $('.view-recSched').show();
 }
@@ -259,8 +298,35 @@ $('.backSched2').on("click", function(){
   $('.view-studSelectSchedule').show();
 });
 
+function editRecSched1(id){
+  var schedEvent = ($('#calendarSelectSched').fullCalendar('clientEvents', id))[0];
+  $('#editPrefDateModal').data('event', id);
+  $('#recTime').html(moment(schedEvent.start).format("hh:mm A"));
+  $('#recDate').html(moment(schedEvent.start).format("MM/DD/YYYY"));
+  $('#instSelect').html("");
+  app.scheduler.getFreeInst(moment(schedEvent.start).format("YYYY-MM-DD"), moment(schedEvent.start).format("HH:mm"), function(err, data){
+    if(err){
+      console.error(err);
+    }else{
+      data.forEach((e,i)=>{
+        var html = "<option value='"+ e.instID +"' data-name='"+ e.fullname +"'>" + e.fullname.replace(/_/g," ") + "</option>";
+        $('#instSelect').append(html);
+      });
+      if(schedEvent.data){
+        if(schedEvent.data.instructor.instID){
+          app.others.getInstName(schedEvent.data.instructor.instID, function(er,fullname){
+            var html = "<option value='"+ schedEvent.data.instructor.instID +"' data-name='"+ fullname +"'>" + fullname.replace(/_/g," ") + "</option>";
+            $('#instSelect').append(html);
+            $('#instSelect').val(schedEvent.data.instructor.instID);
+          });
+        }
+      }
+      $('#editPrefDateModal').modal("show");
+    }
+  });
+}
+
 function editRecSched(){
-  //$('#editPrefDateModal').modal("show");
   var events = $('#calendarMainStudSched').fullCalendar("clientEvents");
   $('#calendarSelectSched').fullCalendar('removeEventSources');
   $('#calendarSelectSched').fullCalendar('addEventSource', events);
@@ -336,10 +402,26 @@ function updateSchedule(){
         date: moment(element.start).format('YYYY-MM-DD'),
         time: moment(element.start).format('HH:mm'),
         title: element.title,
+        instructor: element.data ? element.data.instructor : null,
       });
       if(i==res.length-1){
         submit();
       }
     });
   });
+}
+
+function doneChangeSched(){
+  var eventID = $('#editPrefDateModal').data('event');
+  var schedEvent = $('#calendarSelectSched').fullCalendar('clientEvents', eventID)[0];
+  var inst = $('#instSelect').val();
+  var instName = $('option[value='+ inst +']').data('name');
+  console.log(eventID)
+  if(schedEvent.data){
+    schedEvent.data.instructor = {instID: inst, name: instName};
+  }else{
+    schedEvent.data = {instructor: {instID: inst, name: instName}};
+  }
+  
+  $('#calendarSelectSched').fullCalendar('updateEvent', schedEvent);
 }

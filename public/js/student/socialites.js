@@ -16,6 +16,7 @@ var app = {
                 $('#accountTable').append(html);
             });
         });
+        this.scheduler.getHours('null', ()=>{});
     },
     preference: {
         getPreference: function(target,cb){
@@ -100,12 +101,12 @@ var app = {
         },  
     },
     scheduler: {
-        checkIfAvailable: function(date, time, cb){
-            var branchID = $('.venueSchedToday').data('id') || 1;
+        checkIfAvailable: function(event, date, time, cb){
+            var branchID = event.data.branch || 1;
             $.ajax({
                 type: "GET",
                 url: "api/v1/sched/check",
-                data: {date: date, branch: branchID, time: time},
+                data: {date: date, branch: branchID, time: time, id: event._id},
                 success: (res)=>{
                     if(res.success){
                         cb(null, res.status);
@@ -139,5 +140,56 @@ var app = {
                 }
             });
         },
+        getHours: function(studID, cb){
+            $.get('api/v1/sched/hours/'+studID,function(res){
+                if(res.success){
+                    $('.crsHrsUsed').html(res.data.used);
+                    $('.crsHrsRem').html(res.data.remaining);
+                    $('.crsHrsTot').html(res.data.total);
+                    cb(null,res.data);
+                }else{
+                    console.log(res.detail);
+                    cb(new Error(res.detail));
+                }
+            });
+        },
+        getFreeInst: function(date, time, cb){
+            var branchID = $('.venueSchedToday').data('id') || 1;
+            $.ajax({
+                type: "GET",
+                url: "api/v1/sched/inst",
+                data: {date: date, branch: branchID, time: time},
+                success: res=>{
+                    if(res.success){
+                        cb(null, res.data);
+                    }else{
+                        cb(new Error(res.detail));
+                    }
+                },
+                error: xhr=>{
+                    cb(new Error(xhr.status + ": " + xhr.statusText));
+                },
+            });
+        },
     },
+    others: {
+        getInstName: function(instid,cb){
+            $.get('api/v1/instructor/'+instid+'/fullname', function(res){
+                if(res.success){
+                    cb(null, res.data);
+                }else{
+                    cb(new Error(res.detail));
+                }
+            });
+        },
+        getBranchName: function(id, cb){
+            $.get('api/v1/branch/'+id+'/address', function(res){
+                if(res.success){
+                    cb(null, res.data);
+                }else{
+                    cb(new Error(res.detail));
+                }
+            });
+        }
+    }
 }
