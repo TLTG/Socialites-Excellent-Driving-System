@@ -13,6 +13,8 @@ router.route('/cart')
 
 router.post('/enroll', middleware.enrollWeb);
 
+router.get('/invoice', middleware.generateInvoice);
+
 router.post('/subscription', middleware.subscribe);
 
 router.get('/unsubscribe/:email/:token', middleware.unsubscribe);

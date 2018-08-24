@@ -22,7 +22,7 @@ Account.getBalance = function(ORno){
 };
 
 Account.addBill = function(transaction,transData, feeType, bill, cb){
-    var randPost = generator.generateToken(9);
+    var randPost = generator.generateNumberToken(9);
     var datePre = Date.parse("today").toString("yyMMdd");
 
     var data = [""];

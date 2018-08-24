@@ -55,7 +55,7 @@ exports.enrollWeb = function(req, res, next){
             }else{
                 var billing = require('../../model/accountModel'); 
                 var course = require('../../model/lessonModel');
-                var lic = require('../../model/requireModel')
+                var lic = require('../../model/requireModel');
                 course.getCoursePrice(enroll).catch(next).then(function(coursePrice){
                     lic.getLicenseApply(data.applyLicense, function(err, license){
                         var total = parseFloat(coursePrice.total) + parseFloat(license[0].price);
@@ -68,6 +68,7 @@ exports.enrollWeb = function(req, res, next){
                             student.preRegStud([null,insert,null,1],function(err){
                                 if(err) return next(err);
                                 req.session.cart = [];
+                                req.session.ORNUM = result.ORid;
                                 res.status(200).send({success: true});
                             });
                         });
@@ -113,4 +114,27 @@ exports.getLicenseList = function(req, res, next){
         if(err) return next(err);
         res.status(200).send({success: true, data: _data});
     })
+};
+
+exports.generateInvoice = function(req, res, next){
+    var pdf = require('../../bin/pdfGenerator');
+    var fileName = "SED_Enrollment_Voucher.pdf";
+
+    var course = require('../../model/lessonModel');
+    var lic = require('../../model/requireModel');
+    var billing = require('../../model/accountModel');
+
+    billing.getTransactions(req.session.ORNUM).catch(next).then(transaction=>{
+
+    });
+
+    pdf.generateView(pdf.templates.invoice, {}, function(err, html){
+        if(err) return next(err);
+        pdf.generatePDF(html, pdf.getBuffer, function(err, buffer){
+            if(err) return next(err);
+            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            res.set('Content-Type', 'Application/pdf');
+            res.status(200).send(buffer);
+        });
+    });
 };
