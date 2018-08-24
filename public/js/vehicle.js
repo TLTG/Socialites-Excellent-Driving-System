@@ -552,7 +552,7 @@ function viewCarProfile(id){
         $('#vehiID').html(profile.id + "-" + profile.transmission);
         $('#vehiPlate').html(profile.plate);
         $('#vehiCoding').html(dayName[profile.offday]);
-        $('#vehiInst').html(profile.driverName);
+        $('#vehiInst').html(profile.driverName.replace(/_/g, ' '));
         var defect = "";
         profile.defect.forEach(x=>{
             if(x.repaired != 0){

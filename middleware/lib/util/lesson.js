@@ -6,16 +6,16 @@ exports.create = function(req, res, next){
     if(res.locals.authenticated == 0) return next();
     //VALIDATIONS
     var dataIn = JSON.parse(req.body.data);
-    var data = [];
-    data.push(null);
+    var data = [""];
     data.push(dataIn.title);
-    data.push(dataIn.prerequisite);
+    data.push(dataIn.prerequisite||"");
     data.push(dataIn.description);
-    data.push(dataIn.duration);
+    data.push(dataIn.duration||60);
     data.push(1);
 
     valid.checkUndef(data, function(passed){
         if(passed){
+            data[2] = null;
             lesson.create(data, function(err, result){
                 if(err) return next(err);
                 res.status(200).send({success: true, detail: "Successfully Created!"});
@@ -70,13 +70,14 @@ exports.update = function(req, res, next){
     
     var data = [];
     data.push(dataIn.title);
-    data.push(dataIn.prerequisite);
+    data.push(dataIn.prerequisite||"");
     data.push(dataIn.description);
-    data.push(dataIn.duration);
+    data.push(dataIn.duration||60);
     data.push(1);
 
     valid.checkUndef(data,function(passed){
         if(passed){
+            data[1] = data[1] == "" ? null : data[1];
             lesson.update(id, data, field, function(err, result){
                 if(err) return next(err);
                 res.status(200).send({success: true, detail: "Successfully Modify!"});

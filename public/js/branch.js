@@ -223,7 +223,7 @@ function remBranch(){
 
 function fieldCheck(){
     var a, b, c, d, e, f, g, h;
-    var name = $('#brName').val();
+    var name = $('#brName').val() || "aaa";
     var al1 = $('#brAddL1').val();
     var al2 = $('#brAddL2').val();
     var city = $('#brCity').val();

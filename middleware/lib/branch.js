@@ -84,7 +84,7 @@ exports.update = function(req, res, next){
     var data = [];
     data.push(dataIn.address);
     data.push(dataIn.telno);
-    data.push(dataIn.name);
+    data.push(dataIn.address.split('_')[2]);
     data.push(1);
 
     valid.checkUndef(data, function(passed){

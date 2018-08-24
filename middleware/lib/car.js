@@ -12,15 +12,16 @@ exports.create = function(req, res, next){
         data.push(dataInput.model);
         data.push(dataInput.brand);
         data.push(dataInput.transType);
-        data.push(dataInput.price);
+        data.push(dataInput.price||"default");
         data.push(dataInput.plate);
-        data.push(0);
+        data.push("");
         data.push(dataInput.branch == undefined ? 1 : dataInput.branch);
-        data.push(offday);
+        data.push(offday||"0");
         data.push(1);
 
         valid.checkUndef(data, function(passed){
             if(passed){
+                data[6] = null;
                 car.create(data, function(err, result){
                     if(err) return next(err);
                     res.status(200).send({success: true, detail: "Successfully Created!"});
