@@ -709,3 +709,34 @@
     </div>
   </div>
 </div>
+
+<!-- Assign Vehicle to Instructor Modal -->
+<div class="modal fade" id="assignVehiToInstModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="assignVehiToInstModal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <center>
+            <h6>Socialites Excellent Driving</h6>
+            <h2>ASSIGN VEHICLE TO INSTRUCTOR</h2>
+        </center>
+        <hr class="hrCustom">
+        <div class="stot">
+            <form class="formAddPay">
+                <label><span class="asterisk">*</span>Vehicle:</label><br>
+                <input type="text" id="newLic" class="txtEnr" readonly><br><br>
+                <label><span class="asterisk">*</span>Instructor:</label><br>
+                <select class="enrTxtArea listofInstWNoVehi" name="listofInstWNoVehi">
+                  <option>---</option>
+                  <option>Harry James Potter</option>
+                </select>
+                <br>
+            </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light btnLicense" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success btnLicense" onclick="saveAssignVehi()">Done</button>
+      </div>
+    </div>
+  </div>
+</div>

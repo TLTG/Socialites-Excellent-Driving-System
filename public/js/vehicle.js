@@ -600,3 +600,11 @@ function editVehi(){
         });
     }
 }
+
+function assignVehiToInst(){
+    $("#assignVehiToInstModal").modal("show");
+}
+
+function saveAssignVehi(){
+    
+}
