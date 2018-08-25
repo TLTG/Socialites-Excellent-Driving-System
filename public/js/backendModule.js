@@ -654,6 +654,7 @@ var queryer = {
         this.actionPerform = action;
         this.arrData = data;
         this.done = cb;
+        this.nextData = 0;
         this.next();
     },
     finish: function(){
@@ -996,6 +997,7 @@ var acc = {
 */
 var preRegAssess = {
     selected: 0,
+    enrolleeSelected: -1,
     offset: 0,
     limit: 20,
     currPage: 0,
@@ -1156,12 +1158,15 @@ var license = {
     },
     getLocal: function(id, cb){
         if(id==0){
-            cb({desc:"With License",price:0});
+            return cb({desc:"With License",price:0});
         }
+        var done = 0;
         this.data.forEach((e,i)=>{
             if(e.id == id){
+                done = 1;
                 return cb(e);
             }
+            if(i==this.data.length-1 && done==0) return cb({});
         });
     },
 }

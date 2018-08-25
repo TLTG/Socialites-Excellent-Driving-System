@@ -132,7 +132,7 @@ exports.register = function(req, res, next){
     var getEnrollee = function(enrolleeID){
         return new Promise((resolve, reject)=>{
             student.getEnrollee(enrolleeID, function(err, enrollee){
-                if(err) return reject(err);
+                if(err) return next(err);
                 enrolleeData = enrollee;
                 resolve(enrollee);
             });
@@ -146,7 +146,7 @@ exports.register = function(req, res, next){
             Promise.all([payments.getEnrollBal(OR),payments.getTransactions(OR)]).catch(reject).then(function(dataArr){
                 dataArr.forEach(function(e){
                     if(e == undefined){
-                        reject(new Error("Undefined data"));
+                        return next(new Error("Undefined data"));
                     }
                 });
                 var enrollment = dataArr[0];
@@ -338,7 +338,7 @@ exports.register = function(req, res, next){
                         resolve(true);
                     });
                 });
-            }).catch(reject);
+            }).catch(next);
         });
     };
 
@@ -505,6 +505,13 @@ exports.prepareViewData = function(req, res, next){
                 resolve(crs);
             });
         });
+        var getGradesStudent = new Promise((resolve, reject)=>{
+            grades.getGradesStudent(req.session.studID, function(err, crs){
+                if(err) return reject(err);
+                res.locals.gradesStud = crs;
+                resolve(crs);
+            });
+        });
         var getInstructors = new Promise((resolve, reject)=>{
             grades.getAssignedInst(req.session.studID, function(err, inst){
                 if(err) return reject(err);
@@ -517,6 +524,13 @@ exports.prepareViewData = function(req, res, next){
                 if(err) return reject(err);
                 res.locals.branch = result;
                 resolve(result);
+            });
+        });
+        var getEvalStud = new Promise((resolve, reject)=>{
+            grades.getEvalStud(req.session.studID, function(err, eval){
+                if(err) return reject(err);
+                res.locals.evalStud = eval;
+                resolve(eval);
             });
         });
         var getStudentInfo = new Promise((resolve, reject)=>{
@@ -538,7 +552,7 @@ exports.prepareViewData = function(req, res, next){
                 resolve(true);
             });
         });
-        var query = [getSched, getLicense, getCourse, getLessons, getInstructors, getBranch, getStudentInfo, getVehi];
+        var query = [getSched, getLicense, getCourse, getLessons, getInstructors, getBranch, getStudentInfo, getVehi, getEvalStud, getGradesStudent];
         Promise.all(query).then((results)=>{
             next();
         }).catch(next);

@@ -5,6 +5,8 @@
 
 var fs = require('fs');
 var today = new Date();
+var logFolder = process.env.LOG_FOLDER || "log";
+
 var checkLogFolder = function(path, cb){
     fs.mkdir(path, function(err){
         if(err){
@@ -17,13 +19,15 @@ var checkLogFolder = function(path, cb){
 }
 
 exports.midLogger = function(req, res, next){
-    var data = "["+ today.toString('MM-dd-yyyy HH:mm') +"] " + req.sessionID + " " + req.method + " " + req.ip + " " + req.path + "\n";
-    fs.appendFile('./log/' + today.toString('MM-dd-yyyy') + '.log', data, function(err){
-        if(err){
-            next(new Error(err));
-            console.log('[SERVER] Logging ' + err.stack);
-        }
-    });
+    if(process.env.LOG_REQUEST === "true"){
+        var data = "["+ today.toString('MM-dd-yyyy HH:mm') +"] " + req.sessionID + " " + req.method + " " + req.ip + " " + req.path + "\n";
+        fs.appendFile('./log/' + today.toString('MM-dd-yyyy') + '.log', data, function(err){
+            if(err){
+                next(new Error(err));
+                console.log('[SERVER] Logging ' + err.stack);
+            }
+        });
+    }
     next();
 }
 
@@ -54,7 +58,7 @@ exports.config = function(){
     process.on('unhandledRejection', log);
 }
 
-checkLogFolder('log', function(err){
+checkLogFolder(logFolder, function(err){
     if(err){
         console.log(err.stack);
     }

@@ -14,7 +14,10 @@ var loadPreReg = function(refresh){
         });
     }else{
         if(preRegLoaded == 0){
-            $(".preloader").fadeIn();              
+            $(".preloader").fadeIn();    
+            license.get(function(err){
+                if(err) return console.error(err);
+            });          
             preRegAssess.getList(err=>{
                 if(err) return console.error(err);
                 renderEnrollTbl(preRegAssess.pages[preRegAssess.currPage]);
@@ -35,9 +38,6 @@ var loadPreReg = function(refresh){
             })
         }
     }
-    license.get(function(err){
-        if(err) return console.error(err);
-    });
 }
 
 function viewRegForm(){
@@ -190,6 +190,7 @@ function appRegForm(){ //Approve Registration
     }
     else{
         $('.preloader').fadeIn();
+        preRegAssess.enrolleeSelected = preRegAssess.selected;
         payments.pay(x, "enrolment", function(err, response){
             if(err){
                 console.log(err);
@@ -197,10 +198,12 @@ function appRegForm(){ //Approve Registration
                 swal('Failed!', err.message, 'error');
             }else{
                 var reg = function(cb){
-                    preRegAssess.approve(preRegAssess.selected, function(err){
+                    preRegAssess.approve(preRegAssess.enrolleeSelected, function(err){
                         $('.preloader').fadeOut();
                         if(!err){
                             swal('Done', "Student Successfully Enrolled!",'success');
+                            preRegAssess.enrolleeSelected = -1;
+                            loadPreReg(1);
                             cb(null);
                         }else{
                             swal('Problem Encounter', err.message, 'error');
@@ -321,17 +324,18 @@ var renderEnrollTbl = function(data){
         office.selected = temp.data.branch;
         office.getLocalData(function(branch){
             temp.data["branchName"] = branch.name;
+            var targetID = temp.id;
             var html = "";
-            html += "<tr onclick='viewPendingStudent("+ temp.id +")'>";
+            html += "<tr onclick='viewPendingStudent("+ targetID +")'>";
             html += "<td>"+ Date.parse(temp.dateSubmit).toString("MMM dd, yyyy") +"</td>";
             html += "<td>"+ (temp.data.info.fullname).replace(/_/g,' ') +"</td>";
-            html += "<td class='enrollReq"+ temp.id +"'></td>";
+            html += "<td class='enrollReq"+ targetID +"'></td>";
             html += "</tr>";
             $('#preRegTbl').append(html); 
             license.getLocal(temp.data.applyLicense, l=>{
-                $('.enrollReq'+temp.id).html(l.desc);
+                $('.enrollReq'+targetID).html(l.desc);
             });
-            cb(null);      
+            cb(null);
         });
     }
     queryer.start(task,data,function(err,done){

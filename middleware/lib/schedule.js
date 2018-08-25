@@ -28,6 +28,9 @@ exports.calendar = function(req, res, next){
 
     var sched = [];
     var processSched = function(data){
+        if(data.length==0){
+            return res.status(200).send(sched);
+        }
         data.forEach((e,i) => {
             var minDate = Date.parse("last sunday");
             var maxDate = Date.parse("next saturday");
