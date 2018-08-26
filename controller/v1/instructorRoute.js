@@ -6,6 +6,9 @@ var middleware = require('../../middleware/lib/instructor');
 router.route('/')
     .post(middleware.create)
     .get(middleware.get);
+
+router.get('/test', middleware.testGettingAvailInst);
+
 router.route('/:id')
     .put(middleware.update)
     .get(middleware.get)

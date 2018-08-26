@@ -103,7 +103,7 @@ Lesson.enrollCourse = function(enrollmentID, courseData, cb){
             entry.push(e.branch);
             entry.push(JSON.stringify(e.lesson));
             entry.push(e.special ? 1 : 0);
-            entry.push(null);
+            entry.push(Date.parse("today").toString("yyyy-MM-dd hh:mm:ss"));
             entry.push(0);
             entry.push(2);
             bulk.push(entry);
