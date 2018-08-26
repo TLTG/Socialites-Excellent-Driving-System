@@ -69,7 +69,7 @@ Lesson.getCoursePrice = function(courseArr){
             query.push(new Promise((res, rej)=>{
                 Lesson.getCourse(e.course, function(err, result){
                     if(err) return rej(err);
-                    data.course.push({id: result.id, trans: result.carType, price: result.amount});
+                    data.course.push({id: result.id, days: result.days, trans: result.carType, price: result.amount});
                     data.total += e.special ? (result.amount * 2) : result.amount;
                     data.origTotal += result.amount;
                     res();
