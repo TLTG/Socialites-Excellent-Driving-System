@@ -251,8 +251,22 @@ Schedule.autoAssignSched = function(studID){
  */
 Schedule.getSchedOnDay = function(branch, instID, day){
     return new Promise((resolve, reject)=>{
-        var sql = instID ? "SELECT id, date, time, hour FROM " + table + " WHERE branch = ? AND instID = ? AND status = 2 AND date = ? ORDER BY time ASC" : "SELECT id, date, time, hour FROM " + table + " WHERE branch = ? AND status = 2 AND date = ? ORDER BY time ASC";
-        var data = instID ? [branch, instID, day.toString('yyyy-MM-dd')] : [branch, day.toString('yyyy-MM-dd')];
+        var sql = "SELECT id, date, time, hour FROM " + table + " WHERE status = 2 AND date = ?";
+        var data = [day.toString('yyyy-MM-dd')];
+        
+        var branchID = branch ? branch : null;
+        var inst = instID ? instID : null;
+
+        if(inst){
+            sql += " AND instID = ?";
+            data.push(inst);
+        }
+        if(branchID){
+            sql += " AND branch = ?";
+            data.push(branchID);
+        }
+
+        sql += " ORDER BY time ASC";
         db.get().query(sql, data, function(err, result){
             if(err) return reject(err);
             resolve(result);
@@ -528,5 +542,17 @@ Schedule.isInstructorFree = function(){
 Schedule.checkIfVacant = function(){
 
 }
+
+Schedule.cancelSched = function(date, time, cb){
+    var sql = "SELECT studID, instID FROM " + table + " WHERE date = ? AND time >= ?";
+    db.get().query(sql,[date,time], function(err,schedules){
+        if(err) return cb(err);
+        sql = "UPDATE " + table + " SET status = 4 WHERE date = ? AND time >= ? AND status = 2";
+        db.get().query(sql, [date, time], function(error){
+            if(error) return cb(error);
+            cb(null, schedules);
+        });
+    });
+};
 
 module.exports = Schedule;

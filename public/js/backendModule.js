@@ -1201,6 +1201,7 @@ var license = {
  * Scheduler module comes with all interaction neeed for scheduling
  */
 var scheduler = {
+    selected: -1,
     getSchedToday: function(cb){
         $.ajax({
             type: "GET",
@@ -1247,7 +1248,7 @@ var scheduler = {
     getBranchName: function(id, cb){
         $.ajax({
             type: "GET",
-            url: "api/v1/branch/" + id + "/address",
+            url: "api/v1/branch/" + id + "/name",
             success: (res)=>{
                 if(res.success){
                     cb(null, res.data);
@@ -1256,6 +1257,52 @@ var scheduler = {
                 }
             },
             error: xhr=>cb(new Error(xhr.status+": "+xhr.statusText)),
+        });
+    },
+    doneSched: function(id, cb){
+        $.ajax({
+            type: "PUT",
+            url: "api/v1/sched/" + id + "/done",
+            success: res=>{
+                if(res.success){
+                    cb(null, res.detail);
+                }else{
+                    cb(new Error(res.detail));
+                }
+            },
+            error: xhr=>{
+                cb(new Error(xhr.status + ": " + xhr.statusText));
+            },
+        });
+    },
+    cancelSched: function(id, cb){
+        $.ajax({
+            type: "PUT",
+            url: "api/v1/sched/" + id + "/cancel",
+            success: res=>{
+                if(res.success){
+                    cb(null, res.detail);
+                }else{
+                    cb(new Error(res.detail));
+                }
+            },
+            error: xhr=>{
+                cb(new Error(xhr.status + ": " + xhr.statusText));
+            },
+        });
+    },
+    suspendSched: function(date, cb){
+        $.post('api/v1/sched/suspend', {date: date}, function(res){
+            if(res.success){
+                cb(null, res.detail);
+                $.post('api/v1/sched/suspend',{emailTaskWait: true}, function(res){
+                    swal("Suspension Announcement!", res.detail, "success");
+                });
+            }else{
+                cb(new Error(res.detail));
+            }
+        }).fail(xhr=>{
+            cb(new Error(xhr.status + ": " + xhr.statusText));
         });
     },
 }

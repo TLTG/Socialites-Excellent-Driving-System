@@ -48,7 +48,7 @@ Student.get = function (id, field, cb) {
         if (field == null) {
             cb(null, result[0]);
         } else {
-            cb(null, result[0][field]);
+            cb(null, result[0][0][field]);
         }
     });
 }

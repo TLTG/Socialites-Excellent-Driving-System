@@ -415,7 +415,7 @@ exports.register = function(req, res, next){
             
             Promise.all(task).then(function(results){
                 if(results.indexOf(false) != -1){
-                    next(new Error("One/All of the Executing tasks after enrollment failed"));
+                    next(new Error("One/All of the Executing tasks after enrollment failed: " + results.indexOf(false)));
                 }
             }).catch(function(reason){
                 next(reason);
