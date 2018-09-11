@@ -3,6 +3,7 @@ var ModelModule = require('./model');
 var UserInfo = require('./userInfoModel');
 var UserAcc = require('./userAccModel');
 var table = "instructor";
+var branch_fk_table = "branch_instructor";
 
 //Constructor
 var Instructor = {};
@@ -214,6 +215,14 @@ Instructor.getAvailableInst = function(branch, date, time, cb){
     }).catch(reason=>{
         error = reason;
         return;
+    });
+}
+
+Instructor.getAllBranchInst = function(branch, cb){
+    var sql = "SELECT instID FROM "+ branch_fk_table +" WHERE branchID = ?";
+    db.get().query(sql, [branch], function(err, result){
+        if(err) return cb(err);
+        cb(null, result);
     });
 }
 

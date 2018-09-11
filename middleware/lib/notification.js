@@ -6,18 +6,14 @@ var intervalClock;
 var notifModel = require('../../model/notifModel');
 var pending = [];
 
-exports.addNotification = function(req, res, next){
-    var target = req.body.target || "admin";
-    var type = req.body.type || "BROADCAST";
-    var message = req.body.message || "";
-    var action = req.body.action || "";
+exports.addNotificationMethod = function(target, type, message, action, cb){
 
-    if(message == "") return res.status(200).send({success: false, detail: "Invalid message can't be blank"});
+    if(message == "") return cb(null,"Invalid message can't be blank");
 
     if(type == "QUICK_BROADCAST"){
         notifyPending(target, {detail: message, action: action, type: type}, function(err){
-            if(err) return next(err);
-            res.status(200).send({success: true, detail: "Successfully Notify!"});
+            if(err) return cb(err);
+            cb(null, "Successfully Notify!");
         })
     }else{
         var dbTarget = null;
@@ -26,12 +22,24 @@ exports.addNotification = function(req, res, next){
         }
         notifModel.add(dbTarget, type, message, action, function(err, id){
             if(err) return next(err);
-            res.status(200).send({success: true, detail: "Notifying user/s"});
-            notifyPending(target, id, function(err){
-                if(err) return next(err);
-            });
+            cb(null, "Notifying user/s");
+            notifyPending(target, id, err=>{if(err) return cb(err)});
         });
     }
+}
+
+exports.addNotification = function(req, res, next){
+    var target = req.body.target || "admin";
+    var type = req.body.type || "BROADCAST";
+    var message = req.body.message || "";
+    var action = req.body.action || "";
+
+    if(message == "") return res.status(200).send({success: false, detail: "Invalid message can't be blank"});
+
+    exports.addNotificationMethod(target, type, message, action, function(err, detail){
+        if(err) return next(err);
+        res.status(200).send({success: false, detail: detail});
+    });
 }
 
 exports.markRead = function(req, res, next){
@@ -54,14 +62,15 @@ exports.notificationPoll = function(req, res, next){
             res.status(200).send({success: true, data: notifications});
         }else{
             removePending(userID, function(){
+                var timeout = setRequestTimeout(res, userID);
                 pending.push({
                     accID: userID,
                     http: {
                         req: req,
                         res: res
-                    }
+                    },
+                    timeout: timeout,
                 });
-                setRequestTimeout(res, userID);
             });
         }
     });
@@ -85,6 +94,9 @@ function notifyPending(targetId, notifId, cb){
             if(users.length > 0){
                 users.forEach((user,i)=>{
                     user.http.res.status(200).send({success: true, data: notifId});
+                    removePending(targetId, ()=>{
+                        cb(null);
+                    });
                 });
             }else{
                 cb(null);
@@ -142,6 +154,7 @@ function removePending(id, cb){
     if(pending.length == 0) return cb(true);
     pending.forEach((e,i)=>{
         if(e.accID = id){
+            clearTimeout(e.timeout);
             pending.splice(i,1);
             cb(true);
             done = 1;
@@ -153,7 +166,7 @@ function removePending(id, cb){
 }
 
 function setRequestTimeout(res, requestID){
-    setTimeout(()=>{
+    return setTimeout(()=>{
         if(!res.headerSent){
             removePending(requestID,()=>{
                 res.status(200).send({success: false, detail: "timeout"});

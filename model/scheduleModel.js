@@ -262,7 +262,7 @@ Schedule.autoAssignSched = function(studID){
  */
 Schedule.getSchedOnDay = function(branch, instID, day){
     return new Promise((resolve, reject)=>{
-        var sql = "SELECT id, date, time, hour FROM " + table + " WHERE status = 2 AND date = ?";
+        var sql = "SELECT id, date, time, hour, instID FROM " + table + " WHERE status = 2 AND date = ?";
         var data = [day.toString('yyyy-MM-dd')];
         
         var branchID = branch ? branch : null;
@@ -419,11 +419,13 @@ Schedule.updateSchedule = function(schedule, cb){
  */
 Schedule.autoAssignSched_1 = function(studentID){
     return new Promise((done, error)=>{
+        //#region Variable Declaration
         var studentModel = require('./studentModel');
         var days = ['','monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
         var student;
 
         var prefDays;
+        var prefInst;
         var pos = 0;
         var week = 0;
 
@@ -436,8 +438,15 @@ Schedule.autoAssignSched_1 = function(studentID){
                 ok(studentData);
             });
         });
+        //#endregion
 
-        var findSched = function(){
+        getStudent.catch(error).then(data=>{
+            prefDays = JSON.parse(data.prefDays);
+            Promise.resolve(parseInt(data.hours)).then(chain);
+        });
+
+        //#region Function Declaration
+        function findSched(){
             return new Promise((resolve, reject)=>{
                 var date = Date.parse('next ' + days[prefDays[pos]]);
                 var nextWeek = Date.parse('next sunday');
@@ -445,14 +454,15 @@ Schedule.autoAssignSched_1 = function(studentID){
                     date.addWeeks(1);
                 }
                 date.addWeeks(week);
-                Schedule.getFreeSchedOnDay(student.branch, date).catch(reject).then((result)=>{
+                Schedule.getFreeSchedOnDay(student.branch, date, prefInst).catch(reject).then((result)=>{
+                    if(!prefInst) prefInst = result.instructor;
                     pos++;
                     resolve(result);
                 });
             });
         };
 
-        var displayScheds = function(){
+        function displayScheds(){
             var promises = [];
             scheds.forEach((e,i)=>{
                 promises.push(new Promise((resolve, reject)=>{
@@ -462,7 +472,7 @@ Schedule.autoAssignSched_1 = function(studentID){
                         e.time,
                         1,
                         studentID,
-                        null, //    <------- this is suppose to be instructor update value 
+                        e.instructor, //    <------- this is suppose to be instructor update value 
                         student.branch,      //  <------- changes this, by default it's 1 for main,
                         2       
                     ];
@@ -480,9 +490,9 @@ Schedule.autoAssignSched_1 = function(studentID){
                     });
                 }
             });
-        }
+        };
 
-        var chain = function(loop){
+        function chain(loop){
             if(loop == 0){
                 return displayScheds();
             }
@@ -496,42 +506,62 @@ Schedule.autoAssignSched_1 = function(studentID){
                 chain(loop-1);
             });
         }
-
-        getStudent.catch(error).then(data=>{
-            prefDays = JSON.parse(data.prefDays);
-            Promise.resolve(parseInt(data.hours)).then(chain);
-        });
+        //#endregion
     });
 };
 
-Schedule.getFreeSchedOnDay = function(branch, day){
+Schedule.getFreeSchedOnDay = function(branch, day, instid){
     return new Promise(function(resolve, reject){
-        var targetDate = day;
+        var inst = require('./instructorModel');
+        var targetDate = day; 
         var lookForSched = function(){
-            Schedule.getSchedOnDay(branch, null, targetDate).catch(reject).then((daySchedules)=>{ /* ADD INSTRUCTOR HERE ,*/
+            Schedule.getSchedOnDay(branch, null, targetDate).catch(reject).then(daySchedules=>{
+                return new Promise((res,rej)=>{
+                    inst.getAllBranchInst(branch, function(err, instructors){
+                        if(err) return rej(err);
+                        res({worker: instructors.length, daySchedules: daySchedules});
+                    });
+                });
+            }).then((data)=>{ /* ADD INSTRUCTOR HERE ,*/
+                timelineOptions.worker = data.worker;
                 var timeline = new Timeline(timelineOptions);
-    
                 var getTime = function(){
                     timeline.getFreeTime(60, function(freeTime){
                         if(freeTime.length == 0){
                             targetDate.addWeeks(1);
                             lookForSched(); // Try this recurse, if didn't work then fvck it. haven't test yet, but fvck it.
                         }else{
-                            resolve({
-                                date: targetDate.toString('yyyy-MM-dd'),
+                            var freedate = targetDate.toString('yyyy-MM-dd');
+                            var output = {
+                                date: freedate,
                                 time: freeTime[0].start,
+                                instructor: instid,
                                 duration: 60,
+                            };
+
+                            inst.getAvailableInst(branch, freedate.toString('yyyy-MM-dd'), freeTime[0].start, function(err, instructorList){
+                                if(err) return reject(err);
+                                if(instid == undefined){
+                                    instid = instructorList[0].id;
+                                    output.instructor = instructorList[0].id;
+                                    resolve(output);
+                                }else if(instructorList.findIndex(x=>x.id == instid) == -1){
+                                    output.instructor = instructorList[0].id;
+                                    resolve(output);
+                                }else{
+                                    resolve(output);
+                                }
                             });
                         }
                     });
                 }
     
-                if(daySchedules.length == 0){
+                if(data.daySchedules.length == 0){
                     getTime();
                 }else{
-                    daySchedules.forEach((e,i)=>{
+                    data.daySchedules.forEach((e,i)=>{
                         timeline.reserveTime(e.time, (e.hour*60));
-                        if(i == daySchedules.length-1){
+                        if(i == data.daySchedules.length-1){
                             getTime();
                         };
                     });
@@ -560,7 +590,7 @@ Schedule.cancelSched = function(date, time, cb){
 
 /**
  * Automatically assign a student to a schedule, using its preferred information. instructor and branch
- * (Third Attempt and hope the last)
+ * (Third Attempt and hope the last)(Incomplete)(autosched_1 already extended for this feature)
  * @param {String} studID ID of the student to auto-assign
  * @returns {Promise<Number[]>} A promise that returns array of sched found when done and no error happen.
  */
@@ -578,13 +608,9 @@ Schedule.autoAssignSched_2 = function(studID){
             prefDaysRaw.forEach((e,i)=>{
                 prefDays.push(days[e]);
                 if(i == prefDaysRaw.length-1){
-                    next();
+                    findAvailableSched(prefDays, student.branch, null, check);
                 }
             });
-
-            function next(){
-                //Schedule.getSchedOnDay(student.branch, null, ); // <<<<<<<<<<<<<<<<<---------------- CONTINUE HERE,
-            }
         });
 
         function getStudent(id, cb){
@@ -592,6 +618,22 @@ Schedule.autoAssignSched_2 = function(studID){
                 if(err) return cb(err);
                 cb(null, data);
             });
+        }
+
+        var currentWeek = 0;
+
+        function findAvailableSched(prefDays, branch, instid, cb, done = false){
+            if(done == true){
+                return cb();
+            }
+
+            if(done == undefined) done = 0;
+
+            Schedule.getFreeSchedOnDay(branch, Date.parse(prefDays[done])).then().catch();
+        }
+
+        function check(){
+
         }
     });
 };

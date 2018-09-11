@@ -4,7 +4,6 @@
 */
 
 var fs = require('fs');
-var today = new Date();
 var logFolder = process.env.LOG_FOLDER || "log";
 
 var checkLogFolder = function(path, cb){
@@ -19,6 +18,7 @@ var checkLogFolder = function(path, cb){
 }
 
 exports.midLogger = function(req, res, next){
+    var today = new Date();
     if(process.env.LOG_REQUEST === "true"){
         var data = "["+ today.toString('MM-dd-yyyy HH:mm') +"] " + req.sessionID + " " + req.method + " " + req.ip + " " + req.path + "\n";
         fs.appendFile('./log/' + today.toString('MM-dd-yyyy') + '.log', data, function(err){
@@ -32,6 +32,7 @@ exports.midLogger = function(req, res, next){
 }
 
 exports.errLogger = function(err){
+    var today = new Date();
     fs.appendFile('./log/error.log', "***" + today.toString() + "***\n" + err + "\n***\n\n", function(err){
         if(err){
             console.log("[SERVER] Logging " + err.stack);        
@@ -40,6 +41,7 @@ exports.errLogger = function(err){
 }
 
 exports.logger = function(message){
+    var today = new Date();
     var data = "["+ today.toString('MM-dd-yyyy HH:mm') +"] " + message;
     fs.appendFile('./log/' + today.toString('MM-dd-yyyy') + '.log', data, function(err){
         if(err){

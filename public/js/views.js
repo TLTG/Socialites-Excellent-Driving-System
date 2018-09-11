@@ -31,23 +31,20 @@ $(function() {
     });
 
     notifier.init(function(notification){
+        var messageType = {schedule: 'calendar'};
         var placeholder = $('.message-center');
         var types = {};
         var html = '<a href="#">'; 
         html += '<div class="btn btn-danger btn-circle m-r-10">'; 
-        html +=     '<i class="fa fa-link"></i>';
+        html +=     '<i class="fa fa-'+ messageType[notification.detail.messageType] +'"></i>';
         html += '</div>'; 
         html += '<div class="mail-contnet">'; 
-        html +=     '<h5>This is title</h5>'; 
-        html +=     '<span class="mail-desc">Just see the my new admin!</span>'; 
-        html +=     '<span class="time">9:30 AM</span>'; 
+        html +=     '<h5>'+ notification.detail.title +'</h5>'; 
+        html +=     '<span class="mail-desc">'+ notification.detail.message +'</span>'; 
+        html +=     '<span class="time">'+ Date.parse('now').toString('hh:mm tt') +'</span>'; 
         html += '</div>'; 
         html += '</a>';
-        if(typeof notification == "string"){
-            
-        }else{
 
-        }
         var oldHtml = placeholder.html();
         placeholder.html(html + oldHtml);
         $('#notify-box').fadeIn();
