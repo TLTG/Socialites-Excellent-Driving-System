@@ -93,6 +93,13 @@ CREATE TABLE IF NOT EXISTS `branch` (
   `purgeFlag` int(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE IF NOT EXISTS `branch_instructor` (
+`id` int(5) NOT NULL,
+  `instID` varchar(15) NOT NULL,
+  `branchID` int(3) NOT NULL,
+  `assignedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE IF NOT EXISTS `codingscheme` (
 `id` int(3) NOT NULL,
   `branch` int(3) NOT NULL,
@@ -365,6 +372,9 @@ ALTER TABLE `admin`
 ALTER TABLE `branch`
  ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `branch_instructor`
+ ADD PRIMARY KEY (`id`), ADD KEY `instructor` (`instID`), ADD KEY `branch` (`branchID`);
+
 ALTER TABLE `codingscheme`
  ADD PRIMARY KEY (`id`), ADD KEY `branch` (`branch`);
 
@@ -457,6 +467,8 @@ ALTER TABLE `admin`
 MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `branch`
 MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `branch_instructor`
+MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `codingscheme`
 MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `course`
@@ -515,6 +527,10 @@ ADD CONSTRAINT `activity_ibfk_4` FOREIGN KEY (`lessonID`) REFERENCES `lesson` (`
 ALTER TABLE `admin`
 ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`userInfo`) REFERENCES `userinfo` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
 ADD CONSTRAINT `admin_ibfk_2` FOREIGN KEY (`branchID`) REFERENCES `branch` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+ALTER TABLE `branch_instructor`
+ADD CONSTRAINT `branch_instructor_ibfk_1` FOREIGN KEY (`instID`) REFERENCES `instructor` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+ADD CONSTRAINT `branch_instructor_ibfk_2` FOREIGN KEY (`branchID`) REFERENCES `branch` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 ALTER TABLE `codingscheme`
 ADD CONSTRAINT `scheme_fk1` FOREIGN KEY (`branch`) REFERENCES `branch` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
