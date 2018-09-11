@@ -31,10 +31,15 @@ Mailer.prototype.send = function(recipient, content, cb){
         subject: content.subject,
         html: content.body,
     };
-    this.transporter.sendMail(mail,function(err,info){
-        if(err) return cb(err);
-        cb(null, info.response);
-    });
+    var emailer_status = process.env.EMAILER_STATUS || true;
+    if(emailer_status != "false"){
+        this.transporter.sendMail(mail,function(err,info){
+            if(err) return cb(err);
+            cb(null, info.response);
+        });
+    }else{
+        cb(null, "disabled, enable on .env EMAILER_STATUS to true");
+    }
 };
 
 module.exports = Mailer;

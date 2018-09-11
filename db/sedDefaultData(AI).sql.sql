@@ -31,6 +31,16 @@ INSERT INTO `branch` (`id`, `address`, `telno`, `name`, `purgeFlag`) VALUES
 (4, 'Fortunata Bldg., 663 Q. Avenue between Araneta Ave., and Sto. Domingo ', '938-1236', 'Q. Ave., Quezon City', 1),
 (5, 'Cartimar Shopping Center, Rm. 1A Pasay Taft (between Libertad and Buendia)', '833-2043', 'Pasay City', 1);
 
+INSERT INTO `branch_instructor` (`id`, `instID`, `branchID`, `assignedDate`) VALUES
+(1, 'INST-002002', 1, '2018-09-11 08:13:29'),
+(2, 'INST-003003', 1, '2018-09-11 08:13:29'),
+(3, 'INST-004004', 1, '2018-09-11 08:13:48'),
+(4, 'INST-005005', 1, '2018-09-11 08:13:48'),
+(5, 'INST-006006', 2, '2018-09-11 08:14:02'),
+(6, 'INST-007007', 2, '2018-09-11 08:14:02'),
+(7, 'INST-008008', 3, '2018-09-11 08:14:22'),
+(8, 'INST-009009', 3, '2018-09-11 08:14:22');
+
 INSERT INTO `course` (`id`, `description`, `carType`, `amount`, `days`, `status`) VALUES
 (1, '', 'a', 3500, 5, 1),
 (2, '', 'a', 4900, 7, 1),
@@ -66,7 +76,7 @@ INSERT INTO `lesson` (`id`, `title`, `prerequisite`, `description`, `duration`, 
 (10, 'Review', NULL, 'Reviewing all the past lesson tackled.', 60, 1);
 
 INSERT INTO `license_apply_price` (`id`, `type`, `desc`, `price`, `status`) VALUES
-(0, 'none', 'none', 0, 1),
+(0, 'none', 'none', 0, 0),
 (1, 'SDP', 'Student Driver\'s Permit', 500, 1),
 (2, 'NonPro', 'Non-Professional License', 2500, 1),
 (3, 'Pro', 'Professional License', 2700, 1),
