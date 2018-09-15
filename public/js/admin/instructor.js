@@ -22,7 +22,7 @@ $(function () {
             if(err) return console.error(err);
             if(sched.length == 0) return;
             var html = "<table class='table tblCustom'>";
-            html += "<thead><tr><th>Date</th><th>Time</th><th>Instructor</th><th>Branch</th></tr></thead><tbody class='instScheduleTbl'></tbody></table>";
+            html += "<thead><tr><th>Date</th><th>Time</th><th>Student</th><th>Branch</th></tr></thead><tbody class='instScheduleTbl'></tbody></table>";
             $('#instructorSched').html(html);
             sched.forEach((e,i)=>{
                 scheduler.getStudName(e.studID, function(err, student){

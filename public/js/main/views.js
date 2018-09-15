@@ -255,5 +255,6 @@ var faqClick = function()
     $("#enrollment").hide();
     $("#service").hide();
     $("#announcements").hide();
+    loadFaqLabel();
     $("#faq").show();
 }

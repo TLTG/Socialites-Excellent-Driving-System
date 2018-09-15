@@ -350,3 +350,37 @@ var announcement = {
         });
     }
 };
+
+var faq = {
+    selected: -1,
+    offset: 0,
+    limit: 20,
+    currPage: 0,
+    pages: [],
+    getFaqLabelList: function(cb){
+        var req = $.get('api/v1/faq/list/label', function(response){
+            if(response.success == false){
+                console.log(response.detail);
+                cb(new Error(response.detail));
+            }else{
+                cb(null, response.data);
+            }
+        }).fail(function(request){
+            console.log(request.status + ": " + request.statusText);
+            cb(new Error("Error: On displaying list of FAQ labels"));
+        });
+    },
+    getFaqList: function(cb){
+        var req = $.get('api/v1/faq/list/' + faqID, function(response){
+            if(response.success == false){
+                console.log(response.detail);
+                cb(new Error(response.detail));
+            }else{
+                cb(null, response.data);
+            }
+        }).fail(function(request){
+            console.log(request.status + ": " + request.statusText);
+            cb(new Error("Error: On displaying list of FAQ under this label"));
+        });
+    },
+}

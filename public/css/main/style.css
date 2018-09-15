@@ -559,7 +559,7 @@ Author URI: http://bootstrapthemes.co
        z-index: 300;
        box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
        -webkit-box-shadow: 0 6px 12px rgba(66, 2, 2, 0.89);
-       background-color:rgba(94, 2, 2, 0.64);
+       background-color:#5d0000;
        -webkit-transition:all .3s;
        -moz-transition:all .3s;
        transition:all .3s;
@@ -596,7 +596,7 @@ Author URI: http://bootstrapthemes.co
        color: #fff;
    }
    .navbar-brand {
-       padding: 0px 0px 0px 0px;
+       padding: 0px 0px 0px 20px;
    }
    .navbar-brand>img {
        max-width: 80%;
@@ -711,6 +711,11 @@ Author URI: http://bootstrapthemes.co
        padding-bottom: 250px;
        display: block;
    }
+   .main_home2{
+    padding-top: 150px;
+    padding-bottom: 100px;
+    display: block;
+}
    
    
    .main_home h1, .main_home h2{
@@ -3030,3 +3035,24 @@ Author URI: http://bootstrapthemes.co
     font-size: 15px;
     margin: 10px;
 }
+.faqDiv{
+    padding: 10px 10px 50px 10px;
+  }
+  .faqDisplaySpan{
+    color: #000;
+  }
+  .counterFaq{
+    color: #5d0000;
+    font-weight: bolder;
+  }
+  .divFaq1{
+    padding-left: 20px;
+    margin-left: 50px;
+    border-left: #5d0000 solid 5px;
+  }
+  .questFaq{
+    text-align: left;
+    font-weight: bolder;
+    text-transform: uppercase;
+    text-align: left;
+  }
