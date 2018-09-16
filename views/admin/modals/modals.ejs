@@ -761,11 +761,11 @@
             <form class="formAddBranch">
                 <div>
                     <h5 class="h5Enr"><span class="asterisk">*</span>Title <small>Maximum of 50 characters</small></h5>
-                    <input type="text" class="txtEnr3" required name="newAnnTitle" id="newAnnTitle">
+                    <input type="text" class="txtEnr3" required name="newAnnTitle" id="newAnnTitle" maxlength="50">
                 </div><br>
                 <div>
                     <h5 class="h5Enr"><span class="asterisk">*</span>Message <small>Maximum of 2,000 characters</small></h5>
-                    <textarea rows="8" class="enrTxtArea2" required name="newAnnMsg" id="newAnnMsg"></textarea>            
+                    <textarea rows="8" class="enrTxtArea2" required name="newAnnMsg" id="newAnnMsg" maxlength="2000"></textarea>            
                 </div><br>
                 <div>
                     <h5 class="h5Enr"><span class="asterisk">*</span>Announcement Date</h5>
@@ -829,11 +829,11 @@
             <form class="formAddBranch">
                 <div>
                     <h5 class="h5Enr"><span class="asterisk">*</span>Title <small>Maximum of 50 characters</small></h5>
-                    <input type="text" class="txtEnr3" required name="editAnnTitle" id="editAnnTitle">
+                    <input type="text" class="txtEnr3" required name="editAnnTitle" id="editAnnTitle" maxlength="50">
                 </div><br>
                 <div>
                     <h5 class="h5Enr"><span class="asterisk">*</span>Message <small>Maximum of 2,000 characters</small></h5>
-                    <textarea rows="8" class="enrTxtArea2" required name="editAnnMsg" id="editAnnMsg"></textarea>            
+                    <textarea rows="8" class="enrTxtArea2" required name="editAnnMsg" id="editAnnMsg" maxlength="2000"></textarea>            
                 </div><br>
                 <div>
                     <h5 class="h5Enr"><span class="asterisk">*</span>Announcement Date</h5>
@@ -846,6 +846,149 @@
         <button type="button" onclick="cancEditAnn()" class="btn btn100px btn-danger">Cancel</button>
         <button type="button" onclick="resetAnn()" class="btn btn100px btn-warning">Reset</button>
         <button type="button" onclick="editAnn()" class="btn btn100px btn-success">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Label Modal -->
+<div class="modal fade" id="addLabelModal" tabindex="-1" role="dialog" aria-labelledby="addLabelModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <center>
+            <h2>ADD NEW FAQ LABEL</h2>
+        </center>
+        <hr class="hrCustom"><br>
+        <div>
+            <form class="formAddBranch">
+                <div>
+                    <h5 class="h5Enr"><span class="asterisk">*</span>FAQ Label <small>Maximum of 50 characters</small></h5>
+                    <input type="text" class="txtEnr3" required name="addFaqLbl" id="addFaqLbl" maxlength="50">
+                </div><br>
+            </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn100px btn-danger">Cancel</button>
+        <button type="button" onclick="addLabel()" class="btn btn100px btn-success">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Label Modal -->
+<div class="modal fade" id="editLabelModal" tabindex="-1" role="dialog" aria-labelledby="editLabelModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <center>
+            <h2>EDIT FAQ LABEL</h2>
+        </center>
+        <hr class="hrCustom"><br>
+        <div>
+            <form class="formAddBranch">
+                <div>
+                    <h5 class="h5Enr"><span class="asterisk">*</span>FAQ Label <small>Maximum of 50 characters</small></h5>
+                    <input type="text" class="txtEnr3" required name="editFaqLbl" id="editFaqLbl" maxlength="50">
+                </div><br>
+            </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn100px btn-danger">Cancel</button>
+        <button type="button" onclick="resetLabel()" class="btn btn100px btn-warning">Reset</button>
+        <button type="button" onclick="editLabel()" class="btn btn100px btn-success">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add FAQ Modal -->
+<div class="modal fade" id="addFaqModal" tabindex="-1" role="dialog" aria-labelledby="addFaqModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <center>
+            <h2>ADD NEW FAQ</h2>
+        </center>
+        <hr class="hrCustom"><br>
+        <div>
+            <form class="formAddBranch">
+                <div>
+                    <h5 class="h5Enr"><span class="asterisk">*</span>Question <small>Maximum of 150 characters</small></h5>
+                    <textarea rows="5" class="enrTxtArea2" required name="addFaqQue" id="addFaqQue" maxlength="150"></textarea>
+                </div><br>
+                <div>
+                    <h5 class="h5Enr"><span class="asterisk">*</span>Answer <small>Maximum of 500 characters</small></h5>
+                    <textarea rows="8" class="enrTxtArea2" required name="addFaqAns" id="addFaqAns" maxlength="500"></textarea>
+                </div><br>
+            </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn100px btn-danger">Cancel</button>
+        <button type="button" onclick="addFaqQa()" class="btn btn100px btn-success">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View FAQ Modal -->
+<div class="modal fade" id="viewFaqModal" tabindex="-1" role="dialog" aria-labelledby="viewFaqModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <center>
+            <h2>VIEW FAQ Details</h2>
+        </center>
+        <hr class="hrCustom"><br>
+        <div>
+            <form class="formAddBranch">
+                <div>
+                    <h5 class="h5Enr"><span class="asterisk">*</span>Question</h5>
+                    <textarea rows="5" class="enrTxtArea2" readonly name="viewFaqQue" id="viewFaqQue"></textarea>
+                </div><br>
+                <div>
+                    <h5 class="h5Enr"><span class="asterisk">*</span>Answer</h5>
+                    <textarea rows="8" class="enrTxtArea2" readonly name="viewFaqAns" id="viewFaqAns"></textarea>
+                </div><br>
+            </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn100px btn-success">Okay</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit FAQ Modal -->
+<div class="modal fade" id="editFaqModal" tabindex="-1" role="dialog" aria-labelledby="editFaqModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <center>
+            <h2>EDIT FAQ DETAILS</h2>
+        </center>
+        <hr class="hrCustom"><br>
+        <div>
+            <form class="formAddBranch">
+                <div>
+                    <h5 class="h5Enr"><span class="asterisk">*</span>Question <small>Maximum of 150 characters</small></h5>
+                    <textarea rows="5" class="enrTxtArea2" required name="editFaqQue" id="editFaqQue" maxlength="150"></textarea>
+                </div><br>
+                <div>
+                    <h5 class="h5Enr"><span class="asterisk">*</span>Answer <small>Maximum of 500 characters</small></h5>
+                    <textarea rows="8" class="enrTxtArea2" required name="editFaqAns" id="editFaqAns" maxlength="500"></textarea>
+                </div><br>
+            </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn100px btn-danger">Cancel</button>
+        <button type="button" onclick="resetFaqQa()" class="btn btn100px btn-warning">Reset</button>
+        <button type="button" onclick="editFaqQa()" class="btn btn100px btn-success">Save</button>
       </div>
     </div>
   </div>

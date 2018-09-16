@@ -84,28 +84,9 @@ function viewActive (a){
     else if (a==12) enroll();
     else if (a==13) dtp();
     else if (a==14) license1();
-    else if (a==15) tlect();
-    else if (a==16) payment();
+    else if (a==15) faquest();
+    // else if (a==16) payment();
 }
-
-// function viewActiveStud(a){
-//     var li = "#liS";
-//     $(".liSide").removeClass("active");
-//     for (var x=1; x<=5; x++){
-//         li += a.toString();
-//         if (x==a){
-//             $("li").removeClass("active");
-//         }
-//         else{
-//             $(li).addClass("active");
-//             $("#li2").addClass("active");
-//         }
-//         li = "#liS";
-//     }
-//     $('.viewDiv').hide();
-//     if (a==1) student();
-//     else if (a==4) gradesEval();
-// }
 
 function viewActiveCrs(a){
     var li = "#liC";
@@ -125,26 +106,6 @@ function viewActiveCrs(a){
     if (a==1) courses();
     else if (a==2) lessons();
 }
-
-// function viewActiveSched(a){
-//     var li = "#liSH";
-//     $(".liSide").removeClass("active");
-//     for (var x=1; x<=4; x++){
-//         li += a.toString();
-//         if (x==a){
-//             $("li").removeClass("active");
-//         }
-//         else{
-//             $(li).addClass("active");
-//             $("#li5").addClass("active");
-//         }
-//         li = "#liSH";
-//     }
-//     $('.viewDiv').hide();
-//     if (a==3) schedule();
-//     else if (a==2) schedCanceled();
-//     else if (a==1) schedRequest();
-// }
 
 var dashboard = function (){
     $('.viewDiv').hide();
@@ -299,4 +260,11 @@ var profile = function (){
     resetSettingsAdmin();
     $('.viewDiv').hide();
     $(".view-profile").show();
+}
+
+var faquest = function (){
+    loadFaqLabel();
+    $(".liSide").removeClass("active");
+    $('.viewDiv').hide();
+    $(".view-faq").show();
 }
