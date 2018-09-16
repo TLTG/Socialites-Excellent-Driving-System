@@ -85,6 +85,14 @@ CREATE TABLE IF NOT EXISTS `admin` (
   `branchID` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE IF NOT EXISTS `announcement` (
+`id` int(3) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  `message` varchar(2000) NOT NULL,
+  `dateFrom` date NOT NULL,
+  `status` int(1) NOT NULL COMMENT '0 - off; 1 - on; 2 - not yet'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE IF NOT EXISTS `branch` (
 `id` int(3) NOT NULL,
   `address` varchar(150) NOT NULL,
@@ -162,6 +170,20 @@ CREATE TABLE IF NOT EXISTS `evaluation` (
   `courseID` int(3) NOT NULL,
   `grade` int(4) NOT NULL,
   `dateEvaluated` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `faq` (
+`id` int(2) NOT NULL,
+  `faqLabelID` int(2) NOT NULL,
+  `question` varchar(150) NOT NULL,
+  `answer` varchar(500) NOT NULL,
+  `status` int(1) NOT NULL COMMENT '0 - off; 1 - on'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `faqlabel` (
+`id` int(2) NOT NULL,
+  `label` varchar(50) NOT NULL,
+  `status` int(1) NOT NULL COMMENT '0 - off; 1 -on'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `grades` (
@@ -369,6 +391,9 @@ ALTER TABLE `activity`
 ALTER TABLE `admin`
  ADD PRIMARY KEY (`id`), ADD KEY `userInfo` (`userInfo`), ADD KEY `branchID` (`branchID`);
 
+ALTER TABLE `announcement`
+ ADD PRIMARY KEY (`id`);
+
 ALTER TABLE `branch`
  ADD PRIMARY KEY (`id`);
 
@@ -395,6 +420,12 @@ ALTER TABLE `enrollment`
 
 ALTER TABLE `evaluation`
  ADD PRIMARY KEY (`id`), ADD KEY `studID` (`studID`), ADD KEY `instID` (`instID`), ADD KEY `courseID` (`courseID`);
+
+ALTER TABLE `faq`
+ ADD PRIMARY KEY (`id`), ADD KEY `faqLabelID` (`faqLabelID`);
+
+ALTER TABLE `faqlabel`
+ ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `grades`
  ADD PRIMARY KEY (`id`), ADD KEY `instID` (`instID`), ADD KEY `studID` (`studID`), ADD KEY `lessonID` (`lessonID`), ADD KEY `courseID` (`courseID`), ADD KEY `shedID` (`schedID`);
@@ -465,6 +496,8 @@ ALTER TABLE `activity`
 MODIFY `id` int(15) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `admin`
 MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `announcement`
+MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `branch`
 MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `branch_instructor`
@@ -483,6 +516,10 @@ ALTER TABLE `enrollment`
 MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `evaluation`
 MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `faq`
+MODIFY `id` int(2) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `faqlabel`
+MODIFY `id` int(2) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `grades`
 MODIFY `id` int(4) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `guardian`
@@ -555,6 +592,9 @@ ALTER TABLE `evaluation`
 ADD CONSTRAINT `evaluation_ibfk_1` FOREIGN KEY (`studID`) REFERENCES `student` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
 ADD CONSTRAINT `evaluation_ibfk_2` FOREIGN KEY (`instID`) REFERENCES `instructor` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
 ADD CONSTRAINT `evaluation_ibfk_3` FOREIGN KEY (`courseID`) REFERENCES `course` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+ALTER TABLE `faq`
+ADD CONSTRAINT `faq_ibfk_1` FOREIGN KEY (`faqLabelID`) REFERENCES `faqlabel` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 ALTER TABLE `grades`
 ADD CONSTRAINT `grades_ibfk_1` FOREIGN KEY (`studID`) REFERENCES `student` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,

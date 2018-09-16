@@ -7,7 +7,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 
 INSERT INTO `account` (`id`, `ORno`, `transaction`, `data`, `feeType`, `price`, `balance`, `date`) VALUES
@@ -24,6 +24,10 @@ INSERT INTO `accounttype` (`id`, `title`, `permission`) VALUES
 (3, 'student', '-------'),
 (4, 'branch_admin', '-------');
 
+INSERT INTO `announcement` (`id`, `title`, `message`, `dateFrom`, `status`) VALUES
+(1, 'PROMO (Avail Now)!!!', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam vero doloribus accusantium corporis, ipsam error dolorum! At laboriosam illo itaque ea et inventore fugit animi ratione! Fuga dicta facilis at. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam vero doloribus accusantium corporis, ipsam error dolorum! At laboriosam illo itaque ea et inventore fugit animi ratione! Fuga dicta facilis at', '2018-09-16', 1),
+(2, '20% OFF FOR THE FIRST TEN CUSTOMERS!', 'This promo is only valid for students enrolled in SED-Quezon City (Main). Valid until next week (9/23/18)', '2018-09-16', 1);
+
 INSERT INTO `branch` (`id`, `address`, `telno`, `name`, `purgeFlag`) VALUES
 (1, 'Mayon St. _Cor. Maria Clara, _Quezon city_1108_NCR', '741-7185/', 'Quezon city', 1),
 (2, 'First Level Market! Market! Fort Bonifacio Taguig Global City', '844-7734', 'Taguig City', 1),
@@ -35,7 +39,7 @@ INSERT INTO `branch_instructor` (`id`, `instID`, `branchID`, `assignedDate`) VAL
 (1, 'INST-002002', 1, '2018-09-11 08:13:29'),
 (2, 'INST-003003', 1, '2018-09-11 08:13:29'),
 (3, 'INST-004004', 1, '2018-09-11 08:13:48'),
-(4, 'INST-005005', 1, '2018-09-11 08:13:48'),
+(4, 'INST-005005', 2, '2018-09-11 08:13:48'),
 (5, 'INST-006006', 2, '2018-09-11 08:14:02'),
 (6, 'INST-007007', 2, '2018-09-11 08:14:02'),
 (7, 'INST-008008', 3, '2018-09-11 08:14:22'),
@@ -53,6 +57,21 @@ INSERT INTO `course` (`id`, `description`, `carType`, `amount`, `days`, `status`
 (9, '', 'm', 7500, 15, 1),
 (10, '', 'm', 10000, 20, 1);
 
+INSERT INTO `faq` (`id`, `faqLabelID`, `question`, `answer`, `status`) VALUES
+(1, 1, 'How long will the branch I enrolled in wait for me after I submit my enrollment form online?', 'Our system automatically removes all enrollment form that exceeds one week upon its submission. Don''t worry, we will email you two days before the one week deadline to make sure you don''t forget about it.', 1),
+(2, 3, 'Can I choose specific lessons per course?', 'Yes, but only if you''ve been our student at least once. For choosing of specific lessons, please enroll with your account.', 1),
+(3, 1, 'What are the requirements for enrollment?', 'Please visit the [COURSES] tab for more details.', 1),
+(4, 2, 'What should I bring (requirements) for every driving lesson appointment?', 'It is required to have with you your Student Driver''s Permit or any Philippines Driver''s License for every appointment. You may bring your Student ID, however, it is not required.', 1);
+
+INSERT INTO `faqlabel` (`id`, `label`, `status`) VALUES
+(1, 'Enrollment', 1),
+(2, 'Driving Appointments', 1),
+(3, 'Courses and Lessons', 1),
+(4, 'Scheduling', 1),
+(5, 'Licensing Application Assistance', 1),
+(6, 'Payment', 1),
+(7, 'Others', 1);
+
 INSERT INTO `instructor` (`id`, `userInfo`, `license`, `licenseExp`, `educAttain`, `vacant`, `dateRegistered`, `dateRetired`, `status`) VALUES
 ('INST-002002', 2, 'A02-11-1167', '2023-08-24', 5, '', '0000-00-00 00:00:00', '0000-00-00', 1),
 ('INST-003003', 3, 'A01-11-2131', '2023-08-24', 5, '', '0000-00-00 00:00:00', '0000-00-00', 1),
@@ -64,11 +83,11 @@ INSERT INTO `instructor` (`id`, `userInfo`, `license`, `licenseExp`, `educAttain
 ('INST-009009', 9, 'A01-11-2281', '2023-08-24', 5, '', '0000-00-00 00:00:00', '0000-00-00', 1);
 
 INSERT INTO `lesson` (`id`, `title`, `prerequisite`, `description`, `duration`, `purgeFlag`) VALUES
-(1, 'Start and Stop', NULL, 'Master the starting and stopping of your car\'s engine before you hit the road.', 60, 1),
+(1, 'Start and Stop', NULL, 'Master the starting and stopping of your car''s engine before you hit the road.', 60, 1),
 (2, 'Backing and Turning', NULL, 'Driving a vehicle in reverse direction in order to maneuver,', 60, 1),
 (3, 'Road crossing', NULL, 'Giving way to the pedestrian on crossing with and without lights, crossing at intersection.', 60, 1),
 (4, 'Maneuvering', NULL, 'A controlled change in movement or direction of a moving vehicle.', 60, 1),
-(5, 'Hanging', NULL, 'You\'ll be able to prevent your car from rolling while you\'re on a hill or any elevated surface.', 60, 1),
+(5, 'Hanging', NULL, 'You''ll be able to prevent your car from rolling while you''re on a hill or any elevated surface.', 60, 1),
 (6, 'Garage driving', NULL, 'Things you can do to avoid getting an accident in a parking garage or busy parking lot.', 60, 1),
 (7, 'Parking', NULL, 'The act of stopping and disengaging a vehicle and leaving it unoccupied.', 60, 1),
 (8, 'Highway driving', NULL, 'Driving on a busy road with may lanes.', 60, 1),
@@ -77,21 +96,27 @@ INSERT INTO `lesson` (`id`, `title`, `prerequisite`, `description`, `duration`, 
 
 INSERT INTO `license_apply_price` (`id`, `type`, `desc`, `price`, `status`) VALUES
 (0, 'none', 'none', 0, 0),
-(1, 'SDP', 'Student Driver\'s Permit', 500, 1),
+(1, 'SDP', 'Student Driver''s Permit', 500, 1),
 (2, 'NonPro', 'Non-Professional License', 2500, 1),
 (3, 'Pro', 'Professional License', 2700, 1),
 (4, 'International', 'International License', 5000, 1);
 
-INSERT INTO `payment` (`id`, `transactionID`, `bill`, `pay`, `balance`, `datePay`) VALUES
-(1, '180824e844da2aa', 5500, 5500, 0, '2018-08-24 04:46:02');
-
 INSERT INTO `preregstudent` (`id`, `data`, `dateSubmit`, `status`) VALUES
-(1, '{\"info\":{\"fullname\":\"Graciella _Custodio_Tatel\",\"birthdate\":\"1999-05-17\",\"birthplace\":\"CSJDM, Bulacan\",\"address\":\"CSJDM, Bulacan\",\"telno\":\"09565867353\",\"occupation\":\"Student\",\"email\":\"gtatel0517@gmail.com\",\"civilStatus\":\"Single\",\"sex\":\"Female\",\"guardian\":{\"name\":\"Jemma C. Tatel\",\"telno\":\"09758664532\"}},\"course\":[6],\"branch\":\"1\",\"payment\":1,\"applyLicense\":0,\"special\":{\"course\":[],\"location\":null},\"transaction\":{\"transaction\":\"Enrollment\",\"amount\":0,\"ORnum\":\"1808246de68453f\",\"dataID\":1},\"preference\":{\"vehicle\":\"7\",\"schedule\":[\"2\",\"4\",\"5\"]}}', '2018-08-24 04:06:43', 1),
-(2, '{\"info\":{\"fullname\":\"Christian Paul_Rojero_Tupas\",\"birthdate\":\"1998-12-08\",\"birthplace\":\"Quzon City\",\"address\":\"here and there places everywhere\",\"telno\":\"09185671538\",\"occupation\":\"Developer\",\"email\":\"christianpaultupas@gmail.com\",\"civilStatus\":\"Single\",\"sex\":\"Male\",\"guardian\":{\"name\":\"olivia tupas\",\"telno\":\"09094527651\"}},\"course\":[2],\"branch\":\"1\",\"payment\":1,\"applyLicense\":0,\"special\":{\"course\":[],\"location\":null},\"transaction\":{\"transaction\":\"Enrollment\",\"amount\":0,\"ORnum\":\"180824468f9e9d6\",\"dataID\":2},\"preference\":{\"vehicle\":\"5\",\"schedule\":[\"5\",\"7\",\"3\"]}}', '2018-08-24 04:10:41', 1),
-(3, '{\"info\":{\"fullname\":\"Perrine Clarisse_Buena_Laganzo\",\"birthdate\":\"1998-08-16\",\"birthplace\":\"Makati City\",\"address\":\"Taguig City\",\"telno\":\"09272597427\",\"occupation\":\"Student\",\"email\":\"zhayrineoznagal@gmail.com\",\"civilStatus\":\"Single\",\"sex\":\"Female\",\"guardian\":{\"name\":\"Wilma Laganzo\",\"telno\":\"09062078123\"}},\"course\":[8],\"branch\":\"1\",\"payment\":1,\"applyLicense\":0,\"special\":{\"course\":[],\"location\":null},\"transaction\":{\"transaction\":\"Enrollment\",\"amount\":0,\"ORnum\":\"1808246ee1c2690\",\"dataID\":3},\"preference\":{\"vehicle\":\"8\",\"schedule\":[\"2\",\"5\"]}}', '2018-08-24 04:16:06', 1),
-(4, '{\"info\":{},\"course\":[3],\"branch\":\"1\",\"payment\":1,\"applyLicense\":0,\"special\":{\"course\":[],\"location\":null},\"transaction\":{\"transaction\":\"Enrollment\",\"amount\":0,\"ORnum\":\"18082402c3e24a0\",\"dataID\":4},\"preference\":{\"vehicle\":\"5\",\"schedule\":[\"2\",\"5\"]}}', '2018-08-24 04:19:57', 0),
-(5, '{\"info\":{\"fullname\":\"Janelle Joy_Reyes_Gabat\",\"birthdate\":\"1998-12-18\",\"birthplace\":\"Makati City\",\"address\":\"31-D G. L. Jaena St., West Rembo, Makati City\",\"telno\":\"09218038667\",\"occupation\":\"Student\",\"email\":\"janellejoygabat@gmail.com\",\"civilStatus\":\"Single\",\"sex\":\"Female\",\"guardian\":{\"name\":\"Sarah Jane Gabat\",\"telno\":\"8827273\"}},\"course\":[3],\"branch\":\"1\",\"payment\":1,\"applyLicense\":0,\"special\":{\"course\":[],\"location\":null},\"transaction\":{\"transaction\":\"Enrollment\",\"amount\":0,\"ORnum\":\"180824b7952e960\",\"dataID\":5},\"preference\":{\"vehicle\":\"5\",\"schedule\":[\"2\",\"5\"]}}', '2018-08-24 04:41:10', 1),
-(6, '{\"info\":{\"fullname\":\"Kenard Smith_Belarmino _Bautista \",\"birthdate\":\"1997-05-12\",\"birthplace\":\"CSJDM, Bulacan\",\"address\":\"CSJDM, Bulacan\",\"telno\":\"09750025101\",\"occupation\":\"Programmer\",\"email\":\"ksbautista@gmail.com\",\"civilStatus\":\"Married\",\"sex\":\"Male\",\"guardian\":{\"name\":\"Claire Bautista\",\"telno\":\"09563219645\"}},\"course\":[8],\"branch\":\"1\",\"payment\":1,\"applyLicense\":1,\"special\":{\"course\":[],\"location\":null},\"transaction\":{\"transaction\":\"Enrollment, Apply-1\",\"amount\":500,\"ORnum\":\"180824e844da2aa\",\"dataID\":6},\"preference\":{\"vehicle\":\"10\",\"schedule\":[\"1\",\"4\",\"2\"]}}', '2018-08-24 04:44:45', 1);
+(1, '{"info":{"fullname":"Graciella _Custodio_Tatel","birthdate":"1999-05-17","birthplace":"CSJDM, Bulacan","address":"CSJDM, Bulacan","telno":"09565867353","occupation":"Student","email":"gtatel0517@gmail.com","civilStatus":"Single","sex":"Female","guardian":{"name":"Jemma C. Tatel","telno":"09758664532"}},"course":[6],"branch":"1","payment":1,"applyLicense":0,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment","amount":0,"ORnum":"1808246de68453f","dataID":1},"preference":{"vehicle":"7","schedule":["2","4","5"]}}', '2018-08-24 04:06:43', 0),
+(2, '{"info":{"fullname":"Christian Paul_Rojero_Tupas","birthdate":"1998-12-08","birthplace":"Quzon City","address":"here and there places everywhere","telno":"09185671538","occupation":"Developer","email":"christianpaultupas@gmail.com","civilStatus":"Single","sex":"Male","guardian":{"name":"olivia tupas","telno":"09094527651"}},"course":[2],"branch":"1","payment":1,"applyLicense":0,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment","amount":0,"ORnum":"180824468f9e9d6","dataID":2},"preference":{"vehicle":"5","schedule":["5","7","3"]}}', '2018-08-24 04:10:41', 1),
+(3, '{"info":{"fullname":"Perrine Clarisse_Buena_Laganzo","birthdate":"1998-08-16","birthplace":"Makati City","address":"Taguig City","telno":"09272597427","occupation":"Student","email":"zhayrineoznagal@gmail.com","civilStatus":"Single","sex":"Female","guardian":{"name":"Wilma Laganzo","telno":"09062078123"}},"course":[8],"branch":"1","payment":1,"applyLicense":0,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment","amount":0,"ORnum":"1808246ee1c2690","dataID":3},"preference":{"vehicle":"8","schedule":["2","5"]}}', '2018-08-24 04:16:06', 1),
+(4, '{"info":{},"course":[3],"branch":"1","payment":1,"applyLicense":0,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment","amount":0,"ORnum":"18082402c3e24a0","dataID":4},"preference":{"vehicle":"5","schedule":["2","5"]}}', '2018-08-24 04:19:57', 0),
+(5, '{"info":{"fullname":"Janelle Joy_Reyes_Gabat","birthdate":"1998-12-18","birthplace":"Makati City","address":"31-D G. L. Jaena St., West Rembo, Makati City","telno":"09218038667","occupation":"Student","email":"janellejoygabat@gmail.com","civilStatus":"Single","sex":"Female","guardian":{"name":"Sarah Jane Gabat","telno":"8827273"}},"course":[3],"branch":"1","payment":1,"applyLicense":0,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment","amount":0,"ORnum":"180824b7952e960","dataID":5},"preference":{"vehicle":"5","schedule":["2","5"]}}', '2018-08-24 04:41:10', 1),
+(6, '{"info":{"fullname":"Kenard Smith_Belarmino _Bautista ","birthdate":"1997-05-12","birthplace":"CSJDM, Bulacan","address":"CSJDM, Bulacan","telno":"09750025101","occupation":"Programmer","email":"ksbautista@gmail.com","civilStatus":"Married","sex":"Male","guardian":{"name":"Claire Bautista","telno":"09563219645"}},"course":[8],"branch":"1","payment":1,"applyLicense":1,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment, Apply-1","amount":500,"ORnum":"180824e844da2aa","dataID":6},"preference":{"vehicle":"10","schedule":["1","4","2"]}}', '2018-08-24 04:44:45', 1),
+(7, '{"info":{"fullname":"Troy_Casper_Bolton","birthdate":"1980-01-01","birthplace":"Salt Lake, Utah","address":"Salt Lake, Utah","telno":"09891019991","occupation":"Actor","email":"troy@gmaill.com","civilStatus":"Single","sex":"Male","guardian":{"name":"Thea Bolton","telno":"09019001919"}},"course":[6],"branch":"1","payment":1,"applyLicense":0,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment","amount":0,"ORnum":"1808221113115","dataID":7},"preference":{"vehicle":"7","schedule":["7","1","4","2","3"]}}', '2018-08-21 16:41:57', 1),
+(8, '{"info":{"fullname":"Gabriela__Montes","birthdate":"1982-02-02","birthplace":"CSJDM, Bulacan","address":"CSJDM, Bulacan","telno":"09098781019","occupation":"Actress","email":"gabriela@gmail.com","civilStatus":"Married","sex":"Female","guardian":{"name":"Gabby Montes","telno":"09189901812"}},"course":[6],"branch":"1","payment":1,"applyLicense":1,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment, Apply-1","amount":500,"ORnum":"18082241380","dataID":8},"preference":{"vehicle":"8","schedule":["1","2","3"]}}', '2018-08-21 16:47:01', 1),
+(9, '{"info":{"fullname":"Chad_Harley_Danforth","birthdate":"1980-03-21","birthplace":"Quezon City","address":"Quezon City","telno":"09098881910","occupation":"Writer","email":"chad@gmail.com","civilStatus":"Married","sex":"Female","guardian":{"name":"Charise Danforth","telno":"09010001011"}},"course":[1],"branch":"1","payment":1,"applyLicense":0,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment","amount":0,"ORnum":"18082921407","dataID":9},"preference":{"vehicle":"4","schedule":["1","7","4","2","3"]}}', '2018-08-28 16:52:57', 1),
+(10, '{"info":{"fullname":"Sharpay__Evans","birthdate":"1978-05-01","birthplace":"Quezon City","address":"Quezon City","telno":"09871910011","occupation":"Painter","email":"sharpay@gmail.com","civilStatus":"Married","sex":"Female","guardian":{"name":"Sarah Jane Evans","telno":"09128880011"}},"course":[1],"branch":"1","payment":1,"applyLicense":1,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment, Apply-1","amount":500,"ORnum":"18081541192","dataID":10},"preference":{"vehicle":"5","schedule":["2","3","4"]}}', '2018-08-14 16:55:32', 1),
+(11, '{"info":{"fullname":"Chad_Harley_Danforth","birthdate":"1990-02-21","birthplace":"CSJDM, Bulacan","address":"CSJDM, Bulacan","telno":"09902920101","occupation":"Painter","email":"chad@gmail.com","civilStatus":"Married","sex":"Male","guardian":{"name":"Charise Danforth","telno":"09081910001"}},"course":[1],"branch":"1","payment":1,"applyLicense":1,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment, Apply-1","amount":500,"ORnum":"180822214138","dataID":11},"preference":{"vehicle":"4","schedule":["1","4","7","2","3"]}}', '2018-08-21 16:58:57', 1),
+(12, '{"info":{"fullname":"Ryan_Harley_Evans","birthdate":"1980-05-05","birthplace":"Quezon City","address":"Quezon City","telno":"09908110923","occupation":"Programmer","email":"ryan@gmail.com","civilStatus":"Divorced","sex":"Male","guardian":{"name":"Ryannn Evans","telno":"09182930021"}},"course":[1],"branch":"1","payment":1,"applyLicense":0,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment","amount":0,"ORnum":"18082212068","dataID":12},"preference":{"vehicle":"6","schedule":["1","4","5","2","3"]}}', '2018-08-21 17:02:31', 1),
+(13, '{"info":{"fullname":"Taylor _Custodio_McKessie","birthdate":"1978-06-06","birthplace":"Quezon City","address":"Quezon City","telno":"09071882345","occupation":"Dancer","email":"zhayrineoznagal@gmail.com","civilStatus":"Single","sex":"Female","guardian":{"name":"Taytay McKessie","telno":"09657829102"}},"course":[6],"branch":"1","payment":1,"applyLicense":0,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment","amount":0,"ORnum":"18082233910","dataID":13},"preference":{"vehicle":"10","schedule":["1","4","7","5"]}}', '2018-08-21 17:06:44', 1),
+(14, '{"info":{"fullname":"Kelsi_Adams_Nielsen","birthdate":"1987-12-02","birthplace":"CSJDM, Bulacan","address":"CSJDM. Bulacan","telno":"09758664532","occupation":"Student","email":"kelsi@gmail.com","civilStatus":"Single","sex":"Female","guardian":{"name":"Kelly Nielsen","telno":"09758664531"}},"course":[6],"branch":"1","payment":1,"applyLicense":1,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment, Apply-1","amount":500,"ORnum":"180822159144","dataID":14},"preference":{"vehicle":"8","schedule":["2","5","6","3"]}}', '2018-08-21 17:09:11', 1),
+(15, '{"info":{"fullname":"Ria_A_Sagum","birthdate":"1980-12-25","birthplace":"Quezon City","address":"Quezon City","telno":"09567224151","occupation":"Professor","email":"gtatel0517@gmail.com","civilStatus":"Married","sex":"Female","guardian":{"name":"Ryan Sagum","telno":"09056788191"}},"course":[8],"branch":"1","payment":1,"applyLicense":0,"special":{"course":[],"location":null},"transaction":{"transaction":"Enrollment","amount":0,"ORnum":"18082901430","dataID":15},"preference":{"vehicle":"7","schedule":["1","2","3","4","5"]}}', '2018-08-29 00:24:05', 1);
 
 INSERT INTO `useraccount` (`id`, `username`, `password`, `accType`, `status`) VALUES
 (1, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 1, 1),
