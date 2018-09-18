@@ -1692,6 +1692,7 @@ textarea {
     position: relative;
   }
   .mini-sidebar .sidebar-nav #sidebarnav li.active {
+    color: #F8D108;
     width:100%;
   }
   .mini-sidebar .sidebar-nav #sidebarnav > li > ul {
@@ -5562,7 +5563,6 @@ tbody tr td:last-child {
 }
 .profiletimeline .sl-date {
   color: #262b2e;
-  font-size: 12px;
 }
 .profiletimeline .time-item {
   border-color: rgba(120, 130, 140, 0.13);
@@ -8586,4 +8586,31 @@ tiCustom
 }
 .noAnnounceDiv, .noFaqDiv{
   padding: 10px;
+}
+.accH5{
+  text-align: center;
+  color: #EDD55D;
+  border-bottom: solid 2px #e7713a6e;
+  border-top: solid 2px #e7713a6e;
+  padding: 5px
+}
+.h5a{
+  color: #5d0000;
+  padding-top: 10px;
+}
+.noEvalYet{
+  padding: 20px;
+  text-align: center
+}
+.startEvalPerc{
+  padding: 10px
+}
+.evalInstDiv{
+  color: black
+}
+#evalInstAdmin{
+  font-size: 13px
+}
+.crsInstEval{
+  color: black
 }

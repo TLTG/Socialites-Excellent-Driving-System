@@ -43,6 +43,19 @@ var evaluation = {
             cb(new Error("Error: On displaying student grades"));
         });
     },
+    getGradesInst2: function(cb){
+        var req = $.get('api/v1/grade/student2/' + studID, function(response){
+            if(response.success == false){
+                console.log(response.detail);
+                cb(new Error(response.detail));
+            }else{
+                cb(null, response.data);
+            }
+        }).fail(function(request){
+            console.log(request.status + ": " + request.statusText);
+            cb(new Error("Error: On displaying student grades"));
+        });
+    },
     getGradesSum: function(cb){
         var req = $.get('api/v1/grade/student/' + studID + "/sum", function(response){
             if(response.success == false){
@@ -112,6 +125,51 @@ var evaluation = {
         }).fail(function(request){
             console.log(request.status + ": " + request.statusText);
             cb(new Error("Error: On displaying evaluation"));
+        });
+    },
+    getEvalInstPerc: function(cb){
+        $.ajax({
+            type: "GET",
+            url: 'api/v1/grade/eval/' + instID,
+            data: {year: yearnow, month: uptomonth1},
+            success: (res)=>{
+                if(res.success){
+                    cb(null, res.data);
+                }else{
+                    cb(new Error(res.detail));
+                }
+            },
+            error: xhr=>cb(new Error(xhr.status+": "+xhr.statusText)),
+        });
+    },
+    getEvalInstPercMonth: function(cb){
+        $.ajax({
+            type: "GET",
+            url: 'api/v1/grade/eval/' + instID + '/month',
+            data: {year: yearnow, month: monthnow},
+            success: (res)=>{
+                if(res.success){
+                    cb(null, res.data);
+                }else{
+                    cb(new Error(res.detail));
+                }
+            },
+            error: xhr=>cb(new Error(xhr.status+": "+xhr.statusText)),
+        });
+    },
+    getEvalInst: function(cb){
+        $.ajax({
+            type: "GET",
+            url: 'api/v1/grade/evalInst/' + instID,
+            data: {year: yearnow, month: monthnow},
+            success: (res)=>{
+                if(res.success){
+                    cb(null, res.data);
+                }else{
+                    cb(new Error(res.detail));
+                }
+            },
+            error: xhr=>cb(new Error(xhr.status+": "+xhr.statusText)),
         });
     },
 }
