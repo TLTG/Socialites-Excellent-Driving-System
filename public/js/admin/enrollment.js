@@ -234,14 +234,16 @@ function appRegForm(){ //Approve Registration
                 var reg = function(cb){
                     preRegAssess.approve(preRegAssess.enrolleeSelected, function(err){
                         $('.preloader').fadeOut();
-                        if(!err){
+                        if(err){
+                            setTimeout(()=>{
+                                swal('Problem Encounter', err.message, 'error');
+                            },100);
+                            cb(err);
+                        }else{
                             swal('Done', "Student Successfully Enrolled!",'success');
                             preRegAssess.enrolleeSelected = -1;
                             loadPreReg(1);
                             cb(null);
-                        }else{
-                            swal('Problem Encounter', err.message, 'error');
-                            cb(err);
                         }
                     });
                 };
