@@ -8,7 +8,6 @@ var student = require('../../model/studentModel');
 var Email = require('../../bin/emailer');
 var payments = require('../../model/accountModel');
 var lesson = require('../../model/lessonModel');
-var grade = require('../../model/evaluationModel');
 var Validation = require('../../bin/util/validation');
 var valid = new Validation();
 
@@ -32,19 +31,16 @@ exports.get = function(req, res, next){
         }
     }
     if(param){
-        /* if(query != {}){
-            res.status(403).send({}); // delete this after implementation
-        }else{ */
-            var field = (param.field == undefined ? null : param.field);
-            student.get(param.id, field, function(err, result){
-                if(err) return next(err);
-                res.status(200).send({success: true, data: result});                
-            });
-        //}
+        var field = (param.field == undefined ? null : param.field);
+        student.get(param.id, field, function(err, result){
+            if(err) return next(err);
+            if(result == null) return next();
+            res.status(200).send({success: true, data: result});                
+        });
     }else{
         var offset = query.offset == undefined ? 0 : parseInt(query.offset);
         var limit = query.limit == undefined ? 10 : parseInt(query.limit);
-        var type = query.filter == undefined ? 0 : parseInt(query.filter);
+        var type = query.filter == undefined ? 1 : parseInt(query.filter);
         var branch = query.branch;
         student.getList(offset, limit, type, branch, function(err, result){
             if(err) return next(err);
@@ -422,16 +418,23 @@ exports.getPreRegList = function(req, res, next){
     };
     var offset = req.query.offset == undefined ? 0 : req.query.offset;
     var limit = req.query.limit == undefined ? 10 : parseInt(req.query.limit);
+    var branch = req.query.branch == undefined ? null : req.query.branch;
     student.getPreRegList(offset, limit, function(err, result){
         if(err) return next(err);
-        var res_length = result.length;
-        if(res_length == 0) return response();
-        result.forEach(element => {
+        if(result.length == 0) return response();
+        result.forEach((element,index) => {
             var data = JSON.parse(element.data);
             element.data = data;
-            processData.push(element);
-            res_length--;
-            if(res_length == 0) return response();
+
+            if(branch){
+                if(branch == element.data.branch){
+                    processData.push(element);
+                }
+            }else{
+                processData.push(element);
+            }
+
+            if(index == result.length-1) return response();
         });
     });
 }
@@ -502,6 +505,42 @@ exports.getStudPayments = function(req, res, next){
     payments.getStudentTransactions(studID, function(err, result){
         if(err) return next(err);
         res.status(200).send({success: true, data: result});
+    });
+}
+
+exports.transferList = function(req, res, next){
+    var query = req.query;
+    student.transferList(query, function(err, data){
+        if(err) return next(err);
+        res.status(200).send({success: true, data: data});
+    });
+}
+
+exports.transferBranch = function(req, res, next){
+    var studID = req.session.studID || req.body.studID;
+    var branch = req.body.branch;   
+    var effectiveDate = req.body.date;
+
+    if(!studID || !branch || !effectiveDate) return res.status(200).send({success: false, detail: "Invalid Data"});
+    student.getData(studID, function(err, data){
+        if(err) return next(err);
+        student.transfer(studID, branch, data.branch, Date.parse(effectiveDate).toString("yyyy-MM-dd"), function(err, result){
+            if(err) return next(err);
+            res.status(200).send({success: true, detail: "Transfer request sent"});
+        });
+    });
+}
+
+exports.transferAction = function(req, res, next){
+    var id = req.params.id;
+    var action = req.body.action;
+    if(!id || !action) return res.status(200).send({success: false, detail: "Invalid Data"});
+
+    action = action.toUpperCase() == "APPROVE" ? 2 : 3;
+
+    student.transferAction(id, action, function(err){
+        if(err) return next(err);
+        res.status(200).send({success: true, detail: (action == 2 ? "Transfer Approve" : "Transfer Reject")});
     });
 }
 

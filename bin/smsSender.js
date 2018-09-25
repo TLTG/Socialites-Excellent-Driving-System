@@ -4,7 +4,7 @@ var SMSservice = function(){
     
     this.send = function(recipient, message, priority){
         return new Promise((resolve, reject)=>{
-            if(!process.env.SMS_STATUS) return reject('Disabled');
+            if(!process.env.SMS_STATUS || process.env.SMS_STATUS == "false") return reject('Disabled');
             if(status == 0) return reject("Server is Offline");
             itextmo.send(recipient, message, priority, function(err, res){
                 if(err) return reject(err);
