@@ -30,7 +30,8 @@ exports.getStud = function(req, res, next){
             report.getStud1A(req.query.date).then(data=>{
                 var student = {
                     title: "Students",
-                    title2: "Enrollees"
+                    title2: "Enrollees",
+                    reqDate: Date.parse(req.query.date).toString('MMM dd, yyyy'),
                 }
                 createReport(student);
             }).catch(reason=>{
