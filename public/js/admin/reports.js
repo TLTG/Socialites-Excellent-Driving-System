@@ -210,16 +210,21 @@ function generateReport(a){
         freq = $('.selReportFreq1').find("option:selected").val();
         branch = $('.selReportBranch1').find("option:selected").val();
 
+        var date;
+
         if (freq==1){
             daily = $('.dailyRepDate1').val();
-            daily = Date.parse(daily).toString("yyyy-MM-dd");
+            date = Date.parse(daily).toString("yyyy-MM-dd");
         }else if (freq==2){
-            week = $('.weeklyRepDate1').val();
-            year = week.substring(0, 4);
-            week = week.substring(6, 8);
+            date = $('.weeklyRepDate1').val();
+            // year = week.substring(0, 4);
+            // week = week.substring(6, 8);
         }else if (freq==3){
             month = $(".monthlyRepDate1").val();
             year = $(".yearRepDate1").val();
+
+            date = Date.parse(month+1).toString('MMM');
+            date += " " + year;
         }else if (freq==4){
             if (fromYrQ<=0){
                 fromYrQ = 12 + fromYrQ;
@@ -228,8 +233,10 @@ function generateReport(a){
             monthto = $(".quarterlyRepDate1").val();
             yearfrom = yearFromQ;
             yearto = $(".yearRepDate1").val();
-        }
-        else if (freq==5){
+
+            date = Date.parse(monthto+1).toString('MMM');
+            date += " " + yearto;
+        }else if (freq==5){
             if (fromYrS<=0){
                 fromYrS = 12 + fromYrS;
             }
@@ -237,12 +244,55 @@ function generateReport(a){
             monthto = $(".semiRepDate1").val();
             yearfrom = yearFromS;
             yearto = $(".yearRepDate1").val();
-        }
-        else if (freq==6){
+
+            date = Date.parse(monthto+1).toString('MMM');
+            date += " " + yearto;
+        }else if (freq==6){
             year = $(".yearRepDate1").val();
+            date = year;
         }
 
-        swal("Downloading...", title + ": " + title2 + " report is now downloading.");
+        var link = "api/v1/report/";
+
+        switch(title2){
+            case 'Tuition/Enrollment' : {
+                link += 'tuition';
+                break;
+            }
+            case 'Certificate' : {
+                link += 'certificate';
+                break;
+            }
+            case 'Licensing Assistance' : {
+                link += 'license';
+                break;
+            }
+            case 'All' : {
+                link += 'gross';
+                break;
+            }
+        }
+
+        link += "?";
+        
+        swal({
+            title: "Generate Report?",
+            text: title + ": " + title2,
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function (conf){
+            if(conf){
+                link += "freq=" + freq;
+                link += "&date=" + date;
+                link += branch != "allBr" ? "&branch="+branch : "";
+                setTimeout(function(){
+                    swal('Done','','success');
+                    window.location = link;
+                },1000)
+            }
+        });
     }
     
     else if (a==2){
@@ -284,26 +334,32 @@ function generateReport(a){
             year = $(".yearRepDate2").val();
         }
 
-        report.getStud(function(err){
-            if(err){
-                swal("Failed!", err.message, "error");
-                console.log(err.message);
-            }else{
-                swal("Downloading...", title + ": " + title2 + " report is now downloading.");
-                // if(result.length!=0){
-                    // $('.noEvalYet').hide();
-                    // var x = 0, y, z;
-                    // result.forEach(e => {
-                    //     y = JSON.parse(result[x].data);
-                    //     alert ((x+1) + " " + y.info.fullname.replace(/_/g, ' ') + " " + y.branch + " " + y.course + " " + Date.parse(e.dateSubmit).toString('MMM dd, yyyy'));
-                    //     x++;
-                    //     alert(name);
-                    // });
-                // } else{
-                //     swal("Oops!", "There are no " +  title + ": " + title2 + " report to be generated.");
-                // }
-            }
-        });
+        swal("Downloading...", title + ": " + title2 + " report is now downloading.");
+
+        var link = "api/v1/report/student?";
+
+        link += "branch=" + branch;
+        link += "&report=" + title2;
+        link += "&freq=" + freq;
+        link += "&date=" + daily;
+        link += "&week=" + week;
+        link += "&year=" + year;
+        link += "&month=" + month;
+        link += "&monthfrom=" + monthfrom;
+        link += "&monthto=" + monthto;
+        link += "&yearfrom=" + yearfrom;
+        link += "&yearto=" + yearto;
+
+        window.location = link;
+
+        // report.getStud(function(err, link){
+        //     if(err){
+        //         swal("Failed!", err.message, "error");
+        //         console.log(err.message);
+        //     }else{
+        //         windows.location = link;
+        //     }
+        // });
     }
     
     else if (a==3){

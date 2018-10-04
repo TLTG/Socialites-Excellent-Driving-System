@@ -85,12 +85,16 @@ Student.preRegDel = function(id, cb){
     PreRegister.delete(id, "status", cb);
 }
 
+Student.preRegDone = function(id, cb){
+    PreRegister.update(id, 2, "status", cb);
+}
+
 Student.preRegEdit = function(id, data, cb){
     PreRegister.update(id, data, "data", cb);
 }
 
 Student.getPreRegList = function(offset, limit, cb){
-    var sql = "SELECT * FROM " + PreRegister.table + " WHERE id > ? AND status > 0 ORDER BY id ASC LIMIT ?";
+    var sql = "SELECT * FROM " + PreRegister.table + " WHERE id > ? AND status = 1 ORDER BY id ASC LIMIT ?"; // changed status > 0 to status = 1
     db.get().query(sql, [offset, limit], function(err,result){
         if(err) return cb(err);
         cb(null, result);

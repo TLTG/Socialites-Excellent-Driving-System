@@ -50,7 +50,7 @@ exports.enrollWeb = function(req, res, next){
                     course.getCoursePrice(enroll).then(coursePrice=>{
                         var total = parseFloat(coursePrice.total);
                         var transaction = ("Enrollment");
-                        billing.addBill(transaction, {enrolled: enroll, apply: 0}, data.payment, total, function(error, billResult){
+                        billing.addBill(transaction, {enrolled: enroll, apply: 0, branch: studentData.branch}, data.payment, total, function(error, billResult){
                             if(error) return next(error);
                             student.enrollCourse([studentData.id, billResult.ORid, 2],function(errr,result){
                                 if(errr) return next(errr);
@@ -95,7 +95,7 @@ exports.enrollWeb = function(req, res, next){
                         if(err) return next(err);
                         var total = parseFloat(coursePrice.total) + parseFloat(license[0].price);
                         data.transaction.transaction = ("Enrollment" + (data.applyLicense==0 ? "" : ", Apply-" + data.applyLicense));
-                        billing.addBill(data.transaction.transaction, {enrolled: enroll, apply: data.applyLicense}, data.payment, total, function(err, result){
+                        billing.addBill(data.transaction.transaction, {enrolled: enroll, apply: data.applyLicense, branch: data.branch}, data.payment, total, function(err, result){
                             if(err) return next(err);
                             data.transaction["ORnum"] = result.ORid;
                             data.transaction["dataID"] = result.id;

@@ -58,6 +58,7 @@
                         var html = "";
                         if(payments.length!=0){
                             payments.forEach((element,index)=>{
+                                if(element.desc == "Apply none") return;
                                 html += "<tr>";
                                 html += "<td>"+ date +"</td>";
                                 html += "<td>"+ element.desc +"</td>";
