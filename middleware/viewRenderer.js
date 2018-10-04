@@ -28,14 +28,23 @@ exports.admin = function (req, res, next){
 }
 
 exports.user = function(req, res, next){
-    var WebModel = require('../model/webModel');
+    var WebModel = new (require('../model/webModel'));
     var Car = require('../model/vehicleModel');
-    new WebModel().getLicenseApply(function(err, data){
+    WebModel.getLicenseApply(function(err, data){
         if(err) return next(err);
         Car.getListModel(function(errr,vehicle){
             if(errr) return next(errr);
-            var login = res.locals.login ? res.locals.login : '';
-            res.render('main/index',{title: 'Socialites Excellent Driving', login: login, license: data, car: vehicle});
+            WebModel.getBranch(0, 99, true, function(err, branch){
+                if(err) return next(err);
+
+                var login = res.locals.login ? res.locals.login : '';
+                res.locals.title = 'Socialites Excellent Driving';
+                res.locals.login = login;
+                res.locals.license = data;
+                res.locals.car = vehicle;
+                res.locals.branch = branch;
+                res.render('main/index');
+            })
         });
     });
 }
@@ -47,13 +56,14 @@ exports.student = function(req, res, next){
         //console.log(res.locals);
         res.render('student/index', res.locals);
     }else{
-        res.locals.login = 'loginStudent';
+        res.locals.login = 'loginStudent errorLogin';
         exports.user(req,res,next);
     }
 }
 
 exports.instructor = function(req, res, next){
     var students = require ('../model/lessonModel');
+    var instructor = require ('../model/instructorModel');
     var schedule = require ('../model/scheduleModel');
     var grades = require ('../model/evaluationModel');
     if(req.session.instID != -1){
@@ -108,6 +118,14 @@ exports.instructor = function(req, res, next){
                 resolve(stud);
             });
         });
+        var getInfo = new Promise((resolve, reject)=>{
+            instructor.get(req.session.instID, function(err, inst){
+                if(err) return reject(err);
+                inst[0].data = JSON.parse(inst[0].data);
+                res.locals.user = inst[0];
+                resolve(inst);
+            });
+        });
         // var getEvalInstPerc = new Promise((resolve, reject)=>{
         //     grades.getEvalInstPerc(req.session.instID, req.query.year, req.query.month, function(err, stud){
         //         if(err) return reject(err);
@@ -115,11 +133,11 @@ exports.instructor = function(req, res, next){
         //         resolve(stud);
         //     });
         // });
-        Promise.all([getStudents, getEvalInstNumber, getGradesInst, getGradesSum, getAvailableLessons, getHandledPast]).then((results)=>{
-            res.render('instructor/index', res.locals);
+        Promise.all([getStudents, getEvalInstNumber, getGradesInst, getGradesSum, getAvailableLessons, getHandledPast, getInfo]).then((results)=>{
+            res.render('instructor/index');
         }).catch(next);
     }else{
-        res.locals.login = 'loginInst';
+        res.locals.login = 'loginInst ' + (req.method == "POST" ? "errorLogin" : "");
         exports.user(req,res,next);
     }
 }

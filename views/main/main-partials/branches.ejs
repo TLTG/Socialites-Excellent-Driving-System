@@ -26,7 +26,21 @@
                 <th width="200px">TELEPHONE NO.</th>
             </thead>
             <tbody id="branchTbl">
-                <tr>
+                <%
+                    var html = "";
+                    var currentSelected = "";
+                    branch.forEach((e,i)=>{
+                        html += "<tr>";
+                        html += "<td>"+ (e.location == currentSelected ? "" : e.location) +"</td>";
+                        html += "<td>SED-"+ (e.branchName.split(/[ ,]/g))[0] +"</td>";
+                        html += "<td>"+ e.fulladdress +"</td>";
+                        html += "<td>"+ e.telno +"</td>";
+                        html += "</tr>";
+                        if(e.location != currentSelected) currentSelected = e.location;
+                    });
+                %>
+                <%-html%>
+                <%# <tr>
                     <td>Quezon City</td>
                     <td>SED-Main</td>
                     <td>Mayon St. corner Maria Clara</td>
@@ -73,7 +87,7 @@
                     <td>SED-Makati Ave.</td>
                     <td>Room 303 Villa Bldg., Jupiter Street corner, Makati Ave., Makati City</td>
                     <td>896-33-54</td>
-                </tr>
+                </tr> %>
             </tbody>
         </table>
         <center>

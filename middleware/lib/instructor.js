@@ -149,6 +149,19 @@ exports.getEvalStud = function(req, res, next){
     })
 }
 
+
+exports.updateAvatar = function(req, res, next){
+    var id = req.params.id || req.session.instID;
+
+    if(!id) return res.status(200).send({success: false, detail: "Invalid ID"});
+
+    instructor.get(id, 'id', function(err, userID){
+        if(err) return next(err);
+        req.body.id = userID;
+        next();
+    });
+}
+
 exports.testGettingAvailInst = function(req, res, next){
     var sched = require('../../model/scheduleModel');
     sched.getSchedule({}, function(err, result){

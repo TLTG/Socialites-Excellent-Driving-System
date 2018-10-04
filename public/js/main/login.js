@@ -8,6 +8,9 @@ $(function() {
         loginClick();
         logInst();
     };
+    if($('.errorLogin').length){
+        swal('Login', 'Invalid Username/Password', 'error');
+    }
 });
 
 var logStud = function() 
