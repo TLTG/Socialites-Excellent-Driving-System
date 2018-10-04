@@ -277,7 +277,7 @@ exports.register = function(req, res, next){
                     var studData = [fixedID,idArr[1], "", 0, JSON.stringify(enrollee.data.preference.schedule), enrollee.data.preference.vehicle, enrollee.data.branch, null, 1];
                     student.create(studData,function(err, result){
                         if(err) return reject0(err);
-                        student.preRegDel(id, function(e){
+                        student.preRegDone(id, function(e){
                             if(e) return reject0(e);
                             resolve0({success:result, detail: "ok", userData: enrollee});
                         });

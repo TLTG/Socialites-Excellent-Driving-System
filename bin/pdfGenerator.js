@@ -61,3 +61,18 @@ exports.generatePDF = function(html, method, cb){
         cb(new Error("Invalid Method"));
     }
 };
+
+exports.createPDF = function(template, data, DataType, cb){
+    var pdf = exports;
+    if(typeof DataType == "function"){
+        cb = DataType;
+        DataType = pdf.saveAsFile;
+    }
+    pdf.generateView(template, data, function(err, html){
+        if(err) return cb(err);
+        pdf.generatePDF(html, DataType, function(err, buffer){
+            if(err) return cb(err);
+            cb(null,buffer);
+        });
+    });
+}

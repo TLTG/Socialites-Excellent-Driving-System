@@ -13,7 +13,7 @@ SET time_zone = "+00:00";
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getInst`(IN `_id` VARCHAR(15))
     READS SQL DATA
-SELECT i.id as instID, i.vacant, u.* FROM instructor i, userinfo u WHERE i.id = _id AND i.userInfo = u.id$$
+SELECT i.id as instID, i.vacant, u.*, oi.data FROM instructor i, userinfo u, other_info oi WHERE i.id = _id AND i.userInfo = u.id AND oi.referenceID = u.id$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getInstList`(IN `_offset` INT(7), IN `_limit` INT(5))
     READS SQL DATA

@@ -154,6 +154,7 @@ var account = function (){
 
 var enroll = function (){
     $('.viewDiv').hide();
+    preRegAssess.offset = 0;
     loadPreReg();
     $(".view-enrollment").show();
     $(".search-box").hide();

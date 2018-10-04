@@ -1,10 +1,10 @@
 var report = require('../../model/reportsModel');
+var pdf = require('../../bin/pdfGenerator');
 
 //GROSS INCOME REPORTS
 //STUDENTS REPORT
 exports.getStud = function(req, res, next){
     if(res.locals.authenticated == 0) return next();
-    var pdf = require('../../bin/pdfGenerator');
     var fileName;
 
     var freq = req.query.freq;
@@ -15,12 +15,9 @@ exports.getStud = function(req, res, next){
             if(err) return next(err);
             pdf.generatePDF(html, pdf.getBuffer, function(err, buffer){
                 if(err) return next(err);
-                // let json = JSON.stringify(buffer);
-                // console.log(json);
-                // res.set('Content-disposition', 'attachment; filename=' + fileName);
-                // res.set('Content-Type', 'Application/pdf');
-                // res.status(200).send(buffer);
-                res.status(200).send({success: true, data: buffer});
+                res.set('Content-disposition', 'attachment; filename=' + fileName);
+                res.set('Content-Type', 'Application/pdf');
+                res.status(200).send(buffer);
             });
         });
     }
@@ -38,12 +35,6 @@ exports.getStud = function(req, res, next){
             }).catch(reason=>{
                 next(reason);
             });
-            // report.getStud1A(req.query.date, function(err, result){
-            //     if(err) return next(err);
-            //     console.log(result);
-            //     createReport(result);
-            //     res.status(200).send({success: true, data: result});
-            // });
         }
         else if (freq=="2"){
             report.getStud1B(req.query.week, req.query.year, req.query.branch, function(err, result){
@@ -172,6 +163,93 @@ exports.getStud = function(req, res, next){
             });
         }
     }
+}
+
+exports.tuition = function(req, res, next){
+    var query = req.query;
+
+    if(!query.freq || !query.date) return res.status(400).send('Invalid Request');
+
+    var data = {};
+    report.tuition(query, function(err, result){
+        if(err) return next(err);
+        data.total = result.total;
+        data.transaction = result.transaction;
+
+        var dateStart = Date.parse(result.dateStart);
+        var dateEnd = Date.parse(result.dateEnd);
+        dateEnd = dateEnd.compareTo(dateStart) != 0 ? dateEnd : dateStart;
+        data.dateEnd = dateEnd.toString('MMMM dd, yyyy'); 
+        data.dateStart = dateStart.toString('MMMM dd, yyyy'); 
+
+        data.branch = query.branch ? data.transaction.length != 0 ? data.transaction[0].branch : "" : null;
+        
+        pdf.createPDF(pdf.reportTemplates.tuition, data, pdf.getBuffer, function(err, buffer){
+            if(err) return next(err);
+            var fileName = "Gross Income Report: Tuition["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString('MM/dd/yyyy'): "") +"].pdf";
+            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            res.set('Content-Type', 'Application/pdf');
+            res.status(200).send(buffer);
+        });
+    });
+}
+
+exports.license = function(req, res, next){
+    var query = req.query;
+
+    if(!query.freq || !query.date) return res.status(400).send('Invalid Request');
+
+    var data = {};
+    report.license(query, function(err, result){
+        if(err) return next(err);
+        data.total = result.total;
+        data.transaction = result.transaction;
+
+        var dateStart = Date.parse(result.dateStart);
+        var dateEnd = Date.parse(result.dateEnd);
+        dateEnd = dateEnd.compareTo(dateStart) != 0 ? dateEnd : dateStart;
+        data.dateEnd = dateEnd.toString('MMMM dd, yyyy'); 
+        data.dateStart = dateStart.toString('MMMM dd, yyyy'); 
+
+        data.branch = query.branch ? data.transaction.length != 0 ? data.transaction[0].branch : "" : null;
+        
+        pdf.createPDF(pdf.reportTemplates.license, data, pdf.getBuffer, function(err, buffer){
+            if(err) return next(err);
+            var fileName = "Gross Income Report: License["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString('MM/dd/yyyy'): "") +"].pdf";
+            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            res.set('Content-Type', 'Application/pdf');
+            res.status(200).send(buffer);
+        });
+    });
+}
+
+exports.certificate = function(req, res, next){
+    var query = req.query;
+
+    if(!query.freq || !query.date) return res.status(400).send('Invalid Request');
+
+    var data = {};
+    report.certificate(query, function(err, result){
+        if(err) return next(err);
+        data.total = result.total;
+        data.transaction = result.transaction;
+
+        var dateStart = Date.parse(result.dateStart);
+        var dateEnd = Date.parse(result.dateEnd);
+        dateEnd = dateEnd.compareTo(dateStart) != 0 ? dateEnd : dateStart;
+        data.dateEnd = dateEnd.toString('MMMM dd, yyyy'); 
+        data.dateStart = dateStart.toString('MMMM dd, yyyy'); 
+
+        data.branch = query.branch ? data.transaction.length != 0 ? data.transaction[0].branch : "" : null;
+        
+        pdf.createPDF(pdf.reportTemplates.certificate, data, pdf.getBuffer, function(err, buffer){
+            if(err) return next(err);
+            var fileName = "Gross Income Report: Certificate["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString('MM/dd/yyyy'): "") +"].pdf";
+            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            res.set('Content-Type', 'Application/pdf');
+            res.status(200).send(buffer);
+        });
+    });
 }
 
 //INSTRUCTORS REPORT

@@ -1747,10 +1747,22 @@ var report = {
         $.ajax({
             type: "GET",
             url: 'api/v1/report/student',
-            data: {branch: branch, report: title2, freq: freq, date: daily, week: week, year: year, month: month, monthfrom: monthfrom, monthto: monthto, yearfrom: yearfrom, yearto: yearto},
+            data: {
+                branch: branch, 
+                report: title2, 
+                freq: freq, 
+                date: daily, 
+                week: week, 
+                year: year, 
+                month: month, 
+                monthfrom: monthfrom, 
+                monthto: monthto, 
+                yearfrom: yearfrom, 
+                yearto: yearto
+            },
             success: (res)=>{
                 if(res.success){
-                    cb(null);
+                    cb(null, res.data);
                 }else{
                     cb(new Error(res.detail));
                 }

@@ -33,7 +33,7 @@ exports.midLogger = function(req, res, next){
 
 exports.errLogger = function(err){
     var today = new Date();
-    fs.appendFile('./log/error.log', "***" + today.toString() + "***\n" + err + "\n***\n\n", function(err){
+    fs.appendFile('./log/error/'+ today.toString('MM-dd-yyyy') + '.log', "***" + today.toString() + "***\n" + err + "\n***\n\n", function(err){
         if(err){
             console.log("[SERVER] Logging " + err.stack);        
         }
