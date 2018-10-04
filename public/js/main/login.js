@@ -8,6 +8,9 @@ $(function() {
         loginClick();
         logInst();
     };
+    if($('.errorLogin').length){
+        swal('Login', 'Invalid Username/Password', 'error');
+    }
 });
 
 $('.input100').bind("cut copy paste", function(e){

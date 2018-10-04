@@ -213,6 +213,7 @@ exports.generateInvoice = function(req, res, next){
                         });
                         transaction.payments = payments;
                         transaction.name = fullname;
+                        console.log(JSON.stringify(transaction))
                         createInvoice(transaction);
                     }
                 });

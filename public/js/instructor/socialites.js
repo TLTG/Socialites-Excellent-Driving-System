@@ -90,4 +90,23 @@ var app = {
             }
         });
     },
+    updatePic: function(instID, confirm, cb){
+        $.ajax({
+            type: "PUT",
+            url: "api/v1/instructor/" + instID + "/avatar",
+            data:{
+                confirm: confirm,
+            },
+            success: res=>{
+                if(res.success){
+                    cb(null, res.detail, res.path);
+                }else{
+                    cb(new Error(res.detail));
+                }
+            },
+            error: xhr=>{
+                cb(new Error(xhr.status + ":" + xhr.statusText));
+            }
+        });
+    },
 }

@@ -12,8 +12,17 @@ WebElement.prototype.getCourse = function(offset,limit,type,cb){
     });
 };
 
-WebElement.prototype.getBranch = function(offset,limit,cb){
+WebElement.prototype.getBranch = function(offset,limit, ordered, cb){
+    if(typeof ordered == "function"){
+        cb = ordered;
+        ordered = null;
+    }
     var sql = "SELECT branchID, branchName, location, fulladdress, telno FROM web_branch";
+
+    if(ordered){
+        sql += " ORDER BY location";
+    }
+
     db.get().query(sql, function(err, data){
         if(err) return cb(err);
         cb(null, data);

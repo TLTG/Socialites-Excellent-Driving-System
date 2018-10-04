@@ -2,14 +2,43 @@ function openDropzoneInst(){
     $('#openDropzoneInst').modal('show');
 }
 
-dropzone.options.profileDrop = {
+Dropzone.options.profileDrop = {
+    maxFiles: 1,
     init: function(){
         this.on("queuecomplete", function(file){
-            setTimeout(function() {location.reload();
+            setTimeout(function() {
+                //location.reload();
             });
+        });
+
+        var self = this;
+        $('.clearUpload').on('click', function(){
+            var action = $(this).data('action');
+            if(action == "save"){
+                saveProfPicStud(1);
+            }else{
+                if(self.files.length != 0){
+                    saveProfPicStud(0);
+                }
+            }
+            self.removeAllFiles();
         });
     }
 };
+
+function saveProfPicStud(action){
+    app.updatePic($('body').data('instid'), action == 1 ? true : false, function(err, done, path){
+        if(err){
+            swal("Failed!", err.message, "error");
+            console.error(err);
+        }else{
+            swal("Done!", done, "success");
+            $('.profPicInstructor').attr('src', path || "assets/images/user-medium.png");
+            $('.userImg').attr('src', path || "assets/images/user4.png");
+        }
+        $('#uploadProfileStudModal').modal('hide');
+    });
+}
 
 function resetInstructor1P(){
     $(".btnUpdateInstructorAcc1").show();

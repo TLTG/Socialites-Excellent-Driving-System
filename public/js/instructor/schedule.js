@@ -53,7 +53,7 @@ $(function () {
 function getToday(){
     app.schedule.getToday((error,sched)=>{
         if(error) throw error;
-        if(sched.length==0) return $('.todaySched').hide();
+        //if(sched.length==0) return $('.todaySched').hide();
         $('#todaySched').html("");
         $('.lessonNoSpan').html(sched.length);
         $('.appointments').html(sched.length > 1 ? "appointments" : "appointment");
@@ -93,7 +93,7 @@ function getToday(){
 function getTom(){
     app.schedule.getTom((error,sched)=>{
         if(error) throw error;
-        if(sched.length==0) return $('.tomSched').hide();
+        //if(sched.length==0) return $('.tomSched').hide();
         $('#tomSched').html("");
         $('.lessonNoSpanTom').html(sched.length);
         $('.appointmentsTom').html(sched.length > 1 ? "appointments" : "appointment");

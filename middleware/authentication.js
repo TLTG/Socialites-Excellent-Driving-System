@@ -160,6 +160,7 @@ exports.instLogin = function(req, res, next){
     var pass = req.body.pass;
     account.login({username: user, password: pass}, function(err, user){
         if(err) return next(err);
+        req.session.instID = -1;
         if(user){
             if(user.accType == 2){
                 (require('../model/instructorModel')).getInstInfo(user.id, function(err, info){
