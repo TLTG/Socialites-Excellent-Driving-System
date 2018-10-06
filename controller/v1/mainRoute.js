@@ -39,14 +39,14 @@ router.use('/announce', announce);
 var faq = require('./faqRoute');
 router.use('/faq', faq);
 
-// All routes below are secured with authentication.
-router.use(auth.auth, err.error401);
-
-var notif = require('./notification');
-router.use('/notif', notif);
-
 var report = require('./reportRouter');
 router.use('/report', report);
+
+var notif = require('./notification');
+router.use('/notif', auth.auth, notif);
+
+// All routes below are secured with authentication.
+router.use(auth.auth, err.error401);
 
 var cert = require('./certRouter');
 router.use('/cert', cert);

@@ -268,7 +268,7 @@ function generateReport(a){
                 break;
             }
             case 'All' : {
-                link += 'gross';
+                link += 'overall';
                 break;
             }
         }
