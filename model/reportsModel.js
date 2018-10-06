@@ -2,6 +2,7 @@ var db = require('./db');
 var ModelModule = require('./model');
 var licenseTable = "license_apply_price";
 var enrollmentTable = "enrollment";
+var branchTable = "branch";
 
 var Reports = {};
 Reports = Object.create(ModelModule);
@@ -223,261 +224,455 @@ Reports.getStud4E = function(year, cb){
 
 //GROSS INCOME
 Reports.tuition = function(query, cb){
-    var freq = query.freq;
-    if(!freq || !Date.parse(query.date)) return cb(null, false, query);
-    
-    var branch = query.branch;
-    var date = query.date;
-    
-    getFreqDate(freq, date).then(dateScope=>{
-        return Promise.all([getEnrolled(dateScope, branch),getPaidTransactions(dateScope,'Enrollment', branch)]).then(results=>{
-            return {
-                //enrollee: results[0],
-                transaction: results[1],
-                dateStart: dateScope[0],
-                dateEnd: dateScope[1],
-            } 
-        });
-    }).then(data=>{
-        return new Promise((resolve, reject)=>{
-            var total  = {
-                amount: 0,
-                payment: 0,
-                balance: 0,
-            }
-            if(data.transaction.length == 0){
-                data.total = total;
-                return resolve(data);
-            } 
-            var promises = [];
-            data.transaction.forEach((e,i)=>{
-                promises.push(getLicensePrice(e.data.apply).then(price=>{
-                    var tuition = e.price - price;
-                    var balance = e.balance;
-                    var payment = e.price - balance;
-
-                    data.transaction[i].price = tuition;
-                    data.transaction[i].balance = balance;
-                    data.transaction[i].payment = payment;
-
-                    total.amount += tuition;
-                    total.payment += payment >= tuition ? tuition : payment;
-                    total.balance += balance;
-                    return true;
-                }));
-                if(i==data.transaction.length-1){
-                    Promise.all(promises).then(()=>{
-                        data.total = total;
-                        resolve(data);
-                    });
-                }
+    return new Promise((finish, fail)=>{
+        var freq = query.freq;
+        if(!freq || !Date.parse(query.date)) return cb(null, false, query);
+        
+        var branch = query.branch;
+        var date = query.date;
+        
+        getFreqDate(freq, date).then(dateScope=>{
+            return Promise.all([getEnrolled(dateScope, branch),getPaidTransactions(dateScope,'Enrollment', branch)]).then(results=>{
+                return {
+                    //enrollee: results[0],
+                    transaction: results[1],
+                    dateStart: dateScope[0],
+                    dateEnd: dateScope[1],
+                } 
             });
-        });
-    }).then(data=>{
-        return new Promise((resolve, reject)=>{
-            if(data.transaction.length == 0) return resolve(data);            
-            var promises = [];
-            data.transaction.forEach((e,i)=>{
-                promises.push(getStudentViaORnum(e.ORno).then(student=>{
-                    var pad = "000";
-                    return {
-                        fullname: student.fullname,
-                        course: "CRS-" + student.carType.toUpperCase() + (pad.substring(0,pad.length-student.courseID.length) + student.courseID),
-                        branch: student.branch,
-                        amount: e.price,
-                        payment: e.payment,
-                        balance: e.balance
+        }).then(data=>{
+            return new Promise((resolve, reject)=>{
+                var total  = {
+                    amount: 0,
+                    payment: 0,
+                    balance: 0,
+                }
+                if(data.transaction.length == 0){
+                    data.total = total;
+                    return resolve(data);
+                } 
+                var promises = [];
+                data.transaction.forEach((e,i)=>{
+                    promises.push(getLicensePrice(e.data.apply).then(price=>{
+                        var tuition = e.price - price;
+                        var balance = e.balance;
+                        var payment = e.price - balance;
+    
+                        data.transaction[i].price = tuition;
+                        data.transaction[i].balance = balance;
+                        data.transaction[i].payment = payment;
+    
+                        total.amount += tuition;
+                        total.payment += payment >= tuition ? tuition : payment;
+                        total.balance += balance;
+                        return true;
+                    }));
+                    if(i==data.transaction.length-1){
+                        Promise.all(promises).then(()=>{
+                            data.total = total;
+                            resolve(data);
+                        });
                     }
-                }));
-                if(i==data.transaction.length-1){
-                    return Promise.all(promises).then(done=>{
-                        data.transaction = done;
-                        resolve(data);
-                    }).catch(reject);
-                }
+                });
             });
+        }).then(data=>{
+            return new Promise((resolve, reject)=>{
+                if(data.transaction.length == 0) return resolve(data);            
+                var promises = [];
+                data.transaction.forEach((e,i)=>{
+                    promises.push(getStudentViaORnum(e.ORno).then(student=>{
+                        var pad = "000";
+                        return {
+                            ORno: e.ORno,
+                            fullname: student.fullname,
+                            course: "CRS-" + student.carType.toUpperCase() + (pad.substring(0,pad.length-student.courseID.length) + student.courseID),
+                            branch: student.branch,
+                            amount: e.price,
+                            payment: e.payment,
+                            balance: e.balance
+                        }
+                    }));
+                    if(i==data.transaction.length-1){
+                        return Promise.all(promises).then(done=>{
+                            data.transaction = done;
+                            resolve(data);
+                        }).catch(reject);
+                    }
+                });
+            });
+        }).then(output=>{
+            if(cb){
+                cb(null,output); 
+            }else{
+                finish(output);
+            }
+        }).catch(reason=>{
+            throw new Error(reason.stack);
+        }).catch(reason=>{
+            if(cb){
+                cb(reason);
+            }else{
+                fail(reason);
+            }
         });
-    }).then(output=>{
-        cb(null,output); 
-    }).catch(reason=>{
-        throw new Error(reason.stack);
-    }).catch(reason=>{
-        cb(reason);
     });
 }
 
 Reports.certificate = function(query, cb){
-    var freq = query.freq;
-    if(!freq || !Date.parse(query.date)) return cb(null, false, query);
-    
-    var branch = query.branch;
-    var date = query.date;
-    
-    getFreqDate(freq, date).then(dateScope=>{
-        return Promise.all([getEnrolled(dateScope, branch),getPaidTransactions(dateScope,'Certificate', branch)]).then(results=>{
-            return {
-                //enrollee: results[0],
-                transaction: results[1],
-                dateStart: dateScope[0],
-                dateEnd: dateScope[1],
-            } 
-        });
-    }).then(data=>{
-        return new Promise((resolve, reject)=>{
-            var total  = {
-                amount: 0,
-                payment: 0,
-                balance: 0,
-            }
-            if(data.transaction.length == 0){
-                data.total = total;
-                return resolve(data);
-            } 
-            data.transaction.forEach((e,i)=>{
-                var price = e.price;
-                var balance = e.balance;
-                var payment = price - balance;
-
-                data.transaction[i].price = price;
-                data.transaction[i].balance = balance;
-                data.transaction[i].payment = payment;
-
-                total.amount += price;
-                total.payment += payment;
-                total.balance += balance;
-
-                if(i==data.transaction.length-1){
+    return new Promise((finish, fail)=>{
+        var freq = query.freq;
+        if(!freq || !Date.parse(query.date)) return cb(null, false, query);
+        
+        var branch = query.branch;
+        var date = query.date;
+        
+        getFreqDate(freq, date).then(dateScope=>{
+            return Promise.all([getEnrolled(dateScope, branch),getPaidTransactions(dateScope,'Certificate', branch)]).then(results=>{
+                return {
+                    //enrollee: results[0],
+                    transaction: results[1],
+                    dateStart: dateScope[0],
+                    dateEnd: dateScope[1],
+                } 
+            });
+        }).then(data=>{
+            return new Promise((resolve, reject)=>{
+                var total  = {
+                    amount: 0,
+                    payment: 0,
+                    balance: 0,
+                }
+                if(data.transaction.length == 0){
                     data.total = total;
-                    resolve(data);
-                }
-            });
-        });
-    }).then(data=>{
-        return new Promise((resolve, reject)=>{
-            if(data.transaction.length == 0) return resolve(data);            
-            var promises = [];
-            data.transaction.forEach((e,i)=>{
-                promises.push(getStudentViaORnum(e.ORno).then(student=>{
-                    var pad = "000";
-                    return {
-                        studID: student.id,
-                        fullname: student.fullname,
-                        course: "CRS-" + student.carType.toUpperCase() + (pad.substring(0,pad.length-student.courseID.length) + student.courseID),
-                        branch: student.branch,
-                        amount: e.price,
-                        payment: e.payment,
-                        balance: e.balance
-                    }
-                }));
-                if(i==data.transaction.length-1){
-                    return Promise.all(promises).then(done=>{
-                        data.transaction = done;
+                    return resolve(data);
+                } 
+                data.transaction.forEach((e,i)=>{
+                    var price = e.price;
+                    var balance = e.balance;
+                    var payment = price - balance;
+    
+                    data.transaction[i].price = price;
+                    data.transaction[i].balance = balance;
+                    data.transaction[i].payment = payment;
+    
+                    total.amount += price;
+                    total.payment += payment;
+                    total.balance += balance;
+    
+                    if(i==data.transaction.length-1){
+                        data.total = total;
                         resolve(data);
-                    }).catch(reject);
-                }
+                    }
+                });
             });
+        }).then(data=>{
+            return new Promise((resolve, reject)=>{
+                if(data.transaction.length == 0) return resolve(data);            
+                var promises = [];
+                data.transaction.forEach((e,i)=>{
+                    promises.push(getStudentViaORnum(e.ORno).then(student=>{
+                        var pad = "000";
+                        return {
+                            ORno: e.ORno,
+                            studID: student.id,
+                            fullname: student.fullname,
+                            course: "CRS-" + student.carType.toUpperCase() + (pad.substring(0,pad.length-student.courseID.length) + student.courseID),
+                            branch: student.branch,
+                            amount: e.price,
+                            payment: e.payment,
+                            balance: e.balance
+                        }
+                    }));
+                    if(i==data.transaction.length-1){
+                        return Promise.all(promises).then(done=>{
+                            data.transaction = done;
+                            resolve(data);
+                        }).catch(reject);
+                    }
+                });
+            });
+        }).then(output=>{
+            if(cb){
+                cb(null,output); 
+            }else{
+                finish(output);
+            }
+        }).catch(reason=>{
+            throw new Error(reason.stack);
+        }).catch(reason=>{
+            if(cb){
+                cb(reason);
+            }else{
+                fail(reason);
+            }
         });
-    }).then(output=>{
-        cb(null,output); 
-    }).catch(reason=>{
-        throw new Error(reason.stack);
-    }).catch(reason=>{
-        cb(reason);
     });
 }
 
 Reports.license = function(query, cb){
-    var freq = query.freq;
-    if(!freq || !Date.parse(query.date)) return cb(null, false, query);
-    
-    var branch = query.branch;
-    var date = query.date;
-    
-    getFreqDate(freq, date).then(dateScope=>{
-        return getPaidTransactions(dateScope, 'Apply', branch).then(data=>{
-            return {
-                transaction: data,
-                dateStart: dateScope[0],
-                dateEnd: dateScope[1],
-            }
-        });
-    }).then(data=>{
-        return new Promise((resolve, reject)=>{
-            var total  = {
-                amount: 0,
-                payment: 0,
-                balance: 0,
-            }
-            if(data.transaction.length == 0){
-                data.total = total;
-                return resolve(data);
-            } 
-            var promises = [];
-            data.transaction.forEach((e,i)=>{
-                promises.push(getLicensePrice(e.data.apply, true).then(license=>{
-                    var tuition = e.price - license.price;
-                    var payment = e.price - e.balance;
-                    var balance = 0;
-
-                    payment = payment >= tuition ? payment - tuition : 0;
-                    balance = license.price - payment;
-                    
-                    data.transaction[i].license = license.desc;
-                    data.transaction[i].price = license.price;
-                    data.transaction[i].balance = balance;
-                    data.transaction[i].payment = payment;
-    
-                    total.amount += license.price;
-                    total.payment += payment;
-                    total.balance += balance;
-                    return true;
-                }));
-                if(i==data.transaction.length-1){
-                    Promise.all(promises).then(()=>{
-                        data.total = total;
-                        resolve(data);
-                    });
+    return new Promise((finish, fail)=>{
+        var freq = query.freq;
+        if(!freq || !Date.parse(query.date)) return cb(null, false, query);
+        
+        var branch = query.branch;
+        var date = query.date;
+        
+        getFreqDate(freq, date).then(dateScope=>{
+            return getPaidTransactions(dateScope, 'Apply', branch).then(data=>{
+                return {
+                    transaction: data,
+                    dateStart: dateScope[0],
+                    dateEnd: dateScope[1],
                 }
             });
-        });
-    }).then(data=>{
-        return new Promise((resolve, reject)=>{
-            if(data.transaction.length == 0) return resolve(data);            
-            var promises = [];
-            data.transaction.forEach((e,i)=>{
-                promises.push(getStudentViaORnum(e.ORno).then(student=>{
-                    var pad = "000";
-                    return {
-                        fullname: student.fullname,
-                        course: "CRS-" + student.carType.toUpperCase() + (pad.substring(0,pad.length-student.courseID.length) + student.courseID),
-                        branch: student.branch,
-                        amount: e.price,
-                        payment: e.payment,
-                        balance: e.balance,
-                        license: e.license,
-                        ORno: e.ORno,
-                        date: Date.parse(e.date).toString('MM-dd-yyyy'),
+        }).then(data=>{
+            return new Promise((resolve, reject)=>{
+                var total  = {
+                    amount: 0,
+                    payment: 0,
+                    balance: 0,
+                }
+                if(data.transaction.length == 0){
+                    data.total = total;
+                    return resolve(data);
+                } 
+                var promises = [];
+                data.transaction.forEach((e,i)=>{
+                    promises.push(getLicensePrice(e.data.apply, true).then(license=>{
+                        var tuition = e.price - license.price;
+                        var payment = e.price - e.balance;
+                        var balance = 0;
+    
+                        payment = payment >= tuition ? payment - tuition : 0;
+                        balance = license.price - payment;
+                        
+                        data.transaction[i].license = license.desc;
+                        data.transaction[i].price = license.price;
+                        data.transaction[i].balance = balance;
+                        data.transaction[i].payment = payment;
+        
+                        total.amount += license.price;
+                        total.payment += payment;
+                        total.balance += balance;
+                        return true;
+                    }));
+                    if(i==data.transaction.length-1){
+                        Promise.all(promises).then(()=>{
+                            data.total = total;
+                            resolve(data);
+                        });
                     }
-                }));
-                if(i==data.transaction.length-1){
-                    return Promise.all(promises).then(done=>{
-                        data.transaction = done;
-                        resolve(data);
-                    }).catch(reject);
-                }
+                });
             });
+        }).then(data=>{
+            return new Promise((resolve, reject)=>{
+                if(data.transaction.length == 0) return resolve(data);            
+                var promises = [];
+                data.transaction.forEach((e,i)=>{
+                    promises.push(getStudentViaORnum(e.ORno).then(student=>{
+                        var pad = "000";
+                        return {
+                            fullname: student.fullname,
+                            course: "CRS-" + student.carType.toUpperCase() + (pad.substring(0,pad.length-student.courseID.length) + student.courseID),
+                            branch: student.branch,
+                            amount: e.price,
+                            payment: e.payment,
+                            balance: e.balance,
+                            license: e.license,
+                            ORno: e.ORno,
+                            date: Date.parse(e.date).toString('MM-dd-yyyy'),
+                        }
+                    }));
+                    if(i==data.transaction.length-1){
+                        return Promise.all(promises).then(done=>{
+                            data.transaction = done;
+                            resolve(data);
+                        }).catch(reject);
+                    }
+                });
+            });
+        }).then(output=>{
+            if(cb){
+                cb(null,output); 
+            }else{
+                finish(output);
+            }
+        }).catch(reason=>{
+            throw new Error(reason.stack);
+        }).catch(reason=>{
+            if(cb){
+                cb(reason);
+            }else{
+                fail(reason);
+            }
         });
-    }).then(output=>{
-        cb(null,output); 
-    }).catch(reason=>{
-        throw new Error(reason.stack);
-    }).catch(reason=>{
-        cb(reason);
     });
 }
 
 Reports.overall = function(query, cb){
+    return new Promise((done, fail)=>{
+        var freq = query.freq;
+        if(!freq || !Date.parse(query.date)) return cb(null, false, query);
+    
+        var branchePromise = getBranch();
+        var getDateScope = getFreqDate(freq, query.date);
 
+        // --------- Tuition
+        var t1 = branchePromise.then(branchs=>{
+            return new Promise((resolve, reject)=>{
+                var prom = [];
+                var total = {
+                    amount: 0,
+                    payment: 0,
+                    balance: 0,
+                }
+                branchs.forEach((e,i)=>{
+                    prom.push(new Promise((ok, not)=>{
+                        this.tuition({freq: freq, date: query.date, branch: e.id}).then(data=>{
+                            var output = {
+                                branch: e,
+                                total: data.total,
+                            }
+                            total.amount += output.total.amount;
+                            total.payment += output.total.payment;
+                            total.balance += output.total.balance;
+                            return output;
+                        }).then(data=>{
+                            ok(data);
+                        }).catch(not);
+                    }));
+                    if(i==branchs.length-1){
+                        Promise.all(prom).then(data=>{
+                            resolve({
+                                transaction: data,
+                                total: total,
+                            });
+                        }).catch(reject);
+                    }
+                });
+            });
+        });
+
+        // --------- Certificate
+        var t2 = branchePromise.then(branchs=>{
+            return new Promise((resolve, reject)=>{
+                var prom = [];
+                var total = {
+                    amount: 0,
+                    payment: 0,
+                    balance: 0,
+                }
+                branchs.forEach((e,i)=>{
+                    prom.push(new Promise((ok, not)=>{
+                        this.certificate({freq: freq, date: query.date, branch: e.id}).then(data=>{
+                            var output = {
+                                branch: e,
+                                total: data.total,
+                            }
+                            total.amount += output.total.amount;
+                            total.payment += output.total.payment;
+                            total.balance += output.total.balance;
+                            return output;
+                        }).then(data=>{
+                            ok(data);
+                        }).catch(not);
+                    }));
+                    if(i==branchs.length-1){
+                        Promise.all(prom).then(data=>{
+                            resolve({
+                                transaction: data,
+                                total: total,
+                            });
+                        }).catch(reject);
+                    }
+                });
+            });
+        });
+
+        // --------- License
+        var t3 = branchePromise.then(branchs=>{
+            return new Promise((resolve, reject)=>{
+                var prom = [];
+                var total = {
+                    amount: 0,
+                    payment: 0,
+                    balance: 0,
+                }
+                branchs.forEach((e,i)=>{
+                    prom.push(new Promise((ok, not)=>{
+                        this.license({freq: freq, date: query.date, branch: e.id}).then(data=>{
+                            var output = {
+                                branch: e,
+                                total: data.total,
+                            }
+                            total.amount += output.total.amount;
+                            total.payment += output.total.payment;
+                            total.balance += output.total.balance;
+                            return output;
+                        }).then(data=>{
+                            ok(data);
+                        }).catch(not);
+                    }));
+                    if(i==branchs.length-1){
+                        Promise.all(prom).then(data=>{
+                            resolve({
+                                transaction: data,
+                                total: total,
+                            });
+                        }).catch(reject);
+                    }
+                });
+            });
+        });
+
+        Promise.all([t1,t2,t3]).then(results=>{
+            return new Promise((resolve)=>{
+                var total = {
+                    amount: 0,
+                    income: 0,
+                    balance: 0,
+                };
+                results.forEach((e,i)=>{
+                    total.amount += e.total.amount;
+                    total.balance += e.total.balance;
+                    total.income += (e.total.amount - e.total.balance);
+                    if(i==results.length-1){
+                        resolve({
+                            tuition: results[0],
+                            certificate: results[1],
+                            license: results[2],
+            
+                            total: {
+                                amount: total.amount,
+                                income: total.income,
+                                balance: total.balance,
+                            }
+                        });
+                    }
+                });
+            });
+        }).then(data=>{
+            return getDateScope.then(dateScope=>{
+                data.dateStart = dateScope[0];
+                data.dateEnd = dateScope[1];
+                return data;
+            });
+        }).then(data=>{
+            if(cb){
+                cb(null, data);
+            }else{
+                done(data);
+            }
+        }).catch(reason=>{
+            throw new Error(reason.stack);
+        }).catch(reason=>{
+            if(cb){
+                cb(reason);
+            }else{
+                fail(data);
+            }
+        });
+    });
 }
 
 // Get Start and Ending Dates based on frequency
@@ -508,6 +703,22 @@ function getFreqDate(freq, date){
         resolve(dateScope);
     });
 }
+
+function getBranch(id){
+    return new Promise((resolve, reject)=>{
+        var sql = "";
+        if(id){
+            sql = "SELECT * FROM " + branchTable + " WHERE id = ?";
+        }else{
+            sql = "SELECT * FROM " + branchTable;
+        }
+
+        db.get().query(sql, [id], function(err, results){
+            if(err) return reject(err);
+            resolve(results.length == 1 ? results[0] : results);
+        });
+    });
+};
 
 function getEnrolled(dateScope, branch){ //DISABLED UNUSED
     return new Promise((resolve, reject)=>{

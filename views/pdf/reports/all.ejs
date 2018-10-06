@@ -1,3 +1,15 @@
+<%
+    Number.prototype.formatMoney = function(c, d, t){
+        var n = this, 
+        c = isNaN(c = Math.abs(c)) ? 2 : c, 
+        d = d == undefined ? "." : d, 
+        t = t == undefined ? "," : t, 
+        s = n < 0 ? "-" : "", 
+        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+        j = (j = i.length) > 3 ? j % 3 : 0;
+        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    };
+%>
 <html>
     <head>
         <meta charset="UTF-8">
@@ -40,7 +52,7 @@
                     Tels.: 741-7185/745-2962
                 </h5><hr>
             </div>
-            <h4 style="text-transform: uppercase;">GROSS INCOME: OVERALL REPORT<br>SED-Quezon City (Main) | September 12, 2018</h4>
+            <h4 style="text-transform: uppercase;">GROSS INCOME: OVERALL REPORT<br><%# SED-Quezon City (Main) |  %><%=dateStart + (dateEnd != dateStart ? " - " + dateEnd : "")%></h4>
             <h4 style="text-align: left">TUITION/ENROLLMENT FEE</h4>
             <table class="table tblRecSched" width="100%">
                 <thead>
@@ -52,7 +64,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <%
+                        var html = "";
+                        tuition.transaction.forEach((e,i)=>{
+                            html += "<tr>";
+                            html += "<td>"+ e.branch.name +"</td>";
+                            html += "<td>"+ e.total.amount.formatMoney(2) +"</td>";
+                            html += "<td>"+ (e.total.amount - e.total.balance).formatMoney(2) +"</td>";
+                            html += "<td>"+ e.total.balance.formatMoney(2) +"</td>";
+                            html += "</tr>";
+                        });
+                        html += "<tr>";
+                        html += "<td class='total'>TOTAL</td>";
+                        html += "<td class='total'>"+ tuition.total.amount.formatMoney(2) +"</td>";
+                        html += "<td class='total'>"+ (tuition.total.amount - tuition.total.balance).formatMoney(2) +"</td>";
+                        html += "<td class='total'>"+ tuition.total.balance.formatMoney(2) +"</td>";
+                        html += "</tr>";
+                    %>
+                    <%-html%>
+                    <%# <tr>
                         <td>SED-Quezon City (Main)</td> 
                         <td>2,500.00</td>
                         <td>2,000.00</td>
@@ -87,7 +117,7 @@
                         <td class="total">5,500.00</td>
                         <td class="total">3,000.00</td>
                         <td class="total">1,000.00</td>
-                    </tr>
+                    </tr> %>
                 </tbody>
             </table>
 
@@ -102,7 +132,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <%
+                        var html = "";
+                        certificate.transaction.forEach((e,i)=>{
+                            html += "<tr>";
+                            html += "<td>"+ e.branch.name +"</td>";
+                            html += "<td>"+ e.total.amount.formatMoney(2) +"</td>";
+                            html += "<td>"+ (e.total.amount - e.total.balance).formatMoney(2) +"</td>";
+                            html += "<td>"+ e.total.balance.formatMoney(2) +"</td>";
+                            html += "</tr>";
+                        });
+                        html += "<tr>";
+                        html += "<td class='total'>TOTAL</td>";
+                        html += "<td class='total'>"+ certificate.total.amount.formatMoney(2) +"</td>";
+                        html += "<td class='total'>"+ (certificate.total.amount - certificate.total.balance).formatMoney(2) +"</td>";
+                        html += "<td class='total'>"+ certificate.total.balance.formatMoney(2) +"</td>";
+                        html += "</tr>";
+                    %>
+                    <%-html%>
+                    <%# <tr>
                         <td>SED-Quezon City (Main)</td> 
                         <td>2,500.00</td>
                         <td>2,000.00</td>
@@ -137,7 +185,7 @@
                         <td class="total">5,500.00</td>
                         <td class="total">3,000.00</td>
                         <td class="total">1,000.00</td>
-                    </tr>
+                    </tr> %>
                 </tbody>
             </table>
 
@@ -152,7 +200,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <%
+                        var html = "";
+                        license.transaction.forEach((e,i)=>{
+                            html += "<tr>";
+                            html += "<td>"+ e.branch.name +"</td>";
+                            html += "<td>"+ e.total.amount.formatMoney(2) +"</td>";
+                            html += "<td>"+ (e.total.amount - e.total.balance).formatMoney(2) +"</td>";
+                            html += "<td>"+ e.total.balance.formatMoney(2) +"</td>";
+                            html += "</tr>";
+                        });
+                        html += "<tr>";
+                        html += "<td class='total'>TOTAL</td>";
+                        html += "<td class='total'>"+ license.total.amount.formatMoney(2) +"</td>";
+                        html += "<td class='total'>"+ (license.total.amount - license.total.balance).formatMoney(2) +"</td>";
+                        html += "<td class='total'>"+ license.total.balance.formatMoney(2) +"</td>";
+                        html += "</tr>";
+                    %>
+                    <%-html%>
+                    <%# <tr>
                         <td>SED-Quezon City (Main)</td> 
                         <td>2,500.00</td>
                         <td>2,000.00</td>
@@ -187,16 +253,16 @@
                         <td class="total">5,500.00</td>
                         <td class="total">3,000.00</td>
                         <td class="total">1,000.00</td>
-                    </tr>
+                    </tr> %>
                 </tbody>
             </table>
         </center>
         <div style="width: 100%; align-items: right; margin-top: 10px"><hr>
-            <h5 style="text-transform: uppercase; text-align: right">Overall Amount: &#8369;12,000.00<br>Overall Balance: &#8369;2,000.00</h5>
+            <h5 style="text-transform: uppercase; text-align: right">Overall Amount: &#8369;<%=total.amount.formatMoney(2)%><br>Overall Balance: &#8369;<%=total.balance.formatMoney(2)%></h5>
             <hr width="40%" align="right">
-            <h5 class="total" style="text-transform: uppercase; text-align: right">Overall Income (Tuition/Enrollment): &#8369;10,000.00<br>Overall Income (Certificate): &#8369;10,000.00<br>Overall Income (Licensing Application Assistance): &#8369;10,000.00</h5>
+            <h5 class="total" style="text-transform: uppercase; text-align: right">Overall Income (Tuition/Enrollment): &#8369;<%=(tuition.total.amount - tuition.total.balance).formatMoney(2)%><br>Overall Income (Certificate): &#8369;<%=(certificate.total.amount - certificate.total.balance).formatMoney(2)%><br>Overall Income (Licensing Application Assistance): &#8369;<%=(license.total.amount - license.total.balance).formatMoney(2)%></h5>
             <hr width="40%" align="right">
-            <h5 style="text-transform: uppercase; text-align: right; font-weight: 1000;">Overall Gross Income: &#8369;10,000.00</h5>
+            <h5 style="text-transform: uppercase; text-align: right; font-weight: 1000;">Overall Gross Income: &#8369;<%=total.income.formatMoney(2)%></h5>
         </div>
         <div id="pageFooter"></div>
     </body>

@@ -1,8 +1,9 @@
 var report = require('../../model/reportsModel');
 var pdf = require('../../bin/pdfGenerator');
 
-//GROSS INCOME REPORTS
 //STUDENTS REPORT
+
+//GROSS INCOME REPORTS
 exports.getStud = function(req, res, next){
     if(res.locals.authenticated == 0) return next();
     var fileName;
@@ -245,6 +246,31 @@ exports.certificate = function(req, res, next){
         pdf.createPDF(pdf.reportTemplates.certificate, data, pdf.getBuffer, function(err, buffer){
             if(err) return next(err);
             var fileName = "Gross Income Report: Certificate["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString('MM/dd/yyyy'): "") +"].pdf";
+            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            res.set('Content-Type', 'Application/pdf');
+            res.status(200).send(buffer);
+        });
+    });
+}
+
+exports.overallGross = function(req, res, next){
+    var query = req.query;
+
+    if(!query.freq || !query.date) return res.status(400).send('Invalid Request');
+
+    var data = {};
+    report.overall(query, function(err, result){
+        if(err) return next(err);
+
+        var dateStart = Date.parse(result.dateStart);
+        var dateEnd = Date.parse(result.dateEnd);
+        dateEnd = dateEnd.compareTo(dateStart) != 0 ? dateEnd : dateStart;
+        result.dateEnd = dateEnd.toString('MMMM dd, yyyy'); 
+        result.dateStart = dateStart.toString('MMMM dd, yyyy'); 
+
+        pdf.createPDF(pdf.reportTemplates.all, result, pdf.getBuffer, function(err, buffer){
+            if(err) return next(err);
+            var fileName = "Gross Income: Overall Report["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString('MM/dd/yyyy'): "") +"].pdf";
             res.set('Content-disposition', 'attachment; filename=' + fileName);
             res.set('Content-Type', 'Application/pdf');
             res.status(200).send(buffer);
