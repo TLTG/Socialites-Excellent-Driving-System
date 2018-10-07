@@ -180,7 +180,7 @@ exports.enrolled = function(req, res, next){
         
         pdf.createPDF(pdf.reportTemplates.enrollees, result, pdf.getBuffer, function(err, buffer){
             if(err) return next(err);
-            var fileName = "Gross Income Report: Tuition["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString('MM/dd/yyyy'): "") +"].pdf";
+            var fileName = "Students: Enrollees["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString(' - MM/dd/yyyy'): "") +"].pdf";
             res.set('Content-disposition', 'attachment; filename=' + fileName);
             res.set('Content-Type', 'Application/pdf');
             res.status(200).send(buffer);
@@ -189,11 +189,51 @@ exports.enrolled = function(req, res, next){
 }
 
 exports.transferred = function(req, res, next){
+    var query = req.query;
 
+    if(!query.freq || !query.date) return res.status(400).send('Invalid Request');
+
+    report.transferee(query, function(err, result){
+        if(err) return next(err);
+        if(!result) return res.status(400).send("Invalid Data");
+        var dateStart = Date.parse(result.dateStart);
+        var dateEnd = Date.parse(result.dateEnd);
+        dateEnd = dateEnd.compareTo(dateStart) != 0 ? dateEnd : dateStart;
+        result.dateEnd = dateEnd.toString('MMMM dd, yyyy'); 
+        result.dateStart = dateStart.toString('MMMM dd, yyyy'); 
+        
+        pdf.createPDF(pdf.reportTemplates.transferees, result, pdf.getBuffer, function(err, buffer){
+            if(err) return next(err);
+            var fileName = "Students: Transferees["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString(' - MM/dd/yyyy'): "") +"].pdf";
+            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            res.set('Content-Type', 'Application/pdf');
+            res.status(200).send(buffer);
+        });
+    });
 }
 
 exports.evaluation = function(req, res, next){
+    var query = req.query;
 
+    if(!query.freq || !query.date) return res.status(400).send('Invalid Request');
+
+    report.evaluation(query, function(err, result){
+        if(err) return next(err);
+        if(!result) return res.status(400).send("Invalid Data");
+        var dateStart = Date.parse(result.dateStart);
+        var dateEnd = Date.parse(result.dateEnd);
+        dateEnd = dateEnd.compareTo(dateStart) != 0 ? dateEnd : dateStart;
+        result.dateEnd = dateEnd.toString('MMMM dd, yyyy'); 
+        result.dateStart = dateStart.toString('MMMM dd, yyyy'); 
+        
+        pdf.createPDF(pdf.reportTemplates.transferees, result, pdf.getBuffer, function(err, buffer){
+            if(err) return next(err);
+            var fileName = "Students: Performance Evaluation["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString(' - MM/dd/yyyy'): "") +"].pdf";
+            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            res.set('Content-Type', 'Application/pdf');
+            res.status(200).send(buffer);
+        });
+    });
 }
 
 //GROSS INCOME REPORTS

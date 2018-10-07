@@ -2,6 +2,7 @@ var db = require('./db');
 var ModelModule = require('./model');
 var licenseTable = "license_apply_price";
 var enrollmentTable = "enrollment";
+var transferTable = "transfer_request";
 var branchTable = "branch";
 var courseTable = "course";
 
@@ -13,6 +14,7 @@ Reports.db = db;
 var Student = {};
 Student = Object.create(ModelModule);
 Student.table = "student";
+Student.infoTable = "userinfo";
 Student.db = db;
 
 var PreRegister = {};
@@ -319,7 +321,104 @@ Reports.enrollee = function(query, cb){
     });
 }
 
+Reports.transferee = function(query, cb){
+    return new Promise((resolve, reject)=>{
+        var freq = query.freq;
+        if(!freq || !Date.parse(query.date)) return cb(null, false, query);
+        var date = query.date;
+
+        getFreqDate(freq, date).then(dateScope=>{
+            return new Promise((res, rej)=>{
+                var sql = "SELECT * FROM " + transferTable + " WHERE effectiveDate BETWEEN ? AND ? AND status = 4";
+                db.get().query(sql, dateScope, function(err, results){
+                    if(err) return rej(err);
+                    res({
+                        dateStart: dateScope[0],
+                        dateEnd: dateScope[1],
+                        record: results
+                    });
+                });
+            });
+        }).then(data=>{
+            var total = {
+                from: {},
+                to: {}
+            }
+            data.total = total;
+            if(data.record.length == 0) return data;
+            return new Promise((res, rej)=>{
+                var promises = [];
+                data.record.forEach((e,i)=>{
+                    promises.push(getBranch(e.to_branchID).then(branchData=>{
+                        data.record[i].to_branch = branchData.name;
+                    }));
+                    promises.push(getBranch(e.from_branchID).then(branchData=>{
+                        data.record[i].from_branch = branchData.name;
+                    }));
+                    promises.push(getStudent(e.studID).then(student=>{
+                        data.record[i].studentName = student.fullname;
+                    }));
+
+                    data.record[i].effectiveDate = Date.parse(data.record[i].effectiveDate).toString('MM-dd-yyyy');
+                    data.record[i].request_date = Date.parse(data.record[i].request_date).toString('MM-dd-yyyy');
+                    total.from[e.from_branchID] = (total.from[e.from_branchID] == undefined ? 1 : total.from[e.from_branchID]++);
+                    total.to[e.to_branchID] = (total.to[e.to_branchID] == undefined ? 1 : total.to[e.to_branchID]++);
+
+                    if(i==data.record.length-1){
+                        Promise.all(promises).then(()=>{
+                            data.total = total;
+                            res(data);
+                        }).catch(rej);
+                    }
+                });
+            });
+        }).then(data=>{
+            return getBranch().then(branchData=>{
+                return new Promise((res,rej)=>{
+                    var branches = [];
+                    branchData.forEach((e,i)=>{
+                        var datum = {
+                            id: e.id,
+                            name: e.name,
+                            to: data.total.to[e.id] || 0,
+                            from: data.total.from[e.id] || 0,
+                        }
+                        if(datum.to || datum.from){
+                            branches.push(datum);
+                        }
+                        if(i==branchData.length-1){
+                            data.total = branches;
+                            res(data);
+                        }
+                    });
+                });
+            });
+        }).then(output=>{ // Output
+            if(cb){
+                cb(null,output); 
+            }else{
+                finish(output);
+            }
+        }).catch(reason=>{
+            throw new Error(reason.stack);
+        }).catch(reason=>{
+            if(cb){
+                cb(reason);
+            }else{
+                fail(reason);
+            }
+        });
+    });
+}
+
+Reports.evaluation = function(query, cb){
+    
+}
+
 //INSTRUCTORS
+Reports.performance = function(query, cb){
+    
+}
 
 //GROSS INCOME
 Reports.tuition = function(query, cb){
@@ -875,6 +974,16 @@ function getStudentViaORnum(ORnum){
             carType: data.carType + "",
             branch: data.name + "",
         }
+    });
+}
+
+function getStudent(id){
+    return new Promise((resolve, reject)=>{
+        var sql = "SELECT s.*, ui.fullname FROM " + Student.table + " s, "+ Student.infoTable +" ui WHERE s.userInfo = ui.id AND s.id = ?";
+        db.get().query(sql,[id], function(err, result){
+            if(err) return reject(err);
+            resolve(result[0]);
+        });
     });
 }
 
