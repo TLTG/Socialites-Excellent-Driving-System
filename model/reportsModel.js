@@ -3,6 +3,7 @@ var ModelModule = require('./model');
 var licenseTable = "license_apply_price";
 var enrollmentTable = "enrollment";
 var branchTable = "branch";
+var courseTable = "course";
 
 var Reports = {};
 Reports = Object.create(ModelModule);
@@ -219,6 +220,104 @@ Reports.getStud4E = function(year, cb){
     });
 }
 
+//STUDENTS
+Reports.enrollee = function(query, cb){
+    return new Promise((resolve, reject)=>{
+        var freq = query.freq;
+        if(!freq || !Date.parse(query.date)) return cb(null, false, query);
+        
+        var branch = query.branch;
+        var date = query.date;
+
+        getFreqDate(freq, date).then(dateScope=>{
+            var data = {
+                dateStart: dateScope[0],
+                dateEnd: dateScope[1],
+                total: {
+                    count: 0,
+                    reject: 0,
+                },
+                record: [],
+            }
+            return getEnrolled(dateScope, branch).then(results=>{
+                data.record = results;
+                if(results.length == 0) return data;
+                return new Promise((res,rej)=>{
+                    results.forEach((e,i)=>{
+                        data.total.count += 1;
+                        if(e.status == 3) data.total.reject += 1;
+                        if(i==results.length-1){
+                            res(data);
+                        }
+                    });
+                });
+            });
+        }).then(data=>{ // Get Branch
+            if(!branch){
+                data.branch = "All Branch";
+                return data;
+            }else{
+                return getBranch(branch).then(branchData=>{
+                    data.branch = branchData.name;
+                    return data;
+                });
+            }
+        }).then(data=>{ // Get Branch per record
+            if(data.record.length == 0) return data;
+            return new Promise((res,rej)=>{
+                var promises = [];
+                data.record.forEach((e,i)=>{
+                    promises.push(getBranch(e.data.branch).then(branchData=>{
+                        data.record[i].data.branch = branchData.name;
+                        return true;
+                    }));
+                    data.record[i].dateSubmit = Date.parse(data.record[i].dateSubmit).toString('MM-dd-yyyy');
+                    if(i==data.record.length-1){
+                        Promise.all(promises).then(()=>{
+                            res(data);
+                        });
+                    }
+                });
+            });
+        }).then(data=>{
+            if(data.record.length == 0) return data;
+            return new Promise((res, rej)=>{
+                var promises = [];
+                data.record.forEach((e,i)=>{
+                    e.data.courseName = [];
+                    e.data.course.forEach((e1,i1)=>{
+                        promises.push(new Promise((res1,rej1)=>{
+                            getCourseName(e1).then(name=>{
+                                var special = e.data.special.course.indexOf(e1) == -1 ? "No" : "Yes";
+                                e.data.courseName.push({id: e1, name: name, special: special});
+                                res1();
+                            });
+                        }));
+                    });
+                    if(i==data.record.length-1){
+                        Promise.all(promises).then(()=>{
+                            res(data);
+                        });
+                    }
+                });
+            });
+        }).then(output=>{ // Output
+            if(cb){
+                cb(null,output); 
+            }else{
+                finish(output);
+            }
+        }).catch(reason=>{
+            throw new Error(reason.stack);
+        }).catch(reason=>{
+            if(cb){
+                cb(reason);
+            }else{
+                fail(reason);
+            }
+        });
+    });
+}
 
 //INSTRUCTORS
 
@@ -720,9 +819,23 @@ function getBranch(id){
     });
 };
 
-function getEnrolled(dateScope, branch){ //DISABLED UNUSED
+function getCourseName(id){
     return new Promise((resolve, reject)=>{
-        /* var sql = "SELECT data FROM " + PreRegister.table + " WHERE status = 2 AND dateSubmit BETWEEN ? AND ? ";
+        var sql = "SELECT * FROM " + courseTable + " WHERE id = ?";
+        db.get().query(sql, [id], function(err, result){
+            if(err) return reject(err);
+            if(result.length == 0) return resolve("");
+            var pad = "000";
+            id = id + "";
+            var courseName = "CRS-" + result[0].carType.toUpperCase() + (pad.substring(0, pad.length - id.length) + id);
+            resolve(courseName);
+        });
+    });
+}
+
+function getEnrolled(dateScope, branch){
+    return new Promise((resolve, reject)=>{
+        var sql = "SELECT * FROM " + PreRegister.table + " WHERE status > 0 AND dateSubmit BETWEEN ? AND ? ";
         var data = [dateScope[0],dateScope[1]];
         if(branch){
             sql += "AND data LIKE '%\"branch\":\""+ branch +"\"%'";
@@ -731,8 +844,18 @@ function getEnrolled(dateScope, branch){ //DISABLED UNUSED
     
         db.get().query(sql, data, function(err, results){
             if(err) return reject(err);
-            resolve(results);
-        }); */ resolve();
+            if(results.length == 0) return resolve(results);
+            results.forEach((e,i)=>{
+                try{
+                    e.data = JSON.parse(e.data);
+                }catch(er){
+                    e.data = {};
+                }
+                if(i==results.length-1){
+                    resolve(results);
+                }
+            });
+        });
     });
 }
 
