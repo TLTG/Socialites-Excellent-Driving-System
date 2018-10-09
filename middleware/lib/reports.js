@@ -226,7 +226,7 @@ exports.evaluation = function(req, res, next){
         result.dateEnd = dateEnd.toString('MMMM dd, yyyy'); 
         result.dateStart = dateStart.toString('MMMM dd, yyyy'); 
         
-        pdf.createPDF(pdf.reportTemplates.transferees, result, pdf.getBuffer, function(err, buffer){
+        pdf.createPDF(pdf.reportTemplates.studPerformance, result, pdf.getBuffer, function(err, buffer){
             if(err) return next(err);
             var fileName = "Students: Performance Evaluation["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString(' - MM/dd/yyyy'): "") +"].pdf";
             res.set('Content-disposition', 'attachment; filename=' + fileName);

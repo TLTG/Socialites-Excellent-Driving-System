@@ -412,7 +412,9 @@ Reports.transferee = function(query, cb){
 }
 
 Reports.evaluation = function(query, cb){
-    
+    return new Promise((resolve, reject)=>{
+        
+    });
 }
 
 //INSTRUCTORS
