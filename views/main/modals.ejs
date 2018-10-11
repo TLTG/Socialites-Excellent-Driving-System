@@ -408,21 +408,19 @@
             <h5>Upload and send your proof of payment here.</h5>
         </center>
         <hr class="hrCustom">
-        <form>
+        <form enctype="multipart/form-data" method="POST" id="bankPayment">
           <h5 style="color: black; padding-left: 8px">Enter the email address that you registered on your enrollment form, and the code sent to your email.</h5>
           <table width="100%">
             <tr>
-              <td><input type="text" class="txtEnr" style="color: black" required name="emailBank" id="emailBank" placeholder="Email Address"><br></td>
-              <td><input type="text" class="txtEnr" style="color: black" required name="codeBank" id="codeBank" placeholder="Code"><br></td>
+              <td><input type="text" class="txtEnr" style="color: black" required name="email" id="emailBank" placeholder="Email Address"><br></td>
+              <td><input type="text" class="txtEnr" style="color: black" required name="ornumber" id="codeBank" placeholder="OR Number"><br></td>
             </tr>
           </table><br><br>
-        </form>  
         <h5 style="color: black; padding-left: 8px">Upload a scanned copy or photograph of your payment slip as a proof of payment. Please make sure that it is readable.</h5>
-        <form action="" class="dropzone" id="payslipUpload">
           <div class="fallback" style="padding-left: 8px">
-              <input type="file" name="payslipUpload">
+              <input type="file" name="payslip">
           </div>
-      </form>
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" id="btnGotIt" class="btn btnCstm" onclick="sendPayslip()">Send</button>

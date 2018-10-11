@@ -420,3 +420,26 @@ var display = {
         });
     },
 }
+
+var payment = {
+    send: function(form, cb){
+        var data = new FormData(form);
+        $.ajax({
+            type: "POST",
+            url: "api/v1/web/bankPayment",
+            data: data,
+            processData: false,
+            contentType: false,
+            success: res=>{
+                if(res.success){
+                    cb(null, "Done");
+                }else{
+                    cb(new Error(res.detail));
+                }
+            },
+            error: xhr=>{
+                cb(new Error(xhr.status + ": " + xhr.statusText));
+            }
+        });
+    }
+}

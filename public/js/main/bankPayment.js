@@ -5,16 +5,24 @@ function openBankPayment(){
     $('#bankPaymentModal').modal('show');
 }
 
+var bankPaymentClick = 0;
 function sendPayslip(){
-    email = $('#emailBank').val();
-    code = $('#codeBank').val();
+    if(bankPaymentClick != 0) return;
+    
+    email = $('#emailBank').val().trim();
+    code = $('#codeBank').val().trim();
     var a = validateEmail(email);
 
     if (email.replace(/_/g, ' ') == "" || code.replace(/_/g, ' ') == "") swal("Oops!", "Please fill out all required fields!", "error");
     else{
         if(a==1){
-            $('#bankPaymentModal').modal('hide');
-            $('#bankPaymentOkay').modal('show');
+            bankPaymentClick = 1;
+            payment.send($('#bankPayment')[0], function(err, detail){
+                bankPaymentClick = 0;
+                if(err) return swal('Opps!', err.message, 'error');
+                $('#bankPaymentModal').modal('hide');
+                $('#bankPaymentOkay').modal('show');
+            });
         }
         else swal("Oops!", "Please enter valid email.", "error");
     }

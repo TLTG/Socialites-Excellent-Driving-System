@@ -34,7 +34,7 @@ Account.addBill = function(transaction,transData, feeType, bill, cb){
     data.push(datePre+randPost);
     data.push(transaction);
     data.push(JSON.stringify(transData));
-    data.push(feeType == "online" ? 2 : 1);
+    data.push(feeType);
     data.push(bill);
     data.push(bill);
 
@@ -157,11 +157,47 @@ Account.getStudentTransactions = function(studID, cb){
 }
 
 Account.addPaymentSlip = function(ORnum, filepath, cb){
-    var sql = "INSERT INTO " + paymentSlipTable + " VALUES(null,?,?,null,null)";
-    db.get().query(sql, [ORnum, filepath], function(err, result){
+    var sql = "SELECT * FROM " + table + " WHERE ORno = ?";
+    db.get().query(sql, [ORnum], function(err, result){
         if(err) return cb(err);
-        cb(null, result.insertId);
-    });    
+        if(result.length == 0) return cb(null, false, "OR Number doesn't exist");
+        
+        Promise.all([
+            new Promise((resolve, reject)=>{
+                sql = "UPDATE " + table + " SET data = ? WHERE id = ?";
+                var data = JSON.parse(result[0].data);
+                data.bankslip = data.bankslip ? data.bankslip.push(filepath) : [filepath];
+                data = JSON.stringify(data);
+                db.get().query(sql, [data,result[0].id], function(err, result1){
+                    if(err) return reject(err);
+                    resolve(1);
+                });
+            }),
+            new Promise((resolve, reject)=>{
+                sql = "INSERT INTO " + paymentSlipTable + " VALUES(null,?,?,null,null)";
+                db.get().query(sql, [ORnum, filepath], function(err, result1){
+                    if(err) return reject(err);
+                    resolve(result1.insertId);
+                });    
+            })
+        ]).then((x)=>{
+            cb(null,x[1]);
+        }).catch(reason=>{
+            throw new Error(reason.stack);
+        }).catch(reason=>{
+            cb(reason);
+        });
+    });
+}
+
+Account.getAccount = function(ORnum, cb){
+    var sql = "SELECT * FROM " + table + " WHERE ORno = ?";
+    db.get().query(sql, [ORnum], function(err, result){
+        if(err) return cb(err);
+        if(result.length == 0) return cb(null,{});
+        result[0].data = JSON.parse(result[0].data);
+        cb(null, result[0]);
+    });
 }
 
 module.exports = Account;
