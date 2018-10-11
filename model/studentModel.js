@@ -9,7 +9,7 @@ Student.db = db;
 
 var PreRegister = {};
 PreRegister = Object.create(ModelModule);
-PreRegister.table = "preRegStudent";
+PreRegister.table = "preregstudent";
 PreRegister.db = db;
 
 var Enroll = {};

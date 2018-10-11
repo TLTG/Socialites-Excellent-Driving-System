@@ -133,8 +133,8 @@ function saveUpdStudent1(){
     var add = $("#editStudentAccAdd").val();
     var sex = $('input[name="editStudentAccSex"]:checked').val();
     var cont = $("#editStudentAccCont").val();
-    var guard = $("#editStudentAccGuard").val();
-    var guardCont = $("#editStudentccGuardCont").val();
+    var guard = $("#editStudAccGuard").val();
+    var guardCont = $("#editStudAccGuardCont").val();
     var un = $("#editStudentAccUN").val();
     var pw = $("#editStudentAccPW").val();
     var civ = $('select[name="editStudentAccCivStatus"]').val();
@@ -150,11 +150,31 @@ function saveUpdStudent1(){
     h = un.replace(/\s+/g, '');
     i = pw.replace(/\s+/g, '');
 
+    g = g.search(/[a-zA-Z]/g) == -1 ? g : "";
+
     if (a=="" || sn=="" || c=="" || d=="" 
         || e=="" || f=="" || g=="" || civ=="civ0"){
             swal("Oops!", "Please fill out all required fields.", "error");
         }
     else if (h=="" && i==""){
+        submitt();
+    }else{
+        submitt();
+    }
+
+    function submitt(){
+        var data = {
+            email: email,
+            fullname: fn + "_" + mn + "_" + sn,
+            address: add,
+            telno: cont,
+            birthdate: bday,
+            birthplace: bplace,
+            sex: sex,
+            civilStatus: civ,
+            user: un,
+            pass: pw
+        }
         swal({
             title: "Warning!",
             text: "Are you sure you want to save these changes?",
@@ -168,8 +188,11 @@ function saveUpdStudent1(){
         },
         function(isConfirm){
             if (isConfirm) {
-                swal("Success!", "Changes have been saved!", "success");
-                resetSettingsStudent();
+                app.account.update(data, function(err){
+                    if(err) return console.error(err);
+                    swal("Success!", "Changes have been saved!", "success");
+                    resetSettingsStudent();
+                });
                 //DB: Update Student account function
             }
         });

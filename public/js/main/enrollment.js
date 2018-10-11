@@ -296,6 +296,8 @@ function checkEnr1 (){
     f = guard.replace(/\s+/g, '');
     g = gCont.replace(/\s+/g, '');
 
+    g = g.search(/[a-zA-Z]/g) == -1 ? g : "";
+
     if (a=="" && b=="" && bday==""
     && c=="" && d=="" && e==""
     && f=="" && g=="" && civ=="civ0"){

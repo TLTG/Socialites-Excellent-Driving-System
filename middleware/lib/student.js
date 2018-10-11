@@ -8,6 +8,7 @@ var student = require('../../model/studentModel');
 var Email = require('../../bin/emailer');
 var payments = require('../../model/accountModel');
 var lesson = require('../../model/lessonModel');
+var userAccount = require('../../model/userAccModel');
 var Validation = require('../../bin/util/validation');
 var valid = new Validation();
 
@@ -51,7 +52,7 @@ exports.get = function(req, res, next){
 
 exports.update = function(req, res, next){
     var id = req.params.id;
-    var dataIn = JSON.parse(req.body.data);
+    var dataIn = req.body.data ? JSON.parse(req.body.data) : req.body;
     var field = req.params.field;
     
     if(field == undefined){
@@ -70,11 +71,18 @@ exports.update = function(req, res, next){
         valid.checkUndef(data, function(passed){
             if(passed){
                 student.updateInfo(id, data, function(err, result){
-                    if(err) return next(new Error(err));
-                    res.status(200).send({detail: "Successfully Updated!"});
+                    if(err) return next(err);
+                    if(dataIn.user || dataIn.pass){
+                        userAccount.edit(dataIn.userAcc, dataIn.user, dataIn.pass, 3, function(err){
+                            if(err) return next(err);
+                            res.status(200).send({success: true, detail: "Successfully Updated!"});
+                        });
+                    }else{
+                        res.status(200).send({success: true, detail: "Successfully Updated!"});
+                    }
                 });
             }else{
-                res.status(200).send({detail: "Invalid Data!"});
+                res.status(200).send({success: false, detail: "Invalid Data!"});
             }
         });
     }else{
@@ -133,9 +141,11 @@ exports.register = function(req, res, next){
         if(result.passed){
             return enroll(result.enrollee);
         }else{
-            return res.next(200).send({success: false, detail: result.reason});
+            res.next(200).send({success: false, detail: result.reason});
+            return null; 
         }
     }).then(data=>{
+        if(!data) return;
         res.status(200).send({success: data.success, detail: data.detail});
         if(data.success){
             var task = [];
@@ -167,6 +177,10 @@ exports.register = function(req, res, next){
                 throw new Error(reason);
             });
         }
+    }).catch(reason=>{
+        throw new Error(reason);
+    }).catch(reason=>{
+        next(reason);
     });
 
     //#region Function Declaration 

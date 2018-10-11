@@ -244,6 +244,7 @@ var app = {
                         self.loaded = true;
                         res.data[0].branch = app.others.currentBranch;
                         self.infoID = res.data[0].id;
+                        self.accID = res.data[0].userAcc;
                         self.studentID = res.data[0].studID;
                         cb(null, res.data);
                     }else{
@@ -256,9 +257,11 @@ var app = {
             });
         },
         update: function(data, cb){
+            data.userAcc = this.accID;
+            var self = this;
             $.ajax({
                 type: "PUT",
-                url: "api/v1/stud/" + data.studID,
+                url: "api/v1/stud/" + self.studentID,
                 data: data,
                 success: function(res){
                     if(res.success){
