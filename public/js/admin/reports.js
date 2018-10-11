@@ -416,7 +416,7 @@ function generateReport(a){
             month = $(".monthlyRepDate1").val();
             year = $(".yearRepDate1").val();
 
-            date = Date.parse(month-1).toString('MMM');
+            date = Date.parse(month).toString('MMM ');
             date += " " + year;
         }else if (freq==4){
             if (fromYrQ<=0){
@@ -445,12 +445,12 @@ function generateReport(a){
             date = year;
         }
 
-        var link = "api/v1/report/";
+        var link = "api/v1/report/instructor";
 
         link += "?";
         link += "branch=" + branch != "allBr" ? branch : "";
         link += "&freq=" + freq;
-        link += "&date=" + daily;
+        link += "&date=" + date;
 
         swal({
             title: "Generate Report?",
