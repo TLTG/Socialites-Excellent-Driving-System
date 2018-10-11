@@ -68,9 +68,12 @@ exports.getPayments = function(req, res, next){
     if(res.locals.authenticated == 0) return next(); 
     var ornum = req.params.id;
     if(ornum){
-
+        account.getAccount(ornum, function(err, data){
+            if(err) return next(err);
+            res.status(200).send({success: true, data: data});
+        });
     }else{
-
+        res.status(400).send({success: false, detail: "OR number doesn't exists"});
     }
 };
 
@@ -95,9 +98,13 @@ exports.uploadPaymentSlip = function(req, res, next){
     var email = req.body.email;
     account.addPaymentSlip(ornum, paymentSlip, function(err, id){
         if(err) return next(err);
-        res.status(200).send({success: true, detail: 'Successfully Submitted, Please wait for an hour to validate the payment.'});
-        notifier.addNotificationMethod('admin', 'payments', {title: 'Payment Slip Received', message: 'Bank Payment Slip Submitted, Please Validate'}, '', function(err){
-            if(err) return next(err);
-        });
+        if(id){
+            res.status(200).send({success: true, detail: 'Successfully Submitted, Please wait for an hour to validate the payment.'});
+            // notifier.addNotificationMethod('admin', 'payments', {title: 'Payment Slip Received', message: 'Bank Payment Slip Submitted, Please Validate'}, '', function(err){
+            //     if(err) return next(err);
+            // });
+        }else{
+            res.status(200).send({success: false, detail: detail});
+        }
     });
 };

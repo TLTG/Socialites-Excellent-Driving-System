@@ -2,6 +2,8 @@
 var router = require('express').Router();
 
 var middleware = require('../../middleware/lib/web');
+var payment = require('../../middleware/lib/payments');
+var upload = require('../../middleware/fileUploader');
 
 router.get('/course',middleware.getCourse);
 
@@ -12,6 +14,8 @@ router.route('/cart')
     .put(middleware.updateCart);
 
 router.post('/enroll', middleware.enrollWeb);
+
+router.post('/bankPayment', upload.single('payslip'), payment.uploadPaymentSlip);
 
 router.get('/invoice', middleware.generateInvoice);
 

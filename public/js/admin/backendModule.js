@@ -1214,7 +1214,7 @@ var preRegAssess = {
         this.getList(()=>{
             renderCourseTable(this.pages[this.currPage]);
         });
-    }
+    },
 }
 
 var payments = {

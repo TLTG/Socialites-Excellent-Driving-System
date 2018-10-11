@@ -415,6 +415,11 @@ var viewPendingStudent = function(id){
         $('.regEnrDeadline').html(Date.parse(profile.dateSubmit).addWeeks(1).toString("MMM dd, yyyy"));
         var age = parseInt(Date.parse("today").toString("yyyy")) - parseInt(Date.parse(profile.data.info.birthdate).toString("yyyy"));
         $('.reqForm').hide();
+        payments.getBill(payments.transactionID, function(err, data){
+            if(err) return console.error(err);
+            var transData = data.data.bankslip ? data.data.bankslip : [];
+            $('.attachNo').html(transData.length);
+        });
         if(profile.data.nationality == "Non-Filipino"){
             $('.reqC').show();
         }else if(age < 19){
@@ -463,6 +468,11 @@ function showAttach(){ //when view attachment is clicked
                 payments.amount = total;
                 payments.transactionID = profile.data.transaction.ORnum;
                 $('.totAssess').html(total.formatMoney(2));
+                payments.getBill(payments.transactionID, function(err, data){
+                    if(err) return console.error(err);
+                    var transData = data.data.bankslip ? data.data.bankslip : [];
+                    $('.attachImg').attr('src',transData[transData.length-1].replace('public','assets'));
+                });
             });
             $('#paymentEnroll').val("")
         }
