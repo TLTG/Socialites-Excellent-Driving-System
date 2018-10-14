@@ -171,8 +171,8 @@ exports.generateInvoice = function(req, res, next){
             if(err) return next(err);
             pdf.generatePDF(html, pdf.getBuffer, function(err, buffer){
                 if(err) return next(err);
-                res.set('Content-disposition', 'attachment; filename=' + fileName);
-                res.set('Content-Type', 'Application/pdf');
+                // res.set('Content-disposition', 'attachment; filename=' + fileName);
+                res.set('Content-Type', 'application/pdf');
                 res.status(200).send(buffer);
             });
         });
@@ -213,7 +213,7 @@ exports.generateInvoice = function(req, res, next){
                         });
                         transaction.payments = payments;
                         transaction.name = fullname;
-                        console.log(JSON.stringify(transaction))
+                        // console.log(JSON.stringify(transaction))
                         createInvoice(transaction);
                     }
                 });

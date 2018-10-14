@@ -220,10 +220,10 @@ function generateReport(a){
             // year = week.substring(0, 4);
             // week = week.substring(6, 8);
         }else if (freq==3){
-            month = $(".monthlyRepDate1").val();
+            month = parseInt($(".monthlyRepDate1").val());
             year = $(".yearRepDate1").val();
 
-            date = Date.parse(month-1).toString('MMM');
+            date = Date.parse((month - 1) + " month").toString('MMM');
             date += " " + year;
         }else if (freq==4){
             if (fromYrQ<=0){
@@ -234,7 +234,7 @@ function generateReport(a){
             yearfrom = yearFromQ;
             yearto = $(".yearRepDate1").val();
 
-            date = Date.parse(monthto-1).toString('MMM');
+            date = Date.parse((monthto-1) + " month").toString('MMM');
             date += " " + yearto;
         }else if (freq==5){
             if (fromYrS<=0){
@@ -245,7 +245,7 @@ function generateReport(a){
             yearfrom = yearFromS;
             yearto = $(".yearRepDate1").val();
 
-            date = Date.parse(monthto-1).toString('MMM');
+            date = Date.parse((monthto-1) + " month").toString('MMM');
             date += " " + yearto;
         }else if (freq==6){
             year = $(".yearRepDate1").val();
@@ -289,7 +289,8 @@ function generateReport(a){
                 link += branch != "allBr" ? "&branch="+branch : "";
                 setTimeout(function(){
                     swal('Done','','success');
-                    window.location = link;
+                    // window.location = link;
+                    window.open(link, "_blank");
                 },1000)
             }
         });
