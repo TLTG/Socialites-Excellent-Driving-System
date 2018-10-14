@@ -14,7 +14,7 @@ exports.getStud = function(req, res, next){
             if(err) return next(err);
             pdf.generatePDF(html, pdf.getBuffer, function(err, buffer){
                 if(err) return next(err);
-                res.set('Content-disposition', 'attachment; filename=' + fileName);
+                // res.set('Content-disposition', 'attachment; filename=' + fileName);
                 res.set('Content-Type', 'Application/pdf');
                 res.status(200).send(buffer);
             });
@@ -181,7 +181,7 @@ exports.enrolled = function(req, res, next){
         pdf.createPDF(pdf.reportTemplates.enrollees, result, pdf.getBuffer, function(err, buffer){
             if(err) return next(err);
             var fileName = "Students: Enrollees["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString(' - MM/dd/yyyy'): "") +"].pdf";
-            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            // res.set('Content-disposition', 'attachment; filename=' + fileName);
             res.set('Content-Type', 'Application/pdf');
             res.status(200).send(buffer);
         });
@@ -205,7 +205,7 @@ exports.transferred = function(req, res, next){
         pdf.createPDF(pdf.reportTemplates.transferees, result, pdf.getBuffer, function(err, buffer){
             if(err) return next(err);
             var fileName = "Students: Transferees["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString(' - MM/dd/yyyy'): "") +"].pdf";
-            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            // res.set('Content-disposition', 'attachment; filename=' + fileName);
             res.set('Content-Type', 'Application/pdf');
             res.status(200).send(buffer);
         });
@@ -229,7 +229,7 @@ exports.evaluation = function(req, res, next){
         pdf.createPDF(pdf.reportTemplates.studPerformance, result, pdf.getBuffer, function(err, buffer){
             if(err) return next(err);
             var fileName = "Students: Performance Evaluation["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString(' - MM/dd/yyyy'): "") +"].pdf";
-            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            // res.set('Content-disposition', 'attachment; filename=' + fileName);
             res.set('Content-Type', 'Application/pdf');
             res.status(200).send(buffer);
         });
@@ -259,7 +259,7 @@ exports.tuition = function(req, res, next){
         pdf.createPDF(pdf.reportTemplates.tuition, data, pdf.getBuffer, function(err, buffer){
             if(err) return next(err);
             var fileName = "Gross Income Report: Tuition["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString('MM/dd/yyyy'): "") +"].pdf";
-            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            // res.set('Content-disposition', 'attachment; filename=' + fileName);
             res.set('Content-Type', 'Application/pdf');
             res.status(200).send(buffer);
         });
@@ -288,7 +288,7 @@ exports.license = function(req, res, next){
         pdf.createPDF(pdf.reportTemplates.license, data, pdf.getBuffer, function(err, buffer){
             if(err) return next(err);
             var fileName = "Gross Income Report: License["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString('MM/dd/yyyy'): "") +"].pdf";
-            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            // res.set('Content-disposition', 'attachment; filename=' + fileName);
             res.set('Content-Type', 'Application/pdf');
             res.status(200).send(buffer);
         });
@@ -317,7 +317,7 @@ exports.certificate = function(req, res, next){
         pdf.createPDF(pdf.reportTemplates.certificate, data, pdf.getBuffer, function(err, buffer){
             if(err) return next(err);
             var fileName = "Gross Income Report: Certificate["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString('MM/dd/yyyy'): "") +"].pdf";
-            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            // res.set('Content-disposition', 'attachment; filename=' + fileName);
             res.set('Content-Type', 'Application/pdf');
             res.status(200).send(buffer);
         });
@@ -342,7 +342,7 @@ exports.overallGross = function(req, res, next){
         pdf.createPDF(pdf.reportTemplates.all, result, pdf.getBuffer, function(err, buffer){
             if(err) return next(err);
             var fileName = "Gross Income: Overall Report["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString('MM/dd/yyyy'): "") +"].pdf";
-            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            // res.set('Content-disposition', 'attachment; filename=' + fileName);
             res.set('Content-Type', 'Application/pdf');
             res.status(200).send(buffer);
         });
@@ -367,7 +367,7 @@ exports.performance = function(req, res, next){
         pdf.createPDF(pdf.reportTemplates.instPerformance, result, pdf.getBuffer, function(err, buffer){
             if(err) return next(err);
             var fileName = "Instructor: Performance Evaluation["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString(' - MM/dd/yyyy'): "") +"].pdf";
-            res.set('Content-disposition', 'attachment; filename=' + fileName);
+            // res.set('Content-disposition', 'attachment; filename=' + fileName);
             res.set('Content-Type', 'Application/pdf');
             res.status(200).send(buffer);
         });

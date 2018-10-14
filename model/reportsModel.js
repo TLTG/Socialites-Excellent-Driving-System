@@ -654,6 +654,7 @@ Reports.tuition = function(query, cb){
                 var promises = [];
                 data.transaction.forEach((e,i)=>{
                     promises.push(getStudentViaORnum(e.ORno).then(student=>{
+                        if(!student) return null;
                         var pad = "000";
                         return {
                             ORno: e.ORno,
@@ -667,6 +668,9 @@ Reports.tuition = function(query, cb){
                     }));
                     if(i==data.transaction.length-1){
                         return Promise.all(promises).then(done=>{
+                            done.forEach((x,i)=>{
+                                if(!x) done.splice(i,1);
+                            });
                             data.transaction = done;
                             resolve(data);
                         }).catch(reject);
@@ -1142,6 +1146,7 @@ function getStudentViaORnum(ORnum){
             resolve(result[0]);
         });
     }).then(data=>{
+        if(!data) return data;
         return {
             id: data.studID + "",
             fullname: data.fullname + "",
