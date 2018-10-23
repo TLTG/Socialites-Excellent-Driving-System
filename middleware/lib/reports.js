@@ -266,6 +266,10 @@ exports.tuition = function(req, res, next){
     });
 }
 
+exports.balance = function(req, res, next){
+
+}
+
 exports.license = function(req, res, next){
     var query = req.query;
 
@@ -368,6 +372,43 @@ exports.performance = function(req, res, next){
             if(err) return next(err);
             var fileName = "Instructor: Performance Evaluation["+ dateStart.toString('MM/dd/yyyy') + (dateEnd.compareTo(dateStart) != 0 ? dateEnd.toString(' - MM/dd/yyyy'): "") +"].pdf";
             // res.set('Content-disposition', 'attachment; filename=' + fileName);
+            res.set('Content-Type', 'Application/pdf');
+            res.status(200).send(buffer);
+        });
+    });
+}
+
+exports.instructorList = function(req, res, next){
+    report.instructorList(function(err, instructors){
+        if(err) return next(err);
+        pdf.createPDF(pdf.reportTemplates.instList, {data: instructors}, pdf.getBuffer, function(err, buffer){
+            if(err) return next(err);
+            res.set('Content-Type', 'Application/pdf');
+            res.status(200).send(buffer);
+        });
+    });
+}
+
+//VEHICLE REPORT
+exports.carList = function(req, res, next){
+    report.carList().then(results=>{
+        pdf.createPDF(pdf.reportTemplates.vehiList, {data: results}, pdf.getBuffer, function(err, buffer){
+            if(err) return next(err);
+            res.set('Content-Type', 'Application/pdf');
+            res.status(200).send(buffer);
+        });
+    });
+}
+
+exports.activity = function(req, res, next){
+    var query = req.query;
+
+    if(!query.freq || !query.date) return res.status(400).send('Invalid Request');
+
+    report.activity(query, function(err, history){
+        if(err) return next(err);
+        pdf.createPDF(query.plate ? pdf.reportTemplates.vehiActivities : pdf.reportTemplates.vehiActivitiesAll, history, pdf.getBuffer, function(err, buffer){
+            if(err) return next(err);
             res.set('Content-Type', 'Application/pdf');
             res.status(200).send(buffer);
         });

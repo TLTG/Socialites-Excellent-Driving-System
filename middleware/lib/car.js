@@ -11,6 +11,10 @@ exports.create = function(req, res, next){
         if(err) return next(err);
         data.push(dataInput.model);
         data.push(dataInput.brand);
+        data.push(dataInput.engine);
+        data.push(dataInput.body);
+        data.push(dataInput.displacement);
+        data.push(dataInput.color);
         data.push(dataInput.transType);
         data.push(dataInput.price||"default");
         data.push(dataInput.plate);
@@ -21,7 +25,7 @@ exports.create = function(req, res, next){
 
         valid.checkUndef(data, function(passed){
             if(passed){
-                data[6] = null;
+                data[10] = null;
                 car.create(data, function(err, result){
                     if(err) return next(err);
                     res.status(200).send({success: true, detail: "Successfully Created!"});
@@ -75,15 +79,23 @@ exports.update = function(req, res, next){
             data = [];
             data.push(dataInput.model);
             data.push(dataInput.brand);
+            data.push(dataInput.engine);
+            data.push(dataInput.body);
+            data.push(dataInput.displacement);
+            data.push(dataInput.color);
             data.push(dataInput.transType);
+            data.push(dataInput.price || "default");
             data.push(dataInput.plate);
-            data.push(null);
+            data.push("");
             data.push(dataInput.branch == undefined ? 1 : dataInput.branch);
             data.push(offday);
             data.push(1);
 
             valid.checkUndef(data, function(passed){
                 if(passed){
+                    data.forEach((e,i)=>{
+                        data[i] = e == "" ? null : e;
+                    });
                     query();
                 }else{
                     res.status(200).send({success: false, detail: "Invalid Data."});
@@ -101,6 +113,17 @@ exports.delete = function(req, res, next){
     car.delete(id, "status", function(err, result){
         if(err) return next(err);
         res.status(200).send({success: true});
+    });
+}
+
+exports.getVehicleViaPlateSearch = function(req, res, next){
+    car.getCar(req.query, function(err, cars){
+        if(err) return next(err);
+        var output = [];
+        cars.forEach((e,i)=>{
+            output.push(e.plate);
+        });
+        res.status(200).send(output);
     });
 }
 
