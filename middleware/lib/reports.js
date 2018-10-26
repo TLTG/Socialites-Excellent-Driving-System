@@ -267,7 +267,19 @@ exports.tuition = function(req, res, next){
 }
 
 exports.balance = function(req, res, next){
+    var query = req.query;
 
+    if(!query.freq || !query.date) return res.status(400).send('Invalid Request');
+
+    report.balance(query, function(err, balance){
+        if(err) return next(err);
+        // console.log(balance);
+        pdf.createPDF(pdf.reportTemplates.balance, balance, pdf.getBuffer, function(err, buffer){
+            if(err) return next(err);
+            res.set('Content-Type', 'Application/pdf');
+            res.status(200).send(buffer);            
+        });
+    });
 }
 
 exports.license = function(req, res, next){
@@ -333,7 +345,6 @@ exports.overallGross = function(req, res, next){
 
     if(!query.freq || !query.date) return res.status(400).send('Invalid Request');
 
-    var data = {};
     report.overall(query, function(err, result){
         if(err) return next(err);
 
